@@ -1,4 +1,4 @@
-package org.giiwa.forum.web;
+package org.giiwa.forum.web.forum;
 
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
@@ -9,11 +9,11 @@ import org.giiwa.framework.web.Path;
  * @author joe
  * 
  */
-public class user extends Model {
+public class index extends Model {
 
   @Path(login = true)
   public void home() {
-    this.show("/user/user.home.html");
+    this.show("/forum/forum.home.html");
   }
 
 }
