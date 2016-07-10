@@ -17,6 +17,12 @@
 									access : 'access.forum.admin',
 									seq : 20,
 									classes : 'icon-profile'
+								}, {
+									name : 'menu.member',
+									load : '/admin/member',
+									access : 'access.forum.admin',
+									seq : 30,
+									classes : 'icon-users'
 								}]
 					}]
 		}]
