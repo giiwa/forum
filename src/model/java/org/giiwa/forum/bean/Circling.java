@@ -33,7 +33,7 @@ public class Circling extends Bean {
   public String getMemo() {
     return this.getString("memo");
   }
-
+  
   public long getOwner() {
     return this.getLong("owner");
   }
