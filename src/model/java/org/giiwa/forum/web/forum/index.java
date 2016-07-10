@@ -13,7 +13,7 @@ public class index extends Model {
 
   @Path(login = true)
   public void home() {
-    this.show("/forum/forum.home.html");
+    this.show("/forum/user.home.html");
   }
 
 }
