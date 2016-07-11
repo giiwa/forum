@@ -9,6 +9,7 @@
 		<link rel="shortcut icon" href="/giiwa.png" type="image/png" />
 		<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 		<link href='/css/jquery-ui.min.css' rel='stylesheet' />
+		<link rel="stylesheet" href="/ke/themes/default/default.css" />
 		<link rel="stylesheet" href="/css/style.css" type="text/css" />
 		<link href="/css/jrs.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
@@ -84,6 +85,8 @@ $(function(){
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/jquery-ui.min.js"></script>
 <script src="/js/jquery.iframe.js"></script>
+<script charset="utf-8" src="/ke/kindeditor-min.js"></script>
+<script charset="utf-8" src="/ke/lang/zh-CN.js"></script>
 <script>
 var processing = {
 	show : function() {
@@ -110,13 +113,12 @@ $(function() {
 	});
 })
 function _onresize(){
+	$('body').removeClass('expand');
 	var h0 = $(window).height();
 	var h1 = $('footer').offset().top + $('footer').height();
 	console.log(h0 + "," + h1);
 	if(h0 >= h1) {
 		$('body').addClass('expand');
-	} else {
-		$('body').removeClass('expand');
 	}
 }
 </script>
