@@ -4,6 +4,7 @@ import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
 import org.giiwa.forum.bean.Topic;
+import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 
@@ -15,19 +16,18 @@ import com.mongodb.BasicDBObject;
  * @author joe
  * 
  */
-public class topic extends Model {
+public class user extends Model {
 
   @Path(login = true)
   public void onGet() {
-    String cid = this.getString("cid");
-    this.set("cid", cid);
-    int s = this.getInt("s");
-    int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", "root"),
-        new BasicDBObject("updated", -1), s, n);
-    this.set(bs, s, n);
-    this.query.path("/forum/topic");
-    this.show("/forum/topic.index.html");
+    long id = this.getLong("id");
+
+    User u = User.loadById(id);
+    this.set("u", u);
+    this.set("id", id);
+
+    this.query.path("/forum/user");
+    this.show("/forum/user.home.html");
   }
 
   @Path(path = "create", login = true)

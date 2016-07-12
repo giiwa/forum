@@ -30,7 +30,7 @@
 		#foreach($f in $list)
 		<tr>
 			<td> 
-				$!f.name
+				<a href="/forum/topic?cid=$f.id">$!f.name</a>
 			</td>
 			<td>$lang.get("circling.public_$f.public")</td>
 			<td> 

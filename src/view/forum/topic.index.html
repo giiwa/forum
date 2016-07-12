@@ -3,7 +3,7 @@
 		<div class="container">
 			<div class="row">	
 				<div class="col-sm-8">
-					<h1>Helpdesk ticket system</h1>
+					<h1>Topic list</h1>
 				</div>
 			</div>
 		</div>
@@ -11,223 +11,36 @@
 </div>
 
 <div class='tabs'>
-	<a href='/ticket/ticket' class='selected'>$lang.get('ticket.index.title')</a>
+	<a href='/forum' class='selected'>$lang.get('circling.index.title')</a>
 	<span>&gt;</span>
-	<a href='/ticket/ticket/create' class='btn btn-xs btn-success'>$lang.get('ticket.create.title')</a>
+	<a href='/forum/topic?cid=$!cid' class='selected'>$lang.get('topic.index.title')</a>
+	<span>&gt;</span>
+	<a href='/forum/topic/create?cid=$!cid' class='selected'>$lang.get('topic.create.title')</a>
 </div>
 
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th>$lang.get('ticket.name')</th>
-			<th>$lang.get('ticket.type')</th>
-			<th>$lang.get('ticket.status')</th>
-			<th>$lang.get('project.startdate')</th>
-			<th>$lang.get('project.enddate')</th>
-			<th>$lang.get('project.center')</th>
-			<th>$lang.get('project.doctor')</th>
-			<th>$lang.get('project.clerk')</th>
-			<th>$lang.get('project.total')</th>
-			<th>$lang.get('project.in')</th>
-			<th>$lang.get('project.out')</th>
-			<th>$lang.get('project.done')</th>
-			<th>$lang.get('project.ongoing')</th>
-			<th>$lang.get('project.remaining')</th>
-			<th>$lang.get('project.created')</th>
-			<th></th>
+			<th>$lang.get('topic.title')</th>
+			<th>$lang.get('topic.owner')</th>
+			<th>$lang.get('topic.replies')</th>
+			<th>$lang.get('topic.updated')</th>
+			<th>$lang.get('topic.created')</th>
 		</tr>
 	</thead>
 	<tbody>
 		#foreach($f in $list)
 		<tr>
 			<td> 
-			#if($f.status == 0)
-				$!f.name
-			#else 
-				<a href="/ticket/ticket/random1?projectid=$f.id">$!f.name</a> 
-			#end 
+				<a href="/forum/topic/detail?id=$f.id">$!f.title</a> 
 			</td>
-			<td>$lang.get("project.type_$f.type")</td>
-			<td>$!lang.get("project.status_$f.status")</td>
-			<td>$!f.startdate</td>
-			<td>$!f.enddate</td>
-			<td> 
-			#if($f.center>0) 
-				<a href="/jin/center?projectid=$f.id">$f.center</a> 
-			#elseif($f.status == 0 || $f.status == 1)
-				<button class="btn btn-info btn-xs" onclick="$('#main').iframe('/jin/center/create?projectid=$f.id')">
-				$lang.get("a.add")
-				</button>
-			#end 
-			</td>
-			<td> 
-			#if($f.center > 0)
-				#if($f.doctor>0) 
-				<a href="/jin/doctor?projectid=$f.id">$f.doctor</a> 
-				#elseif($f.status == 0 || $f.status == 1)
-				<button class="btn btn-info btn-xs" onclick="$('#main').iframe('/jin/doctor/create?projectid=$f.id')">
-					$lang.get("a.add")
-				</button> 
-				#end
-			#end </td>
-			<td> 
-			#if($f.center > 0 && $f.type > 0)
-				#if($f.clerk>0) 
-				<a href="/jin/clerk?projectid=$f.id">$f.clerk</a> 
-				#elseif($f.status == 0 || $f.status == 1)
-				<button class="btn btn-info btn-xs" onclick="$('#main').iframe('/jin/clerk/create?projectid=$f.id')">
-					$lang.get("a.add")
-				</button> 
-				#end
-			#end
-			</td>
-			<td>$!f.total</td>
-			<td>$!f.in</td>
-			<td>$!f.out</td>
-			<td>$!f.done</td>
-			<td>$!f.ongoing</td>
-			<td>$!f.remaining</td>
+			<td><a href="/forum/user?id=$f.owner">$!f.owner_obj.nickname</a></td>
+			<td>$!f.replies</td>
+			<td>$!lang.format($f.updated, 'yy-MM-dd HH:mm:ss')</td>
 			<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
-			<td> #if($f.status == 0)
-				<button class="btn btn-info btn-xs" onclick="$('#main').iframe('/jin/project/edit?id=$f.id')">
-					$lang.get("a.edit")
-				</button>
-				<button class="btn btn-success btn-xs" onclick="_showstart('$f.id');">
-					$lang.get("a.start")
-				</button> #elseif($f.status == 1 || $f.status == 2)
-				<button class="btn btn-info btn-xs" onclick="$('#main').iframe('/jin/project/edit?id=$f.id')">
-					$lang.get("a.edit")
-				</button>
-				<button class="btn btn-warning btn-xs" onclick="_showdone('$f.id');">
-					$lang.get("a.done")
-				</button> #end
-				<button class="btn btn-xs" onclick="$('#main').iframe('/jin/project/history?projectid=$f.id')">
-					$lang.get("a.history")
-				</button>
-			</td>
 		</tr>
 		#end
 	</tbody>
 </table>
 
-#parse('/jin/goto.page.html')
-
-<div id="start" title="$lang.get('alert.title')" style="display:none">
-	<input type="hidden" name="projectid" value=""/>
-	<p class="text-danger">
-		$lang.get('are_u_sure_start_project')
-	</p>
-	<div><label><h3>$lang.get('user.password'):</h3><input type="password" name="password" value=""/></label></div>
-	<div>
-		<label><h3>$lang.get('user.captcha'):</h3><input type="text" name="code" onblur="_verify(this);">
-			<img class="captcha" onclick="_oncaptcha();" style="width:80px;"/> </label>
-	</div>
-	<p class="text-danger message"></p>
-	<button class="btn btn-primary" onclick="_start();">
-		$lang.get('btn.ok')
-	</button>
-</div>
-
-<div id="done" title="$lang.get('alert.title')" style="display:none">
-	<input type="hidden" name="projectid" value=""/>
-	<p class="text-danger">
-		$lang.get('are_u_sure_done_project')
-	</p>
-	<div><label><h3>$lang.get('user.password'):</h3><input type="password" name="password" value=""/></label></div>
-	<div>
-		<label><h3>$lang.get('user.captcha'):</h3><input type="text" name="code" onblur="_verify(this);">
-			<img class="captcha" onclick="_oncaptcha();" style="width:80px;"/> </label>
-	</div>
-	
-	<p class="text-danger message"></p>
-	<button class="btn btn-primary" onclick="_done();">
-		$lang.get('btn.ok')
-	</button>
-</div>
-
-<script>
-function _oncaptcha() {
-	$.get('/captcha', {}, function(d) {
-		if (d.state == 200) {
-			$('img.captcha').each(function(i, e){
-				$(e).attr('src', d.uri);
-			});
-		}
-	})
-}
-function _verify(o) {
-	$.get('/captcha/verify', {
-		code : $(o).val()
-	}, function(d) {
-		if (d.state == 200) {
-			//ok
-			$(o).removeClass('bad');
-			$(o).addClass('good');
-		} else {
-			//bad
-			$(o).removeClass('good');
-			$(o).addClass('bad');
-			if(d.state == 201) {
-				//expired, then refresh
-				_oncaptcha();
-			}
-		}
-	})
-}
-	function _showstart(projectid) {
-		var e = $('#start');
-		e.find('input').val('');
-		e.find("input[name=projectid]").val(projectid);
-		e.find("p.message").html('');
-		e.find('button').text("$lang.get('btn.ok')");
-		_oncaptcha();
-		e.dialog({modal : true,close:function(e,ui){$(this).dialog('destroy');}});
-	}
-	function _start() {
-		if ($('#start button').text() == "$lang.get('btn.close')") {
-			$('#start').dialog('close');
-			$('#main').iframe('reload');
-			return;
-		}
-
-		$.post("/jin/project/start", {
-			projectid : $('#start input[name=projectid]').val(),
-			pwd:$('#start input[name=password]').val(),
-			code:$('#start input[name=code]').val()
-		}, function(d) {
-			$('#start p.message').html(d.message);
-			if(d.state == 200) {
-				$('#start button').text("$lang.get('btn.close')");
-			}
-		});
-	}
-
-	function _showdone(projectid) {
-		var e = $('#done');
-		e.find('input').val('');
-		e.find("input[name=projectid]").val(projectid);
-		e.find("p.message").html('');
-		e.find('button').text("$lang.get('btn.ok')");
-		_oncaptcha();
-		e.dialog({modal : true,close:function(e,ui){$(this).dialog('destroy');}});
-	}
-
-	function _done() {
-		if ($('#done button').text() == "$lang.get('btn.close')") {
-			$('#done').dialog('close');
-			$('#main').iframe('reload');
-			return;
-		}
-
-		$.post("/jin/project/done", {
-			projectid : $('#done input[name=projectid]').val(),
-			pwd:$('#done input[name=password]').val(),
-			code:$('#done input[name=code]').val()
-		}, function(d) {
-			$('#done p.message').html(d.message);
-			if(d.state == 200) {
-				$('#done button').text("$lang.get('btn.close')");
-			}
-		});
-	}
-</script>
+#parse('/forum/goto.page.html')

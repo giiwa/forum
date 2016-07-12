@@ -51,6 +51,11 @@ public class circling extends Model {
       Circling f = Circling.load(id);
       this.set("f", f);
       this.show("/admin/circling.item.html");
+    } else if (this.getString("repair") != null) {
+      Circling.repair(id);
+      Circling f = Circling.load(id);
+      this.set("f", f);
+      this.show("/admin/circling.item.html");
     }
   }
 

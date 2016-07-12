@@ -5,6 +5,7 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
+import org.giiwa.core.task.Task;
 
 import com.mongodb.BasicDBObject;
 
@@ -33,7 +34,7 @@ public class Circling extends Bean {
   public String getMemo() {
     return this.getString("memo");
   }
-  
+
   public long getOwner() {
     return this.getLong("owner");
   }
@@ -82,4 +83,25 @@ public class Circling extends Bean {
     Bean.delete(new BasicDBObject(X._ID, id), Circling.class);
   }
 
+  public static void repair(final String id) {
+    new Task() {
+
+      @Override
+      public void onExecute() {
+        int s = 0;
+        BasicDBObject q = new BasicDBObject("cid", id);
+        BasicDBObject order = new BasicDBObject(X._ID, 1);
+
+        Beans<Topic> bs = Topic.load(q, order, s, 10);
+        while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
+          for (Topic t : bs.getList()) {
+            t.repair();
+          }
+          s += bs.getList().size();
+          bs = Topic.load(q, order, s, 10);
+        }
+      }
+
+    }.schedule(10);
+  }
 }

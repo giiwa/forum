@@ -18,13 +18,7 @@
 	  <header class="navbar navbar-inverse navbar-fixed-top">
 	    <div class="navbar-inner">
 	      <div class="container">
-	        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-collapse">
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	        </a>
-	        <a  class="brand" href="/">Ratjin</a>  
-	        <a href="／" class="ios-get-app small"></a>
+	        <a  class="brand" href="/">Forum</a>  
 	        <div class="collapse navbar-collapse">
 	          <ul class="nav">
 	          	  #if($me)
@@ -116,7 +110,6 @@ function _onresize(){
 	$('body').removeClass('expand');
 	var h0 = $(window).height();
 	var h1 = $('footer').offset().top + $('footer').height();
-	console.log(h0 + "," + h1);
 	if(h0 >= h1) {
 		$('body').addClass('expand');
 	}

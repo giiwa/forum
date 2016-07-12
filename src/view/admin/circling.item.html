@@ -16,6 +16,7 @@
 <td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
 <td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
 <td>
+	<a href='javascript:;' onclick='_repair("$f.id", this)'>$lang.get('a.repair')</a>
 	#if($f.state == 1)
 	<a href='javascript:;' onclick='_state("$f.id", this, 0)'>$lang.get('a.enable')</a>
 	#else
