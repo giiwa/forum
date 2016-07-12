@@ -100,4 +100,15 @@ public class topic extends Model {
     this.show("/forum/topic.detail.html");
   }
 
+  public String toHtml(Topic r) {
+    StringBuilder sb = new StringBuilder("<div class='refer'>");
+    Topic r1 = r.getRefer();
+    if (r1 != null) {
+      sb.append(toHtml(r1));
+    }
+    sb.append("<div>").append(r.getOwner_obj().getNickname()).append(":</div>");
+    sb.append("<div class='content'>").append(r.getContent()).append("</div>");
+    sb.append("</div>");
+    return sb.toString();
+  }
 }
