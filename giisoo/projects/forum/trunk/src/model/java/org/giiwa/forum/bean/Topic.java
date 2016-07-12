@@ -5,8 +5,10 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
+import org.giiwa.framework.bean.User;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 
 /**
  * Demo bean
@@ -22,10 +24,6 @@ public class Topic extends Bean {
    */
   private static final long serialVersionUID = 1L;
 
-  public static enum Type {
-    ticket, reply
-  };
-
   public String getId() {
     return this.getString(X._ID);
   }
@@ -38,34 +36,25 @@ public class Topic extends Bean {
     return this.getString("content");
   }
 
-  public String getReplyto() {
-    return this.getString("replyto");
+  public int getReads() {
+    return this.getInt("reads");
   }
 
-  public Topic getReplyto_obj() {
-    Topic t = (Topic) this.get("replyto_obj");
-    if (t == null) {
-      String replyto = this.getReplyto();
-      t = Topic.load(replyto);
-      this.set("replyto_obj", t);
+  public int getReplies() {
+    return this.getInt("replies");
+  }
+
+  public long getOwner() {
+    return this.getLong("owner");
+  }
+
+  public User getOwner_obj() {
+    User u = (User) this.get("owner_obj");
+    if (u == null) {
+      u = User.loadById(this.getOwner());
+      this.set("user_obj", u);
     }
-    return t;
-  }
-
-  public int getReaded() {
-    return this.getInt("readed");
-  }
-
-  public int getReplied() {
-    return this.getInt("replied");
-  }
-
-  public String getCategoryid() {
-    return this.getString("categoryid");
-  }
-
-  public String[] getTogroup() {
-    return (String[]) this.get("togroup");
+    return u;
   }
 
   // ------------
@@ -100,8 +89,8 @@ public class Topic extends Bean {
     return Bean.updateCollection(id, v, Topic.class);
   }
 
-  public static Beans<Topic> load(BasicDBObject q, int s, int n) {
-    return Bean.load(q, new BasicDBObject(X._ID, 1), s, n, Topic.class);
+  public static Beans<Topic> load(BasicDBObject q, BasicDBObject order, int s, int n) {
+    return Bean.load(q, order, s, n, Topic.class);
   }
 
   public static Topic load(String id) {
@@ -110,6 +99,20 @@ public class Topic extends Bean {
 
   public static void delete(String id) {
     Bean.delete(new BasicDBObject(X._ID, id), Topic.class);
+  }
+
+  public String getCid() {
+    // TODO Auto-generated method stub
+    return this.getString("cid");
+  }
+
+  public Topic getLast() {
+    return Bean.load(new BasicDBObject("parent", this.getId()), new BasicDBObject("created", -1), Topic.class);
+  }
+
+  public void repair() {
+    long c = Bean.count(new BasicDBObject("parent", this.getId()), Topic.class);
+    update(this.getId(), V.create("replies", (int) c));
   }
 
 }

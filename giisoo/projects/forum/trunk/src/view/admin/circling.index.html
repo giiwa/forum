@@ -46,6 +46,12 @@
  #parse('/widget/goto.page.html')
 
 <script>
+function _repair(id, o) {
+	$.post("/admin/circling/update", {id:id, repair:1}, function(d){
+		$(o).parent().parent().html(d);
+		$.message('已经启动修复！');
+	})
+}
 function _delete(id, o) {
 	if(confirm("$lang.get('title.are_u_sure_delete')")) {
 		$.post("/admin/circling/update", {id:id, deleted:1}, function(d){
