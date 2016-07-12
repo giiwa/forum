@@ -8,7 +8,6 @@ import org.giiwa.core.bean.X;
 import org.giiwa.framework.bean.User;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 
 /**
  * Demo bean
@@ -34,6 +33,15 @@ public class Topic extends Bean {
 
   public String getContent() {
     return this.getString("content");
+  }
+
+  public Topic getRefer() {
+    Topic t = (Topic) this.get("refer_obj");
+    if (t == null && !X.isEmpty(this.get("refer"))) {
+      t = Topic.load(this.getString("refer"));
+      this.set("refer_obj", t);
+    }
+    return t;
   }
 
   public int getReads() {
@@ -113,6 +121,11 @@ public class Topic extends Bean {
   public void repair() {
     long c = Bean.count(new BasicDBObject("parent", this.getId()), Topic.class);
     update(this.getId(), V.create("replies", (int) c));
+  }
+
+  public void update(V v) {
+    // TODO Auto-generated method stub
+    update(this.getId(), v);
   }
 
 }
