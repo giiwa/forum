@@ -37,7 +37,12 @@ public class topic extends Model {
     if (method.isPost()) {
       V v = V.create("cid", cid);
       v.set("title", this.getString("title"));
-      v.set("content", this.getHtml("content"));
+
+      /**
+       * remove the "FFF" background, that may blink eyes
+       */
+      String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
+      v.set("content", content);
       v.set("owner", login.getId());
       v.set("parent", "root");
       Topic.create(v);
@@ -57,10 +62,13 @@ public class topic extends Model {
       Topic t = Topic.load(id);
       Topic last = t.getLast();
 
-      String content = this.getHtml("content");
+      /**
+       * remove the "FFF" background, that may blink eyes
+       */
+      String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
       if (last == null || last.getOwner() != login.getId() || !X.isSame(content, last.getContent())) {
         V v = V.create("parent", id);
-        v.set("content", this.getHtml("content"));
+        v.set("content", content);
         v.set("owner", login.getId());
         Topic.create(v);
         Topic.update(id, V.create("replies", t.getReplies() + 1));
