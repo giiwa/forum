@@ -1,7 +1,7 @@
 <div class='refer'>
 	<div>$!r.content</div>
-	#set($r=$!r.refer)
-	#if($r)
-	#parse('/forum/topic.refer.html')
+	#if($r.refer)
+		#set($r=$!r.refer)
+		#parse('/forum/topic.refer.html')
 	#end
 </div>
