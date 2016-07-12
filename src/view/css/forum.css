@@ -230,3 +230,10 @@ td div.refer {
 	border: 1px solid #333;
 	padding: 5px;
 }
+
+td .content {
+	padding-left: 0;
+}
+td div.refer .content {
+	border-top: 1px solid #333;
+}
