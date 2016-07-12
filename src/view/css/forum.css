@@ -1,0 +1,232 @@
+html, body {
+	width: 100%;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	line-height: 23px;
+	background: #fff;
+	text-align: left;
+	position: relative;
+}
+
+label {
+	width: 100%;
+	position: relative;
+	display: inline-block;
+}
+label h3 {
+	font-size: 14px;
+	margin: 0;
+	min-width: 80px;
+	display: inline-block;
+	overflow: hidden;
+	text-align: right;
+	float: left;
+	font-weight: normal;
+	color: #000;
+	line-height: 26px;
+	margin-right: 5px;
+}
+
+.ui-widget-header {
+	text-align: center;
+}
+
+.ui-dialog .ui-dialog-content {
+	text-align: center;
+}
+
+.ui-dialog .ui-dialog-content > div {
+	text-align: left;
+}
+
+input[type=text], input[type=password] {
+	line-height: 29px;
+	height: 29px;
+}
+
+input[name=code] {
+	width: 60px;
+}
+
+input.good {
+	border-color: green;
+}
+
+input.bad {
+	border-color: red;
+}
+
+label g {
+	color: #697280;
+	display: inline-block;
+	font-size: 90%;
+	margin-left: 26px;
+	font-style: italic;
+	font-weight: normal;
+}
+
+label g:before {
+	content: '// ';
+}
+
+r {
+	color: #f33;
+}
+input, select, textarea {
+	font-size: 11pt;
+	outline: none;
+	line-height: 22px;
+	border: 1px solid rgba(0, 0, 0, 0);
+	margin-left: 6px;
+	margin-top: 2px;
+	padding: 2px 5px;
+	font-weight: normal;
+}
+
+input, textarea {
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #678;
+}
+
+textarea {
+	width: 60%;
+	height: 200px;
+}
+
+.tabs span {
+	margin-left: 6px;
+	margin-right: 6px;
+	color: #666;
+}
+form g {
+	color: #697280;
+	display: inline-block;
+	font-size: 90%;
+	margin-left: 6px;
+	font-style: italic;
+	font-weight: normal;
+	white-space: nowrap
+}
+form g:before {
+	content: '// ';
+}
+
+header {
+	height: 70px;
+	background-color: rgba(75,122,147,.95);
+	background-image: none;
+	border: none;
+}
+
+#overview {
+	margin-top: 70px;
+	background-color: #5299C0;
+	color: #fff;
+}
+
+form {
+	position: relative;
+	padding: 40px 15px 15px;
+	border-color: #e5e5e5 #eee #eee;
+	border-style: solid;
+	border-width: 1px;
+	margin: 20px 60px;
+}
+.table {
+	border-top: 1px solid #538098;
+}
+
+.expand footer {
+	position: fixed;
+}
+
+footer {
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+#processing {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	z-index: 9999;
+	height: 60px;
+	width: 150px;
+	margin-left: -75px;
+	margin-top: -30px;
+	display: none;
+	box-shadow: 0 1px 4px #bbb;
+}
+#processing .bg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #222;
+	opacity: 0.6;
+}
+#processing .img {
+	margin: 25px 45px;
+}
+
+#main {
+	margin-bottom: 20px;
+}
+
+.pages {
+	border-top: 0;
+	text-align: center;
+	display: inline-block;
+	background-color: #fff;
+	width: 99%;
+	margin: 5px 0 10px;
+	padding: 1px 0;
+}
+.pages i {
+	color: #B9341A;
+	margin: 0 4px;
+}
+.pages a {
+	text-decoration: none;
+	border: 1px solid #fff;
+}
+a.page_1, a.page_2 {
+	border: 1px solid #CCC;
+	text-align: center;
+	line-height: 21px;
+	cursor: pointer;
+	display: inline-block;
+	border-radius: 3px;
+	background: white;
+	color: #456;
+	margin: auto 5px;
+	padding: 0 10px;
+}
+.page_2 {
+	cursor: default;
+	border: 0;
+	background: 0;
+	font-weight: bold;
+	color: #E00E0E;
+}
+.pages a:hover {
+	background-color: #4d90fe;
+	border: 1px solid #3079ed;
+	color: white !important;
+	text-decoration: underline;
+}
+.pages label {
+	margin-left: 16px;
+	width: initial;
+}
+
+.tabs {
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+
+td div.refer {
+	float: left;
+	border: 1px solid #333;
+	padding: 5px;
+}

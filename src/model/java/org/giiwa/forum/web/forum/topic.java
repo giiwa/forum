@@ -3,6 +3,7 @@ package org.giiwa.forum.web.forum;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
+import org.giiwa.forum.bean.Log;
 import org.giiwa.forum.bean.Topic;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
@@ -56,31 +57,26 @@ public class topic extends Model {
   @Path(path = "reply", login = true)
   public void reply() {
     String id = this.getString("id");
-    this.set("id", id);
-    if (method.isPost()) {
+    String refer = this.getString("refer");
 
-      Topic t = Topic.load(id);
-      Topic last = t.getLast();
-
-      /**
-       * remove the "FFF" background, that may blink eyes
-       */
-      String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
-      if (last == null || last.getOwner() != login.getId() || !X.isSame(content, last.getContent())) {
-        V v = V.create("parent", id);
-        v.set("content", content);
-        v.set("owner", login.getId());
-        Topic.create(v);
-        Topic.update(id, V.create("replies", t.getReplies() + 1));
-      }
-
-      this.set(X.MESSAGE, lang.get("create.success"));
-      detail();
-      return;
-    }
     Topic t = Topic.load(id);
-    this.set("cid", t.getCid());
-    this.show("/forum/topic.reply.html");
+    Topic last = t.getLast();
+
+    /**
+     * remove the "FFF" background, that may blink eyes
+     */
+    String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
+    if (last == null || last.getOwner() != login.getId() || !X.isSame(content, last.getContent())) {
+      V v = V.create("parent", id);
+      v.set("content", content);
+      v.set("owner", login.getId());
+      if (!X.isEmpty(refer)) {
+        v.set("refer", refer);
+      }
+      Topic.create(v);
+      Topic.update(id, V.create("replies", t.getReplies() + 1));
+    }
+
   }
 
   @Path(path = "detail", login = true)
@@ -90,6 +86,10 @@ public class topic extends Model {
     this.set("t", t);
     this.set("id", t.getId());
     this.set("cid", t.getCid());
+
+    if (Log.create(V.create("topic_id", id).set("sid", sid()))) {
+      t.update(V.create("reads", t.getReads() + 1));
+    }
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
