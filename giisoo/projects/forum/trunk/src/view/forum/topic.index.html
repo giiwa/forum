@@ -24,6 +24,7 @@
 			<th>$lang.get('topic.title')</th>
 			<th>$lang.get('topic.owner')</th>
 			<th>$lang.get('topic.replies')</th>
+			<th>$lang.get('topic.lastreply')</th>
 			<th>$lang.get('topic.updated')</th>
 			<th>$lang.get('topic.created')</th>
 		</tr>
@@ -36,6 +37,7 @@
 			</td>
 			<td><a href="/forum/user?id=$f.owner">$!f.owner_obj.nickname</a></td>
 			<td>$!f.replies</td>
+			<td>$!f.last.owner_obj.nickname</td>
 			<td>$!lang.format($f.updated, 'yy-MM-dd HH:mm:ss')</td>
 			<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
 		</tr>
