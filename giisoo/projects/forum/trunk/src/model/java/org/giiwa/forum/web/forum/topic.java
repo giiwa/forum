@@ -3,6 +3,7 @@ package org.giiwa.forum.web.forum;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
+import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Log;
 import org.giiwa.forum.bean.Topic;
 import org.giiwa.framework.web.Model;
@@ -54,6 +55,26 @@ public class topic extends Model {
     this.show("/forum/topic.create.html");
   }
 
+  @Path(path = "update", login = true)
+  public void update() {
+    String cid = this.getString("cid");
+    Circling c = Circling.load(cid);
+    String id = this.getString("id");
+    if (c.getOwner() == login.getId()) {
+      V v = V.create();
+      if (this.getString("deleted") != null) {
+        v.set("deleted", this.getInt("deleted"));
+      }
+
+      Topic.update(id, v);
+    }
+
+    Topic t = Topic.load(id);
+    this.set("f", t);
+    this.set("c", c);
+    this.show("/forum/topic.reply.content.html");
+  }
+
   @Path(path = "reply", login = true)
   public void reply() {
     String id = this.getString("id");
@@ -84,6 +105,7 @@ public class topic extends Model {
     String id = this.getString("id");
     Topic t = Topic.load(id);
     this.set("t", t);
+    this.set("c", t.getCircling());
     this.set("id", t.getId());
     this.set("cid", t.getCid());
 
@@ -107,7 +129,14 @@ public class topic extends Model {
       sb.append(toHtml(r1));
     }
     sb.append("<div>").append(r.getOwner_obj().getNickname()).append(":</div>");
-    sb.append("<div class='content'>").append(r.getContent()).append("</div>");
+    sb.append("<div class='content'>");
+    if (r.getDeleted() == 1) {
+      sb.append(lang.get("topic.was.deleted"));
+    } else {
+      sb.append(r.getContent());
+    }
+
+    sb.append("</div>");
     sb.append("</div>");
     return sb.toString();
   }

@@ -1,0 +1,23 @@
+<div class="col-sm-12">
+	#if($f.refer)
+	#set($r=$f.refer)
+	$this.toHtml($r)
+	#end
+	#if($f.deleted == 1)
+	<div class='col-sm-12 content'>$lang.get('topic.was.deleted')</div>
+	#else
+	<div class='col-sm-12 content'>$!f.content</div>
+	#end
+</div>
+<div class="col-sm-12">
+	#if(!$c.isForbidden($me))
+	<a class="btn" href="javascript:;" onclick="_showreply('$f.id')">reply</a>
+	#end
+	#if($me.id == $c.owner)
+		#if($f.deleted==1)
+		<a class="btn" href="javascript:;" onclick="_delete('$f.id', 0, this)">recover</a>
+		#else
+		<a class="btn" href="javascript:;" onclick="_delete('$f.id', 1, this)">delete</a>
+		#end
+	#end
+</div>

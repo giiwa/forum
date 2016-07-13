@@ -128,4 +128,17 @@ public class Topic extends Bean {
     update(this.getId(), v);
   }
 
+  public Circling getCircling() {
+    Circling c = (Circling) this.get("circling_obj");
+    if (c == null) {
+      c = Circling.load(this.getCid());
+      this.set("circling_obj", c);
+    }
+    return c;
+  }
+
+  public int getDeleted() {
+    return this.getInt("deleted");
+  }
+
 }
