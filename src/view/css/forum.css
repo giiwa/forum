@@ -248,3 +248,9 @@ td .content {
 td div.refer .content {
 	border-top: 1px solid #333;
 }
+ul.recommends {
+	list-style: none;
+}
+ul.recommends li {
+	margin-bottom: 10px;
+}
