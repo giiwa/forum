@@ -16,44 +16,37 @@
 	<a href='/forum/circling/create' class='btn btn-xs btn-success'>$lang.get('circling.create.title')</a>
 </div>
 
-<div class='col-sm-9'>
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>$lang.get('circling.name')</th>
-				<th>$lang.get('circling.public')</th>
-				<th>$lang.get('circling.photo')</th>
-				<th>$lang.get('circling.created')</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			#foreach($f in $list)
-			<tr>
-				<td> 
-					<a href="/forum/topic?cid=$f.id">$!f.name</a>
-				</td>
-				<td>$lang.get("circling.public_$f.public")</td>
-				<td> 
-					#if($f.photo)
-					<img src="$f.photo"/>
-					#end
-				</td>
-				<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
-				<td> 
-					<button class="btn btn-xs" onclick="$('#main').iframe('/forum/circling/history?projectid=$f.id')">
-						$lang.get("a.history")
-					</button>
-				</td>
-			</tr>
-			#end
-		</tbody>
-	</table>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>$lang.get('circling.name')</th>
+			<th>$lang.get('circling.public')</th>
+			<th>$lang.get('circling.photo')</th>
+			<th>$lang.get('circling.created')</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($f in $list)
+		<tr>
+			<td> 
+				<a href="/forum/topic?cid=$f.id">$!f.name</a>
+			</td>
+			<td>$lang.get("circling.public_$f.public")</td>
+			<td> 
+				#if($f.photo)
+				<img src="$f.photo"/>
+				#end
+			</td>
+			<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
+			<td> 
+				<button class="btn btn-xs" onclick="$('#main').iframe('/forum/circling/history?projectid=$f.id')">
+					$lang.get("a.history")
+				</button>
+			</td>
+		</tr>
+		#end
+	</tbody>
+</table>
 
-	#parse('/forum/goto.page.html')
-</div>
-<ul class='col-sm-3 recommends'>
-	#foreach($f in $recommends)
-	<li><a href="/forum/topic?cid=$f.id">$f.title</a></li>
-	#end
-</ul>
+#parse('/forum/goto.page.html')
