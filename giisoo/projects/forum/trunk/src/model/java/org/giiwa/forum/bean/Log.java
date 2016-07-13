@@ -1,6 +1,7 @@
 package org.giiwa.forum.bean;
 
 import org.giiwa.core.bean.Bean;
+import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
@@ -35,4 +36,9 @@ public class Log extends Bean {
     }
     return false;
   }
+
+  public static Beans<Log> load(BasicDBObject q, BasicDBObject order, int s, int n) {
+    return Bean.load(q, order, s, n, Log.class);
+  }
+
 }

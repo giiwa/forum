@@ -29,6 +29,13 @@ public class topic extends Model {
         new BasicDBObject("updated", -1), s, n);
     this.set(bs, s, n);
     this.query.path("/forum/topic");
+
+    /**
+     * get recommends
+     */
+    Beans<Circling> bs1 = Circling.load(login.getId(), new BasicDBObject("updated", -1), 0, 20);
+    this.set("recommends", bs1 == null ? null : bs1.getList());
+
     this.show("/forum/topic.index.html");
   }
 

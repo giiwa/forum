@@ -18,31 +18,38 @@
 	<a href='/forum/topic/create?cid=$!cid' class='selected'>$lang.get('topic.create.title')</a>
 </div>
 
-<table class="table table-hover">
-	<thead>
-		<tr>
-			<th>$lang.get('topic.title')</th>
-			<th>$lang.get('topic.owner')</th>
-			<th>$lang.get('topic.replies')</th>
-			<th>$lang.get('topic.lastreply')</th>
-			<th>$lang.get('topic.updated')</th>
-			<th>$lang.get('topic.created')</th>
-		</tr>
-	</thead>
-	<tbody>
-		#foreach($f in $list)
-		<tr>
-			<td> 
-				<a href="/forum/topic/detail?id=$f.id">$!f.title</a> 
-			</td>
-			<td><a href="/forum/user?id=$f.owner">$!f.owner_obj.nickname</a></td>
-			<td>$!f.replies</td>
-			<td>$!f.last.owner_obj.nickname</td>
-			<td>$!lang.format($f.updated, 'yy-MM-dd HH:mm:ss')</td>
-			<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
-		</tr>
-		#end
-	</tbody>
-</table>
-
-#parse('/forum/goto.page.html')
+<div class='col-sm-9'>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>$lang.get('topic.title')</th>
+				<th>$lang.get('topic.owner')</th>
+				<th>$lang.get('topic.replies')</th>
+				<th>$lang.get('topic.lastreply')</th>
+				<th>$lang.get('topic.updated')</th>
+				<th>$lang.get('topic.created')</th>
+			</tr>
+		</thead>
+		<tbody>
+			#foreach($f in $list)
+			<tr>
+				<td> 
+					<a href="/forum/topic/detail?id=$f.id">$!f.title</a> 
+				</td>
+				<td><a href="/forum/user?id=$f.owner">$!f.owner_obj.nickname</a></td>
+				<td>$!f.replies</td>
+				<td>$!f.last.owner_obj.nickname</td>
+				<td>$!lang.format($f.updated, 'yy-MM-dd HH:mm:ss')</td>
+				<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+	
+	#parse('/forum/goto.page.html')
+</div>
+<ul class='col-sm-3 recommends'>
+	#foreach($f in $recommends)
+	<li><a href="/forum/topic?cid=$f.id">$f.name</a></li>
+	#end
+</ul>

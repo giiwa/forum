@@ -8,6 +8,7 @@ import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.framework.bean.User;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 /**
@@ -110,4 +111,26 @@ public class Circling extends Bean {
     return Log.exists(new BasicDBObject("data", "forbidden").append("cid", this.getId()).append("uid", u.getId())
         .append("expired", new BasicDBObject("$gt", System.currentTimeMillis())));
   }
+
+  public static Beans<Circling> load(long uid, BasicDBObject order, int s, int n) {
+
+    BasicDBList list = new BasicDBList();
+    list.add(new BasicDBObject("owner", uid));
+
+    int s1 = 0;
+    BasicDBObject q = new BasicDBObject("uid", uid).append("data", "follower");
+    BasicDBObject order1 = new BasicDBObject(X._ID, 1);
+    Beans<Log> bs1 = Log.load(q, order1, s1, 100);
+    while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
+      for (Log l : bs1.getList()) {
+        list.add(new BasicDBObject(X._ID, l.getString("cid")));
+      }
+      s1 += bs1.getList().size();
+      bs1 = Log.load(q, order1, s1, 100);
+    }
+
+    return Bean.load(new BasicDBObject("$or", list), order, s, n, Circling.class);
+
+  }
+
 }
