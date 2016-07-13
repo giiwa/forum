@@ -18,7 +18,7 @@
 	<a href='/forum/topic/detail?id=$!t.id'>$lang.get('topic.detail.title')</a>
 </div>
 
-<div class='col-sm-10'>
+<div class='col-sm-9'>
 	<table class="table table-hover">
 		<thead>
 			<tr>
@@ -79,7 +79,7 @@
 		  <input type='hidden' name='refer' value='' />
 		  <div class="form-group">
 		    <label for="content" class="col-sm-2 control-label">$lang.get('topic.reply')</label>
-		    <div class="col-sm-8">
+		    <div class="col-sm-10">
 		      <textarea class="form-control" name="content" id="content">$!content</textarea>
 		    </div>
 		  </div>
@@ -92,7 +92,7 @@
 		</div>	
 	</div>
 </div>
-<ul class='col-sm-2'>
+<ul class='col-sm-3'>
 	#foreach($f in $recommends)
 	<li><a href="/forum/topic/detail?id=$f.id">$f.title</a></li>
 	#end

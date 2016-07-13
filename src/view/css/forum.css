@@ -4,7 +4,7 @@ html, body {
 	font-size: 14px;
 	line-height: 23px;
 	background: #fff;
-	text-align: left;
+	text-align: center;
 	position: relative;
 }
 
@@ -122,6 +122,10 @@ header {
 	margin-top: 70px;
 	background-color: #5299C0;
 	color: #fff;
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	text-align: left;
 }
 
 form {
@@ -171,6 +175,11 @@ footer {
 
 #main {
 	margin-bottom: 20px;
+	position: relative;
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
 }
 
 .pages {
@@ -235,6 +244,7 @@ td div.refer {
 td .content {
 	padding-left: 0;
 }
+
 td div.refer .content {
 	border-top: 1px solid #333;
 }
