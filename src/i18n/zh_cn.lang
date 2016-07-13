@@ -29,3 +29,4 @@ topic.owner=创建人
 topic.replies=回复
 topic.title=标题
 topic.updated=更新
+topic.was.deleted=<r>该回复已删除</r>

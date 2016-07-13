@@ -8,6 +8,7 @@ import org.giiwa.core.bean.X;
 import org.giiwa.core.base.Html;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.forum.bean.Circling;
+import org.giiwa.forum.bean.Log;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.jsoup.nodes.Element;
@@ -44,6 +45,24 @@ public class circling extends Model {
     Circling.delete(id);
     JSONObject jo = new JSONObject();
     jo.put(X.STATE, 200);
+    this.response(jo);
+  }
+
+  @Path(path = "deny", login = true, access = "access.forum.admin")
+  public void _deny() {
+    String cid = this.getString("cid");
+    long uid = this.getLong("uid");
+
+    Circling c = Circling.load(cid);
+    JSONObject jo = new JSONObject();
+    if (c.getOwner() == login.getId()) {
+      Log.create(V.create("data", "forbidden").set("cid", cid).set("uid", uid));
+      jo.put(X.STATE, 200);
+      jo.put(X.MESSAGE, lang.get("save.success"));
+    } else {
+      jo.put(X.STATE, 201);
+      jo.put(X.MESSAGE, lang.get("access.deny"));
+    }
     this.response(jo);
   }
 

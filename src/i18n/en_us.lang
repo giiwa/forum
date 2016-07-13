@@ -29,3 +29,4 @@ topic.owner=Owner
 topic.replies=Replies
 topic.title=Title
 topic.updated=Updated
+topic.was.deleted=<r>deleted</r>

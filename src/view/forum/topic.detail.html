@@ -33,26 +33,32 @@
 			<td>
 				<div class='col-sm-12 content'>$!t.content</div>
 				<div class="col-sm-12">
+					#if(!$c.isForbidden($me))
 					<a class="btn" href="javascript:;" onclick="_showreply('')">reply</a>
+					#end
+					#if($me.id == $t.owner)
+					<a class="btn" href="/forum/topic/edit?id=$t.id">edit</a>
+					#end
+					#if($me.id == $c.owner)
+					<a class="btn" href="javascript:;" onclick="_delete('$t.id', 1, this)">delete</a>
+					#end
 				</div>
 			</td>
 		</tr>
 		#foreach($f in $list)
 		<tr>
 			<td> 
-				<a href="/forum/user?$f.owner">$!f.owner_obj.nickname</a> 
+				<div>
+					<a href="/forum/user?$f.owner">$!f.owner_obj.nickname</a> 
+				</div>
+				#if($me.id==$c.owner)
+				<div>
+					<a href="javascript:;" onclick="_deny('$cid','$f.owner')">deny</a> 
+				</div>
+				#end
 			</td>
 			<td>
-				<div class="col-sm-12">
-					#set($r=$!f.refer)
-					#if($r)
-					$this.toHtml($r)
-					#end
-					<div class='col-sm-12 content'>$!f.content</div>
-				</div>
-				<div class="col-sm-12">
-					<a class="btn" href="javascript:;" onclick="_showreply('$f.id')">reply</a>
-				</div>
+				#parse('/forum/topic.reply.content.html')
 			</td>
 		</tr>
 		#end
@@ -80,6 +86,20 @@
 	</div>	
 </div>
 <script>
+function _deny(cid, uid) {
+	processing && processing.show();
+	$.post('/forum/circling/deny', {cid:cid, uid:uid}, function(d){
+		processing && processing.hide();
+		$.success(d.messsage);
+	})
+}
+function _delete(id, flag, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {cid:'$cid', id:id, deleted:flag}, function(d){
+		processing && processing.hide();
+		$(o).parent().parent().html(d);
+	})
+}
 function _reply() {
 	var p = {};
 	p.id = "$t.id";

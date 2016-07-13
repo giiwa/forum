@@ -6,6 +6,7 @@ import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
+import org.giiwa.framework.bean.User;
 
 import com.mongodb.BasicDBObject;
 
@@ -103,5 +104,10 @@ public class Circling extends Bean {
       }
 
     }.schedule(10);
+  }
+
+  public boolean isForbidden(User u) {
+    return Log.exists(new BasicDBObject("data", "forbidden").append("cid", this.getId()).append("uid", u.getId())
+        .append("expired", new BasicDBObject("$gt", System.currentTimeMillis())));
   }
 }
