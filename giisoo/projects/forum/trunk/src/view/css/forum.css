@@ -238,16 +238,27 @@ td div.refer {
 	float: left;
 	border: 1px solid #333;
 	padding: 10px;
-	margin: 10px 0;
+	margin-bottom: 10px;
+	margin-top: 2px;
+	padding-top: 2px;
+	padding-left: 2px;
 }
 
 td .content {
 	padding-left: 0;
+	width: 100%;
+	display: inline-block;
 }
 
-td div.refer .content {
-	border-top: 1px solid #333;
+td div.refer .block {
+
 }
+
+td div.refer .owner {
+	border-bottom: 1px solid #333;
+	float: left;
+}
+
 ul.recommends {
 	list-style: none;
 }

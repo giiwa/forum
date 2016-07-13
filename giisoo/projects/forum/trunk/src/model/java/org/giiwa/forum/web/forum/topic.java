@@ -163,7 +163,7 @@ public class topic extends Model {
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
-    sb.append("<div>").append(r.getOwner_obj().getNickname()).append(":</div>");
+    sb.append("<div class='block'><div class='owner'>").append(r.getOwner_obj().getNickname()).append(":</div>");
     sb.append("<div class='content'>");
     if (r.getDeleted() == 1) {
       sb.append(lang.get("topic.was.deleted"));
@@ -171,7 +171,7 @@ public class topic extends Model {
       sb.append(r.getContent());
     }
 
-    sb.append("</div>");
+    sb.append("</div></div>");
     sb.append("</div>");
     return sb.toString();
   }
