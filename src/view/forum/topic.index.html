@@ -1,3 +1,5 @@
+#parse('/forum/head.html')
+
 <div id='title'>
 	<div class="blue-wrap">
 		<div class="container">
@@ -36,9 +38,9 @@
 				<td> 
 					<a href="/forum/topic/detail?id=$f.id">$!f.title</a> 
 				</td>
-				<td><a href="/forum/user?id=$f.owner">$!f.owner_obj.nickname</a></td>
+				<td><a href="/forum/circling?uid=$f.owner">$!f.owner_obj.nickname</a></td>
 				<td>$!f.replies</td>
-				<td>$!f.last.owner_obj.nickname</td>
+				<td><a href="/forum/circling?uid=$f.owner">$!f.last.owner_obj.nickname</a></td>
 				<td>$!lang.format($f.updated, 'yy-MM-dd HH:mm:ss')</td>
 				<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
 			</tr>
@@ -53,3 +55,5 @@
 	<li><a href="/forum/topic?cid=$f.id">$f.name</a></li>
 	#end
 </ul>
+
+#parse('/forum/foot.html')

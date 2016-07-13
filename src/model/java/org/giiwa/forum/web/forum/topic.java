@@ -105,6 +105,7 @@ public class topic extends Model {
       Topic.update(id, V.create("replies", t.getReplies() + 1));
     }
 
+    this.redirect("/forum/topic/detail?id=" + id);
   }
 
   @Path(path = "edit", login = true)
@@ -163,7 +164,7 @@ public class topic extends Model {
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
-    sb.append("<div class='block'><div class='owner'>").append(r.getOwner_obj().getNickname()).append(":</div>");
+    sb.append("<div class='block'><div class='owner'>").append(r.getOwner_obj().getNickname()).append(":</div><br/>");
     sb.append("<div class='content'>");
     if (r.getDeleted() == 1) {
       sb.append(lang.get("topic.was.deleted"));

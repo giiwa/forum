@@ -1,3 +1,5 @@
+#parse('/forum/head.html')
+
 <div id='title'>
 	<div class="blue-wrap">
 		<div class="container">
@@ -29,7 +31,7 @@
 		<tbody>
 			<tr>
 				<td> 
-					<a href="/forum/user?id=$t.owner">$!t.owner_obj.nickname</a> 
+					<a href="/forum/circling?uid=$t.owner">$!t.owner_obj.nickname</a> 
 					#if($me.id==$c.owner && $me.id != $t.owner)
 					<div>
 						<a href="javascript:;" onclick="_deny('$cid','$f.owner')">deny</a> 
@@ -55,7 +57,7 @@
 			<tr>
 				<td> 
 					<div>
-						<a href="/forum/user?$f.owner">$!f.owner_obj.nickname</a> 
+						<a href="/forum/circling?uid=$f.owner">$!f.owner_obj.nickname</a> 
 					</div>
 					#if($me.id==$c.owner && $me.id != $f.owner)
 					<div>
@@ -73,8 +75,8 @@
 	
 	#parse('/forum/goto.page.html')
 	
-	<div id='reply'>
-		<div class="form-horizontal">
+	<div id='reply' class="col-sm-12">
+		<form class="form-horizontal" method="post" action="/forum/topic/reply">
 		  <input type='hidden' name='id' value='$!t.id' />
 		  <input type='hidden' name='refer' value='' />
 		  <div class="form-group">
@@ -89,7 +91,7 @@
 		      <button class="btn btn-primary" onclick="_reply()">$lang.get('btn.ok')</button>
 		    </div>
 		  </div>
-		</div>
+		</form>
 	</div>
 </div>
 <ul class='col-sm-3 recommends'>
@@ -113,17 +115,14 @@ function _delete(id, flag, o) {
 		$(o).parent().parent().html(d);
 	})
 }
-function _reply() {
-	var p = {};
-	p.id = "$t.id";
-	p.refer = $('#reply input[name=refer]').val();
-	p.content = editor.html();	
-	$.post('/forum/topic/reply', p, function(d){
-		$('#main').iframe('reload');
-	});
-}
-function _showreply(refer){
+function _showreply(refer, o){
 	$('#reply input[name=refer]').val(refer);
+	var e = $('#reply label[for=content]');
+	if(refer.length > 0) {
+		e.html('@' + o);
+	} else {
+		e.html("$lang.get('topic.reply')");
+	}
 	editor.html('');
 	
 	//smoothscroll to #reply
@@ -145,3 +144,5 @@ $(function(){
 		});	
 })
 </script>
+
+#parse('/forum/foot.html')
