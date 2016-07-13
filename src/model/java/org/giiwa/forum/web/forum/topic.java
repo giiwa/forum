@@ -100,6 +100,28 @@ public class topic extends Model {
 
   }
 
+  @Path(path = "edit", login = true)
+  public void edit() {
+    String id = this.getString("id");
+    Topic t = Topic.load(id);
+    if (method.isPost()) {
+      V v = V.create();
+      v.set("title", this.getString("title"));
+      String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
+      v.set("content", content);
+      Topic.update(id, v);
+      this.set(X.MESSAGE, lang.get("save.success"));
+      detail();
+      return;
+    }
+    this.set("t", t);
+    this.set("c", t.getCircling());
+    this.set("id", t.getId());
+    this.set("cid", t.getCid());
+
+    this.show("/forum/topic.edit.html");
+  }
+
   @Path(path = "detail", login = true)
   public void detail() {
     String id = this.getString("id");
@@ -118,7 +140,13 @@ public class topic extends Model {
     Beans<Topic> bs = Topic.load(new BasicDBObject("parent", t.getId()), new BasicDBObject("created", 1), s, n);
 
     this.set(bs, s, n);
+    this.query.path("/forum/topic/detail");
 
+    /**
+     * get recommends
+     */
+    Beans<Topic> bs1 = Topic.load(new BasicDBObject("cid", t.getCid()), new BasicDBObject("updated", -1), 0, 20);
+    this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");
   }
 
