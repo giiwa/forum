@@ -1,0 +1,47 @@
+		</div>
+	<footer>
+		<div class="footer-credits">
+			<div class="container">
+				<ul class="nav-footer">
+					<li>© 2016 Ratjin, Inc.</li>
+					<li class="terms"><a href="/terms.html" target="_blank">Terms</a></li>
+					<li>Questions? Email us at <a href="mailto:hello@ottoradio.com">hello@ratjin.org</a></li>
+					<li>Powered by <a href="//giiwa.org" target="_blank">giiwa.org</a></li>
+				</ul>
+			</div>	  
+		</div>	
+	</footer>
+	
+	$!system.get('site.counter')
+
+	<div id="processing" style="display: none;">
+		<div class="bg"></div>
+		<div class="img">
+			<img src="/images/loading2.gif">
+		</div>
+	</div>
+</body>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script charset="utf-8" src="/ke/kindeditor-min.js"></script>
+<script charset="utf-8" src="/ke/lang/zh-CN.js"></script>
+<script>
+var processing = {
+	show : function() {
+		$('#processing').show();
+	},
+	hide : function() {
+		$('#processing').hide();
+	}
+};
+$(function(){
+	$('body').removeClass('expand');
+	var h0 = $(window).height();
+	var h1 = $('footer').offset().top + $('footer').height();
+	if(h0 >= h1) {
+		$('body').addClass('expand');
+	}
+})
+</script>
+
+</html>

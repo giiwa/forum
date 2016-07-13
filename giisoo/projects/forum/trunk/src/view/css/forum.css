@@ -130,11 +130,7 @@ header {
 
 form {
 	position: relative;
-	padding: 40px 15px 15px;
-	border-color: #e5e5e5 #eee #eee;
-	border-style: solid;
-	border-width: 1px;
-	margin: 20px 60px;
+	border-top: 1ps solid #e5e5e5;
 }
 .table {
 	border-top: 1px solid #538098;
@@ -180,6 +176,7 @@ footer {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: left;
+	margin-top: 70px;
 }
 
 .pages {
@@ -235,23 +232,23 @@ a.page_1, a.page_2 {
 }
 
 td div.refer {
-	float: left;
 	border: 1px solid #333;
 	padding: 10px;
 	margin-bottom: 10px;
 	margin-top: 2px;
 	padding-top: 2px;
 	padding-left: 2px;
+	display: inline-block;
 }
 
 td .content {
 	padding-left: 0;
 	width: 100%;
 	display: inline-block;
+	float: left;
 }
 
 td div.refer .block {
-
 }
 
 td div.refer .owner {

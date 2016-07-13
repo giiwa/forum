@@ -9,6 +9,7 @@ import org.giiwa.core.base.Html;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Log;
+import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.jsoup.nodes.Element;
@@ -24,7 +25,11 @@ public class circling extends Model {
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    BasicDBObject q = new BasicDBObject("owner", login.getId());
+    long uid = this.getLong("uid", login.getId());
+    User u = User.loadById(uid);
+    this.set("u", u);
+    
+    BasicDBObject q = new BasicDBObject("owner", uid);
     String name = this.getString("name");
 
     if (!X.isEmpty(name) && path == null) {
@@ -34,7 +39,7 @@ public class circling extends Model {
     }
     Beans<Circling> bs = Circling.load(q, new BasicDBObject("updated", -1), s, n);
     this.set(bs, s, n);
-    this.query.path("/admin/circling");
+    this.query.path("/forum/circling");
 
     this.show("/forum/circling.index.html");
   }
