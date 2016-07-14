@@ -13,19 +13,53 @@
 </div>
 
 <div class='tabs'>
-	<a href='/forum'>$lang.get('circling.index.title')</a>
-	<span>&gt;</span>
-	<a href='/forum/topic?cid=$!cid'>$lang.get('topic.index.title')</a>
-	<span>&gt;</span>
-	<a href='/forum/topic/detail?id=$!t.id'>$lang.get('topic.detail.title')</a>
+	<div class='pull-left'>
+		<a href='/forum'>$lang.get('circling.index.title')</a>
+		<span>&gt;</span>
+		<a href='/forum/topic?cid=$!cid'>$lang.get('topic.index.title')</a>
+		<span>&gt;</span>
+		<a href='/forum/topic/detail?id=$!t.id'>$lang.get('topic.detail.title')</a>
+	</div>
+	<div class='pull-right'>
+		<a>new</a>
+		<a>reply</a>
+	</div>
 </div>
 
-<div class='col-sm-9'>
+<div class='col-sm-12 topic'>
+	<div class='topic-summary'>
+		<strong><a href='/forum/topic?cid=$!cid'>$!c.name</a></strong>&nbsp;&gt;&nbsp;<span>$!t.title</span>
+		<div class='pull-right'>
+			<span>$lang.get('topic.reads'):$t.reads</span>
+			<span>|</span>
+			<span>$lang.get('topic.replies'):$t.replies</span>
+		</div>
+	</div>
+	
+	<div class='col-sm-12 topic-f0'>
+		#set($o = $t.owner_obj)
+		#parse('/forum/topic.owner.html')
+		#set($f=$t)
+		#parse('/forum/topic.content.html')
+	</div>
+	#foreach($f in $list)
+	<div class='col-sm-12 topic-fn'>
+		#set($o = $t.owner_obj)
+		#parse('/forum/topic.owner.html')
+		#parse('/forum/topic.content.html')
+	</div>
+	#end
+	
 	<table class="table table-hover">
 		<thead>
 			<tr>
 				<th class="col-sm-2"></th>
-				<th class="col-sm-10">$!t.title</th>
+				<th class="col-sm-10">
+					$!t.title
+					#if($me.id == $c.owner)
+					<a class="btn" href="javascript:;" onclick="_delete('$t.id', 1, this)">delete</a>
+					#end
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -47,9 +81,6 @@
 						#if($me.id == $t.owner)
 						<a class="btn" href="/forum/topic/edit?id=$t.id">edit</a>
 						#end
-						#if($me.id == $c.owner)
-						<a class="btn" href="javascript:;" onclick="_delete('$t.id', 1, this)">delete</a>
-						#end
 					</div>
 				</td>
 			</tr>
@@ -66,7 +97,29 @@
 					#end
 				</td>
 				<td>
-					#parse('/forum/topic.reply.content.html')
+					<div class="col-sm-12 content">
+						#if($f.refer)
+						#set($r=$f.refer)
+						$this.toHtml($r)
+						#end
+						#if($f.deleted == 1)
+						<div class='col-sm-12 content'>$lang.get('topic.was.deleted')</div>
+						#else
+						<div class='col-sm-12 content'>$!f.content</div>
+						#end
+					</div>
+					<div class="col-sm-12">
+						#if(!$c.isForbidden($me))
+						<a class="btn" href="javascript:;" onclick="_showreply('$f.id', '$f.owner_obj.nickname')">reply</a>
+						#end
+						#if($me.id == $c.owner)
+							#if($f.deleted==1)
+							<a class="btn" href="javascript:;" onclick="_delete('$f.id', 0, this)">recover</a>
+							#else
+							<a class="btn" href="javascript:;" onclick="_delete('$f.id', 1, this)">delete</a>
+							#end
+						#end
+					</div>
 				</td>
 			</tr>
 			#end
