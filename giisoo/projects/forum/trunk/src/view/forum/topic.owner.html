@@ -33,5 +33,9 @@
 	<p class='text-center'>
 		$lang.get('user.from'):$!o.from
 	</p>
-	
+	#if($me.id != $o.id && $me.id == $c.owner)
+	<p class='text-center'>
+		<a href="javascript:;" onclick="_deny('$cid','$f.owner')">deny</a> 
+	</p>
+	#end
 </div>

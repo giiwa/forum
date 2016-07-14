@@ -37,7 +37,14 @@
 	#if($f == $t)
 	<div class='recommends'>
 		<div class='rec-tt'>
+			<span class="list-recommend-tit">$lang.get('recommends.title')</span>
+			<a class='pull-right' href="/forum/topic?cid=$cid">$lang.get('a.more.tops')&gt;&gt;</a>
 		</div>
+		<ul class='rec-list'>
+			#foreach($f in $recommends)
+			<li><a href="/forum/topic/detail?id=$f.id">$f.title</a></li>
+			#end
+		</ul>
 	</div>
 	<div class='shares'>
 		<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
@@ -49,6 +56,12 @@
 		<a>down</a>
 		<a>report</a>
 		<a>reply</a>
+		#if($me.id == $t.owner && $f == $t)
+		<a class="btn" href="/forum/topic/edit?id=$t.id">edit</a>
+		#end
+		#if($me.id == $c.owner && $f != $t)
+		<a class="btn" href="javascript:;" onclick="_delete('$t.id', 1, this)">delete</a>
+		#end
 		#if(!$c.isForbidden($me))
 		<a class="btn" href="javascript:;" onclick="_showreply('$f.id', '$f.owner_obj.nickname')">reply</a>
 		#end
