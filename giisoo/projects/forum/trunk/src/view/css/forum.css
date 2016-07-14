@@ -232,29 +232,21 @@ a.page_1, a.page_2 {
 	margin-bottom: 20px;
 }
 
-td div.refer {
-	border: 1px solid #333;
-	padding: 10px;
-	margin-bottom: 10px;
-	margin-top: 2px;
-	padding-top: 2px;
-	padding-left: 2px;
+.refer {
+	padding: 3px 10px 10px 3px;
 	display: inline-block;
+	border: 1px solid #666;
+}
+.refer .block {
 }
 
-td .content {
-	padding-left: 0;
-	width: 100%;
-	display: inline-block;
-	float: left;
-}
-
-td div.refer .block {
-}
-
-td div.refer .owner {
+div.refer .owner {
 	border-bottom: 1px solid #333;
 	float: left;
+}
+div.refer .content {
+	float: left;
+	width: 100%;
 }
 
 ul.recommends {
@@ -296,6 +288,7 @@ div.topic-f0, div.topic-fn {
 .topic-owner {
 	width: 188px;
 	float: left;
+    padding-top: 20px;	
 }
 .topic-cnt {
 	width: 780px;
@@ -330,4 +323,13 @@ div.topic-f0, div.topic-fn {
 	border-bottom: 1px dotted #ccd3e4;
 	color: #666;
 	font-size: 16px;
+}
+
+.del {
+	color: red;
+	font-size: 12px;
+	line-height: 19px;
+	padding: 3px 5px;
+	border: 1px solid #e3e3e3;
+	background-color: #f9f9f9;
 }
