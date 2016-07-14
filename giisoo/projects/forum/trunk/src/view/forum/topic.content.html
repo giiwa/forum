@@ -52,24 +52,23 @@
 	</div>
 	#end
 	<div class='combomf'>
-		<a>up</a>
-		<a>down</a>
-		<a>report</a>
-		<a>reply</a>
-		#if($me.id == $t.owner && $f == $t)
-		<a class="btn" href="/forum/topic/edit?id=$t.id">edit</a>
-		#end
-		#if($me.id == $c.owner && $f != $t)
-		<a class="btn" href="javascript:;" onclick="_delete('$t.id', 1, this)">delete</a>
-		#end
-		#if(!$c.isForbidden($me))
-		<a class="btn" href="javascript:;" onclick="_showreply('$f.id', '$f.owner_obj.nickname')">reply</a>
+
+		<a href="javascript:;" onclick="_up('$f.id', this)">$lang.get('a.topic.up')(<span>$!f.up</span>)</a>
+		<a href="javascript:;" onclick="_down('$f.id', this)">$lang.get('a.topic.down')(<span>$!f.down</span>)</a>
+		#if($f.deleted != 1)
+			<a href="javascript:;" onclick="_expose('$f.id', this)">$lang.get('a.topic.expose')</a>
+			#if($me.id == $t.owner && $f == $t)
+			<a class="btn" href="/forum/topic/edit?id=$t.id">$lang.get('a.edit')</a>
+			#end
+			#if(!$c.isForbidden($me))
+			<a class="btn" href="javascript:;" onclick="_showreply('$f.id', '$f.owner_obj.nickname')">$lang.get('a.reply')</a>
+			#end
 		#end
 		#if($me.id == $c.owner)
 			#if($f.deleted==1)
-			<a class="btn" href="javascript:;" onclick="_delete('$f.id', 0, this)">recover</a>
+			<a class="btn" href="javascript:;" onclick="_delete('$f.id', 0, this)">$lang.get('a.recover')</a>
 			#else
-			<a class="btn" href="javascript:;" onclick="_delete('$f.id', 1, this)">delete</a>
+			<a class="btn" href="javascript:;" onclick="_delete('$f.id', 1, this)">$lang.get('a.delete')</a>
 			#end
 		#end
 	</div>	
