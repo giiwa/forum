@@ -21,8 +21,8 @@
 		<a href='/forum/topic/detail?id=$!t.id'>$!t.title</a>
 	</div>
 	<div class='pull-right'>
-		<a>new</a>
-		<a>reply</a>
+		<a href="/forum/topic/create?cid=$cid">new</a>
+		<a href="javascript:;" onclick="_reply('')">reply</a>
 	</div>
 </div>
 
@@ -46,7 +46,9 @@
 	<div class='col-sm-12 topic-fn'>
 		#set($o = $t.owner_obj)
 		#parse('/forum/topic.owner.html')
+		<div id="cnt_$f.id">
 		#parse('/forum/topic.content.html')
+		</div>
 	</div>
 	#end
 	
@@ -73,6 +75,20 @@
 </div>
 
 <script>
+function _up(id, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {id:id, up:1, cid:'$cid'}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
+function _down(id, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {id:id, down:1, cid:'$cid'}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
 function _deny(cid, uid) {
 	processing && processing.show();
 	$.post('/forum/circling/deny', {cid:cid, uid:uid}, function(d){
@@ -84,10 +100,10 @@ function _delete(id, flag, o) {
 	processing && processing.show();
 	$.post('/forum/topic/update', {cid:'$cid', id:id, deleted:flag}, function(d){
 		processing && processing.hide();
-		$(o).parent().parent().html(d);
+		$('#cnt_' + id).html(d);
 	})
 }
-function _showreply(refer, o){
+function _reply(refer, o){
 	$('#reply input[name=refer]').val(refer);
 	var e = $('#reply label[for=content]');
 	if(refer.length > 0) {
