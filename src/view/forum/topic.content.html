@@ -1,0 +1,42 @@
+<div class='topic-cnt'>
+	<div class='col-sm-12 rtopcon'>
+		<div class='pull-left'>
+			<span>$!lang.get('topic.created'):$!lang.format($f.created,'yyyy-MM-dd hh:mm:ss')</span>
+			<span>|</span>
+			<span>$!lang.get('topic.createdby'):$!lang.get('topic.createdby_$f.createdby')</span>
+		</div>
+		<div class='pull-right'>
+			<a>$!lang.get('topic.apply.top')</a>
+			<a>
+				$!lang.get('topic.floor_$f.floor')
+			</a>
+		</div>
+	</div>
+	<div class='rconten'>
+		<div class="rtitle">
+			$!f.title
+        </div>
+        <div>
+			$!f.content
+        </div>
+        
+	</div>
+</div>
+<div class='conbutton'>
+	#if($f == $t)
+	<div class='recommends'>
+		<div class='rec-tt'>
+		</div>
+	</div>
+	<div class='shares'>
+		<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+		<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+	</div>
+	#end
+	<div class='combomf'>
+		<a>up</a>
+		<a>down</a>
+		<a>report</a>
+		<a>reply</a>
+	</div>	
+</div>

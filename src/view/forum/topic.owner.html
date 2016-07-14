@@ -1,0 +1,37 @@
+<div class='topic-owner'>
+	<p class='text-center'>
+		<a href='/forum/circling?uid=$f.owner'>$o.nickname</a>
+	</p>
+	<p class='text-center'>
+		#if($me.id == $o.id)
+		<a href='/forum/user/edit'>
+			#if($o.photo)
+			<img src='$o.photo'/>
+			#else
+			<img src='/images/user_default.gif'/>
+			#end
+		</a>
+		#else
+		<a href='/forum/circling?uid=$f.owner'>
+			#if($o.photo)
+			<img src='$o.photo'/>
+			#else
+			<img src='/images/user_default.gif'/>
+			#end
+		</a>
+		#end
+	</p>
+	<p class='text-center'>
+		$lang.get('user.tops'):$!o.tops
+	</p>
+	<p class='text-center'>
+		$lang.get('user.topics'):$!o.topics | $lang.get('user.replies'):$!o.replies
+	</p>
+	<p class='text-center'>
+		$lang.get('user.created'):$!lang.format($o.created, 'yyyy-MM-dd')
+	</p>
+	<p class='text-center'>
+		$lang.get('user.from'):$!o.from
+	</p>
+	
+</div>

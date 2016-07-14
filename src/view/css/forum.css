@@ -177,6 +177,7 @@ footer {
 	margin-right: auto;
 	text-align: left;
 	margin-top: 70px;
+	width: 1000px;
 }
 
 .pages {
@@ -261,4 +262,72 @@ ul.recommends {
 }
 ul.recommends li {
 	margin-bottom: 10px;
+}
+
+div.topic {
+	border: 1px solid #ccd3e4;
+	border-top: 4px solid #3b5998;
+	margin-top: 12px;
+	padding: 0;
+}
+
+div.topic-summary {
+	height: 37px;
+	line-height: 37px;
+	background: #fafbfc;
+	border-bottom: 1px solid #ccd3e4;
+	padding: 0 20px;
+	color: #3e3a39;
+}
+
+div.topic-f0, div.topic-fn {
+	border-bottom: 9px solid #ccd3e4;
+	clear: both;
+	font-size: 12px;
+	background: url(/images/new-cons_bg.png) repeat-y;
+	padding: 0;
+}
+
+.rtopcon {
+	padding: 5px 18px;
+	border-bottom: 1px solid #ccd3e4;
+	color: #3b5998;
+}
+.topic-owner {
+	width: 188px;
+	float: left;
+}
+.topic-cnt {
+	width: 780px;
+	float: left;
+}
+.conbutton {
+	margin-left: 189px;
+	display: inline-block;
+	width: 779px;
+}
+.conbutton .shares {
+	margin: 10px 25px;
+	line-height: 16px;
+	overflow: hidden;
+}
+
+.conbutton .combomf {
+	background: #fafbfc;
+	border-top: 1px solid #ccd3e4;
+	padding: 10px 23px;
+	font-size: 12px;
+	position: relative;
+	text-align: right;
+}
+.rconten {
+	display: inline-block;
+	padding: 20px;
+}
+
+.rtitle {
+	padding: 7px 0;
+	border-bottom: 1px dotted #ccd3e4;
+	color: #666;
+	font-size: 16px;
 }
