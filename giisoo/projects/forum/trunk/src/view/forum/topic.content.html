@@ -6,9 +6,15 @@
 			<span>$!lang.get('topic.createdby'):$!lang.get('topic.createdby_$f.createdby')</span>
 		</div>
 		<div class='pull-right'>
-			<a>$!lang.get('topic.apply.top')</a>
-			<a>
-				$!lang.get('topic.floor_$f.floor')
+			#if($f == $t)
+			<a class='btn btn-xs btn-primary' href='javascript:;' onclick="_top('$f.id')">$!lang.get('topic.apply.top')</a>
+			#end
+			<a class='btn btn-xs btn-default' id='#f_$!f.floor'>
+				#if($f.floor > 4)
+				$!{f.floor}$!lang.get('topic.floor')
+				#else
+				$!lang.get('topic.floor_$!f.floor')
+				#end
 			</a>
 		</div>
 	</div>
