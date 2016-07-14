@@ -144,12 +144,14 @@ public class Topic extends Bean {
         BasicDBObject q = new BasicDBObject("parent", id);
         BasicDBObject order = new BasicDBObject("created", 1);
         Beans<Topic> bs = Topic.load(q, order, s, 100);
+        int f = 1;
         while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
 
           for (Topic t : bs.getList()) {
-            if (t.getFloor() != s + 1) {
-              t.update(V.create("floor", s + 1));
+            if (t.getFloor() != f) {
+              t.update(V.create("floor", f));
             }
+            f++;
           }
           s += bs.getList().size();
           bs = Topic.load(q, order, s, 100);
