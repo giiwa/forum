@@ -107,6 +107,7 @@ public class topic extends Model {
 
   @Path(path = "reply", login = true)
   public void reply() {
+    
     String id = this.getString("id");
     String refer = this.getString("refer");
 
