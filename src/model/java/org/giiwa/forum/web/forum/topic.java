@@ -67,19 +67,31 @@ public class topic extends Model {
     String cid = this.getString("cid");
     Circling c = Circling.load(cid);
     String id = this.getString("id");
+    Topic t = Topic.load(id);
     if (c.getOwner() == login.getId()) {
       V v = V.create();
       if (this.getString("deleted") != null) {
         v.set("deleted", this.getInt("deleted"));
       }
+      if (this.getString("up") != null) {
+        if (Log.create(V.create("data", "up/down").set("tid", id).set("sid", this.sid()))) {
+          v.set("up", t.getUp() + 1);
+        }
+      }
+      if (this.getString("down") != null) {
+        if (Log.create(V.create("data", "up/down").set("tid", id).set("sid", this.sid()))) {
+          v.set("down", t.getDown() + 1);
+        }
+      }
 
       Topic.update(id, v);
     }
 
-    Topic t = Topic.load(id);
+    t = Topic.load(id);
+    this.set("t", t.getRefer());
     this.set("f", t);
     this.set("c", c);
-    this.show("/forum/topic.reply.content.html");
+    this.show("/forum/topic.content.html");
   }
 
   @Path(path = "reply", login = true)
@@ -164,7 +176,8 @@ public class topic extends Model {
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
-    sb.append("<div class='block'><div class='owner icon-user'>").append(r.getOwner_obj().getNickname()).append(":</div><br/>");
+    sb.append("<div class='block'><div class='owner icon-user'>").append(r.getOwner_obj().getNickname())
+        .append(":</div><br/>");
     if (r.getDeleted() == 1) {
       sb.append("<div class='del icon icon-warning'>");
       sb.append(lang.get("topic.was.deleted"));
