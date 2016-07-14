@@ -3,9 +3,11 @@ package org.giiwa.forum.web.forum;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
+import org.giiwa.core.task.Task;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Log;
 import org.giiwa.forum.bean.Topic;
+import org.giiwa.forum.bean.UserHelper;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 
@@ -53,8 +55,17 @@ public class topic extends Model {
       String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
       v.set("content", content);
       v.set("owner", login.getId());
-      v.set("parent", "root");
+      v.set("parent", "root").set("top", 0);
       Topic.create(v);
+      new Task() {
+
+        @Override
+        public void onExecute() {
+          UserHelper.count(login.getId());
+        }
+
+      }.schedule(10);
+
       this.set(X.MESSAGE, lang.get("create.success"));
       onGet();
       return;
@@ -115,6 +126,16 @@ public class topic extends Model {
       }
       Topic.create(v);
       Topic.update(id, V.create("replies", t.getReplies() + 1));
+
+      new Task() {
+
+        @Override
+        public void onExecute() {
+          UserHelper.count(login.getId());
+        }
+
+      }.schedule(10);
+
     }
 
     this.redirect("/forum/topic/detail?id=" + id);
