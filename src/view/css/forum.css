@@ -288,7 +288,7 @@ div.topic-f0, div.topic-fn {
 .topic-owner {
 	width: 188px;
 	float: left;
-    padding-top: 20px;	
+	padding-top: 20px;
 }
 .topic-cnt {
 	width: 780px;
@@ -332,4 +332,45 @@ div.topic-f0, div.topic-fn {
 	padding: 3px 5px;
 	border: 1px solid #e3e3e3;
 	background-color: #f9f9f9;
+}
+.recommends {
+	margin-bottom: 20px;
+	background-color: #fafbfc;
+	border: 1px solid #ccd3e4;
+	display: inline-block;
+	margin-left: 20px;
+}
+
+.rec-tt {
+	padding: 10px 15px 5px;
+	line-height: 24px;
+}
+.rec-list {
+	width: 734px;
+	padding-left: 15px;
+	font-size: 14px;
+	margin-left: -10px;
+	list-style: none;
+    display: inline-block;	
+}
+
+.rec-list li {
+	float: left;
+	width: 220px;
+	margin-left: 10px;
+	margin-bottom: 5px;
+	text-indent: 6px;
+}
+.rec-list li a {
+	display: inline-block;
+	max-width: 220px;
+	height: 19px;
+	overflow: hidden;
+	color: #3B5998;
+	outline: 0;
+}
+
+.list-recommend-tit {
+	line-height: 24px;
+	font-size: 14px;
 }
