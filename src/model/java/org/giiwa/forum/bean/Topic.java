@@ -31,6 +31,14 @@ public class Topic extends Bean {
     return this.getString("title");
   }
 
+  public int getUp() {
+    return this.getInt("up");
+  }
+
+  public int getDown() {
+    return this.getInt("down");
+  }
+
   public String getContent() {
     return this.getString("content");
   }
