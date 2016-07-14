@@ -164,15 +164,16 @@ public class topic extends Model {
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
-    sb.append("<div class='block'><div class='owner'>").append(r.getOwner_obj().getNickname()).append(":</div><br/>");
-    sb.append("<div class='content'>");
+    sb.append("<div class='block'><div class='owner icon-user'>").append(r.getOwner_obj().getNickname()).append(":</div><br/>");
     if (r.getDeleted() == 1) {
+      sb.append("<div class='del icon icon-warning'>");
       sb.append(lang.get("topic.was.deleted"));
+      sb.append("</div>");
     } else {
-      sb.append(r.getContent());
+      sb.append("<div class='content'>").append(r.getContent()).append("</div>");
     }
 
-    sb.append("</div></div>");
+    sb.append("</div>");
     sb.append("</div>");
     return sb.toString();
   }

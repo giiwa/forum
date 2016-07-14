@@ -29,4 +29,13 @@ topic.owner=创建人
 topic.replies=回复
 topic.title=标题
 topic.updated=更新
-topic.was.deleted=<r>该回复已删除</r>
+topic.was.deleted=该回复已删除
+topic.createdby=发表
+topic.reads=阅读
+topic.reply=回复
+user.created=注册
+user.from=来自
+user.replies=回复数
+user.topics=帖子数
+user.tops=精华帖
+
