@@ -316,6 +316,7 @@ div.topic-f0, div.topic-fn {
 .rconten {
 	display: inline-block;
 	padding: 20px;
+	width: 780px;
 }
 
 .rtitle {
@@ -351,7 +352,7 @@ div.topic-f0, div.topic-fn {
 	font-size: 14px;
 	margin-left: -10px;
 	list-style: none;
-    display: inline-block;	
+	display: inline-block;
 }
 
 .rec-list li {

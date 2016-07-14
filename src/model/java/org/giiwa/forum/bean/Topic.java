@@ -5,6 +5,7 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
+import org.giiwa.core.task.Task;
 import org.giiwa.framework.bean.User;
 
 import com.mongodb.BasicDBObject;
@@ -37,6 +38,10 @@ public class Topic extends Bean {
 
   public int getDown() {
     return this.getInt("down");
+  }
+
+  public int getFloor() {
+    return this.getInt("floor");
   }
 
   public String getContent() {
@@ -129,6 +134,30 @@ public class Topic extends Bean {
   public void repair() {
     long c = Bean.count(new BasicDBObject("parent", this.getId()), Topic.class);
     update(this.getId(), V.create("replies", (int) c));
+
+    new Task() {
+
+      @Override
+      public void onExecute() {
+        String id = getId();
+        int s = 0;
+        BasicDBObject q = new BasicDBObject("parent", id);
+        BasicDBObject order = new BasicDBObject("created", 1);
+        Beans<Topic> bs = Topic.load(q, order, s, 100);
+        while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
+
+          for (Topic t : bs.getList()) {
+            if (t.getFloor() != s + 1) {
+              t.update(V.create("floor", s + 1));
+            }
+          }
+          s += bs.getList().size();
+          bs = Topic.load(q, order, s, 100);
+
+        }
+      }
+
+    }.schedule(10);
   }
 
   public void update(V v) {

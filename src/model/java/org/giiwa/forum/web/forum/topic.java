@@ -127,6 +127,9 @@ public class topic extends Model {
       Topic.create(v);
       Topic.update(id, V.create("replies", t.getReplies() + 1));
 
+      // TODO, remove later
+      Topic.load(id).repair();
+
       new Task() {
 
         @Override
