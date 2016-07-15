@@ -212,7 +212,9 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Topic> bs1 = Topic.load(new BasicDBObject("cid", t.getCid()), new BasicDBObject("updated", -1), 0, 20);
+    Beans<Topic> bs1 = Topic.load(
+        new BasicDBObject("cid", t.getCid()).append("parent", "root").append(X._ID, new BasicDBObject("$ne", id)),
+        new BasicDBObject("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");
   }

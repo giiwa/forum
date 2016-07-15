@@ -12,15 +12,13 @@
 	</div>	
 </div>
 
-<div class='tabs'>
-	<a href='/forum/circling' class='selected'>$lang.get('circling.index.title')</a>
-	<span>&gt;</span>
-	<a href='/forum/circling/create' class='btn btn-xs btn-success'>$lang.get('circling.create.title')</a>
+<div class='col-sm-12 text-right'>
+	<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
 </div>
 
 <div class='col-sm-2'>
 	<p class='text-center'>
-		<a href='/forum/circling?uid=$u.id'>$u.nickname</a>
+		<a href='/forum/circling?uid=$!u.id'>$!u.nickname</a>
 	</p>
 	<p class='text-center'>
 		#if($me.id == $u.id)
@@ -55,53 +53,24 @@
 	</p>
 </div>
 
-<div class='col-sm-10'>
-	<ul class='col-sm-12 circlings'>
-		#foreach($f in $list)
-		<li class='col-sm-12'>
-			<img src='$f.photo'/>
-			<div>
-				<span>$!f.name</span>
-				<span>$lang.get('circling.owner'):$!f.owner_obj.nickname</span>
-				<span>$lang.get('circling.users'):$!f.users</span>
-				<span>$lang.get('circling.topics'):$!f.topics</span>
-			</div>
-			<div class='btns col-sm-12 text-right'>
-				<a class='btn btn-sm btn-info'>follow</a>
-				<a class='btn btn-sm btn-info'>delete</a>
-			</div>
-		</li>
-		#end
-	</ul>
+<ul class='col-sm-10 circlings'>
+	#foreach($f in $list)
+	<li class='col-sm-12'>
+		<img src='$f.photo'/>
+		<div class='cl-info'>
+			<h1><a href='/forum/topic?cid=$f.id'>$!f.name</a></h1>
+			<p>$lang.get('circling.owner'):$!f.owner_obj.nickname</p>
+			<p>$lang.get('circling.users'):$!f.users</p>
+			<p>$lang.get('circling.topics'):$!f.topics</p>
+		</div>
+		<div class='btns col-sm-12 text-right'>
+			<a class='btn btn-sm btn-info'>follow</a>
+			<a class='btn btn-sm btn-info'>delete</a>
+		</div>
+	</li>
+	#end
+</ul>
 	
-	<table class="table">
-		<thead>
-			<tr>
-				<th>$lang.get('circling.name')</th>
-				<th>$lang.get('circling.public')</th>
-				<th>$lang.get('circling.photo')</th>
-				<th>$lang.get('circling.created')</th>
-			</tr>
-		</thead>
-		<tbody>
-			#foreach($f in $list)
-			<tr>
-				<td> 
-					<a href="/forum/topic?cid=$f.id">$!f.name</a>
-				</td>
-				<td>$lang.get("circling.public_$f.public")</td>
-				<td> 
-					#if($f.photo)
-					<img src="$f.photo"/>
-					#end
-				</td>
-				<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
-			</tr>
-			#end
-		</tbody>
-	</table>
-	
-	#parse('/forum/goto.page.html')
-</div>
+#parse('/forum/goto.page.html')
 
 #parse('/forum/foot.html')
