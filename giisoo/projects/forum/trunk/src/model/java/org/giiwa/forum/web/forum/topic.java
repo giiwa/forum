@@ -5,6 +5,7 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.forum.bean.Circling;
+import org.giiwa.forum.bean.Expose;
 import org.giiwa.forum.bean.Log;
 import org.giiwa.forum.bean.Topic;
 import org.giiwa.forum.bean.UserHelper;
@@ -12,6 +13,8 @@ import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 
 import com.mongodb.BasicDBObject;
+
+import net.sf.json.JSONObject;
 
 /**
  * web api: /demo
@@ -24,7 +27,10 @@ public class topic extends Model {
   @Path(login = true)
   public void onGet() {
     String cid = this.getString("cid");
+    Circling c = Circling.load(cid);
     this.set("cid", cid);
+    this.set("c", c);
+
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
     Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", "root"),
@@ -107,7 +113,7 @@ public class topic extends Model {
 
   @Path(path = "reply", login = true)
   public void reply() {
-    
+
     String id = this.getString("id");
     String refer = this.getString("refer");
 
@@ -120,6 +126,7 @@ public class topic extends Model {
     String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
     if (last == null || last.getOwner() != login.getId() || !X.isSame(content, last.getContent())) {
       V v = V.create("parent", id);
+      v.set("cid", t.getCid());
       v.set("content", content);
       v.set("owner", login.getId());
       if (!X.isEmpty(refer)) {
@@ -167,6 +174,20 @@ public class topic extends Model {
     this.show("/forum/topic.edit.html");
   }
 
+  @Path(path = "expose", login = true)
+  public void expose() {
+    JSONObject jo = new JSONObject();
+    String id = this.getString("id");
+
+    Topic t = Topic.load(id);
+    Circling c = t.getCircling();
+    Expose.create(V.create("cid", t.getCid()).set("owner", c.getOwner()).set("tid", id).set("reporter", login.getId())
+        .set("state", 0));
+    jo.put(X.STATE, 200);
+    jo.put(X.MESSAGE, lang.get("topic.expose.success"));
+    this.response(jo);
+  }
+
   @Path(path = "detail", login = true)
   public void detail() {
     String id = this.getString("id");
@@ -196,13 +217,13 @@ public class topic extends Model {
   }
 
   public String toHtml(Topic r) {
-    StringBuilder sb = new StringBuilder("<div class='refer'>");
+    StringBuilder sb = new StringBuilder("<blockquote>");
     Topic r1 = r.getRefer();
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
     sb.append("<div class='block'><div class='owner icon-user'>").append(r.getOwner_obj().getNickname())
-        .append(":</div><br/>");
+        .append(":</div>");
     if (r.getDeleted() == 1) {
       sb.append("<div class='del icon icon-warning'>");
       sb.append(lang.get("topic.was.deleted"));
@@ -212,7 +233,7 @@ public class topic extends Model {
     }
 
     sb.append("</div>");
-    sb.append("</div>");
+    sb.append("</blockquote>");
     return sb.toString();
   }
 }

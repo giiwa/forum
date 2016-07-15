@@ -1,0 +1,56 @@
+<div class='head'>$lang.get('expose.index.title')</div>
+
+#parse('/widget/widget.message.html')
+
+<div class='tabs'>
+	<a href='/admin/expose' class='selected'>$lang.get('a.expose')</a>
+</div>
+
+<table id='expose-table' class='tablesorter nospace' border="0" cellpadding="0" cellspacing="1">
+	<thead>
+		<tr>
+			<th>$lang.get('expose.circling')</th>
+			<th>$lang.get('expose.topic')</th>
+			<th>$lang.get('expose.owner')</th>
+			<th>$lang.get('expose.reporter')</th>
+			<th>$lang.get('topic.updated')</th>
+			<th>$lang.get('topic.created')</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+#foreach($f in $list)
+	<tr>
+		<td>
+			<a href="/forum/topic?cid=$f.cid" target="_blank">$!f.circling_obj.name</a>
+		</td>
+		<td>
+			<a href="/forum/topic/detail?id=$f.tid" target="_blank">$!f.topic_obj.title</a>
+		</td>
+		<td>
+			<a href="/forum/circling?uid=$f.owner" target="_blank">$!f.owner_obj.nickname</a>
+		</td>
+		<td>
+			<a href="/forum/circling?uid=$f.reporter" target="_blank">$!f.reporter_obj.nickname</a>
+		</td>
+		<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>
+			<a href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
+		</td>
+	</tr>
+#end
+	</tbody>
+</table>
+
+ #parse('/widget/goto.page.html')
+
+<script>
+function _delete(id, o) {
+	if(confirm("$lang.get('title.are_u_sure_delete')")) {
+		$.post("/admin/expose/delete", {id:id}, function(d){
+			$(o).parent().parent().remove();
+		})
+	}
+}
+</script>

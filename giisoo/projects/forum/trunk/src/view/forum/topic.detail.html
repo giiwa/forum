@@ -75,6 +75,13 @@
 </div>
 
 <script>
+function _expose(id) {
+	processing && processing.show();
+	$.post('/forum/topic/expose', {id:id}, function(d){
+		processing && processing.hide();
+		alert(d.message);
+	})	
+}
 function _up(id, o) {
 	processing && processing.show();
 	$.post('/forum/topic/update', {id:id, up:1, cid:'$cid'}, function(d){
@@ -114,7 +121,7 @@ function _reply(refer, o){
 	editor.html('');
 	
 	//smoothscroll to #reply
-	
+	$.scrollTo('#reply', 500);
 }
 var editor = false;
 $(function(){
