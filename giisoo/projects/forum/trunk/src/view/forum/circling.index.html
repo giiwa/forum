@@ -19,17 +19,68 @@
 </div>
 
 <div class='col-sm-2'>
-	<a>$!u.nickname</a>
+	<p class='text-center'>
+		<a href='/forum/circling?uid=$u.id'>$u.nickname</a>
+	</p>
+	<p class='text-center'>
+		#if($me.id == $u.id)
+		<a href='/forum/user/edit'>
+			#if($u.photo)
+			<img src='$u.photo'/>
+			#else
+			<img src='/images/user_default.gif'/>
+			#end
+		</a>
+		#else
+		<a href='/forum/circling?uid=$u.owner'>
+			#if($u.photo)
+			<img src='$u.photo'/>
+			#else
+			<img src='/images/user_default.gif'/>
+			#end
+		</a>
+		#end
+	</p>
+	<p class='text-center'>
+		$lang.get('user.tops'):$!u.tops
+	</p>
+	<p class='text-center'>
+		$lang.get('user.topics'):$!u.topics | $lang.get('user.replies'):$!u.replies
+	</p>
+	<p class='text-center'>
+		$lang.get('user.created'):$!lang.format($u.created, 'yyyy-MM-dd')
+	</p>
+	<p class='text-center'>
+		$lang.get('user.from'):$!u.from
+	</p>
 </div>
+
 <div class='col-sm-10'>
-	<table class="table table-hover">
+	<ul class='col-sm-12 circlings'>
+		#foreach($f in $list)
+		<li class='col-sm-12'>
+			<img src='$f.photo'/>
+			<div>
+				<span>$!f.name</span>
+				<span>$lang.get('circling.owner'):$!f.owner_obj.nickname</span>
+				<span>$lang.get('circling.users'):$!f.users</span>
+				<span>$lang.get('circling.topics'):$!f.topics</span>
+			</div>
+			<div class='btns col-sm-12 text-right'>
+				<a class='btn btn-sm btn-info'>follow</a>
+				<a class='btn btn-sm btn-info'>delete</a>
+			</div>
+		</li>
+		#end
+	</ul>
+	
+	<table class="table">
 		<thead>
 			<tr>
 				<th>$lang.get('circling.name')</th>
 				<th>$lang.get('circling.public')</th>
 				<th>$lang.get('circling.photo')</th>
 				<th>$lang.get('circling.created')</th>
-				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -45,11 +96,6 @@
 					#end
 				</td>
 				<td>$!lang.format($f.created, 'yy-MM-dd HH:mm:ss')</td>
-				<td> 
-					<button class="btn btn-xs" onclick="$('#main').iframe('/forum/circling/history?projectid=$f.id')">
-						$lang.get("a.history")
-					</button>
-				</td>
 			</tr>
 			#end
 		</tbody>
