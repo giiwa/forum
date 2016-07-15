@@ -45,34 +45,33 @@
 		<thead>
 			<tr>
 				<th>$lang.get('topic.title')</th>
-				<th>$lang.get('topic.owner')</th>
-				<th>$lang.get('topic.replies')</th>
-				<th>$lang.get('topic.lastreply')</th>
+				<th>$lang.get('topic.owner_created')</th>
+				<th>$lang.get('topic.replies_reads')</th>
+				<th>$lang.get('topic.lastreply_created')</th>
 			</tr>
 		</thead>
 		<tbody>
 			#foreach($f in $list)
 			<tr>
-				<td> 
-					<span class="">
-						pic
+				<td style='padding:0'> 
+					<span class="topic-state">
 					</span>
-					<a href="/forum/topic/detail?id=$f.id">$!f.title</a> 
+					<a class='topic-title' href="/forum/topic/detail?id=$f.id">$!f.title</a> 
 				</td>
 				<td>
 					<a href="/forum/circling?uid=$f.owner">$!f.owner_obj.nickname</a>
 					<br/>
-					<span>$!lang.format($f.created, 'yy-MM-dd')</span>
+					<span class='text-muted'>$!lang.format($f.created, 'yyyy-MM-dd')</span>
 				</td>
 				<td>
 					$!f.replies
 					<br/>
-					<span>$!f.reads</span>
+					<span class='text-muted'>$!f.reads</span>
 				</td>
 				<td>
 					<a href="/forum/circling?uid=$f.owner">$!f.last.owner_obj.nickname</a>
 					<br/>
-					<span>$!lang.format($f.last.created, 'yy-MM-dd HH:mm')</span>
+					<span class='text-muted'>$!lang.format($f.last.created, 'yyyy-MM-dd HH:mm')</span>
 				</td>
 			</tr>
 			#end
@@ -81,7 +80,7 @@
 	
 	#parse('/forum/goto.page.html')
 </div>
-<ul class='col-sm-3 recommends'>
+<ul class='col-sm-12 cl-recommends'>
 	#foreach($f in $recommends)
 	<li><a href="/forum/topic?cid=$f.id">$f.name</a></li>
 	#end
