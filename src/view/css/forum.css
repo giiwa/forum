@@ -232,23 +232,6 @@ a.page_1, a.page_2 {
 	margin-bottom: 20px;
 }
 
-.refer {
-	padding: 3px 10px 10px 3px;
-	display: inline-block;
-	border: 1px solid #666;
-}
-.refer .block {
-}
-
-div.refer .owner {
-	border-bottom: 1px solid #333;
-	float: left;
-}
-div.refer .content {
-	float: left;
-	width: 100%;
-}
-
 ul.recommends {
 	list-style: none;
 }
@@ -375,4 +358,57 @@ div.topic-f0, div.topic-fn {
 .list-recommend-tit {
 	line-height: 24px;
 	font-size: 14px;
+}
+
+.circlinginfo {
+	background-color: #fafbfc;
+	width: 488px;
+	height: 128px;
+	float: left;
+	border: 1px solid #ccd3e4;
+	position: relative;
+	z-index: 300;
+}
+
+.clinfo {
+	position: relative;
+	float: left;
+	width: 345px;
+	margin-left: 10px;
+}
+
+.clinfo h1 {
+	padding: 0;
+	margin: 0;
+	line-height: 32px;
+	padding-top: 10px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #333;
+	display: inline-block;
+	width: 100%;
+	overflow: hidden;
+	float: left;
+}
+
+.clinfo div.clba_s {
+	width: 352px;
+	line-height: 22px;
+	padding: 0;
+	display: inline-block;
+	z-index: 10;
+}
+
+.moder {
+	display: inline-block;
+	width: 260px;
+	height: 66px;
+	float: left;
+	overflow: hidden;
+	zoom: 1;
+}
+.circling-photo {
+	width: 128px;
+	height: 128px;
+	float: left;
 }

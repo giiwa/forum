@@ -41,6 +41,15 @@ public class Circling extends Bean {
     return this.getLong("owner");
   }
 
+  public User getOwner_obj() {
+    User u = (User) this.get("owner_obj");
+    if (u == null) {
+      u = User.loadById(this.getOwner());
+      this.set("user_obj", u);
+    }
+    return u;
+  }
+
   // ------------
 
   public static String create(V v) {

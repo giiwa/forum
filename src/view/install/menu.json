@@ -18,10 +18,16 @@
 									seq : 20,
 									classes : 'icon-profile'
 								}, {
+									name : 'menu.expose',
+									load : '/admin/expose',
+									access : 'access.forum.admin',
+									seq : 30,
+									classes : 'icon-warning'
+								}, {
 									name : 'menu.member',
 									load : '/admin/member',
 									access : 'access.forum.admin',
-									seq : 30,
+									seq : 40,
 									classes : 'icon-users'
 								}]
 					}]

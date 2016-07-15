@@ -28,7 +28,7 @@ public class circling extends Model {
     long uid = this.getLong("uid", login.getId());
     User u = User.loadById(uid);
     this.set("u", u);
-    
+
     BasicDBObject q = new BasicDBObject("owner", uid);
     String name = this.getString("name");
 
@@ -79,11 +79,11 @@ public class circling extends Model {
       V v = V.create().copy(jo, "name");
       String memo = this.getHtml("memo");
       v.set("memo", memo);
-      Html h = Html.create(memo);
-      List<Element> list = h.get("img");
-      if (list != null && list.size() > 0) {
-        v.set("photo", list.get(0).attr("src"));
-      }
+      // Html h = Html.create(memo);
+      // List<Element> list = h.get("img");
+
+      String photo = this.getString("photo");
+      v.set("photo", photo);
 
       v.set("public", X.isSame("on", this.getString("public")) ? "yes" : "no");
       v.set("right_view", X.isSame("on", this.getString("right_view")) ? "yes" : "no");
