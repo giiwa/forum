@@ -441,25 +441,33 @@ div.topic-f0, div.topic-fn {
 }
 ul.circlings {
 	list-style: none;
+	margin-top: 10px;
 }
 
 ul.circlings li {
 	margin-bottom: 40px;
 	border-bottom: 5px solid #ccd3e4;
-    padding: 0;	
+	padding: 0;
+	border: 1px solid #ccd3e4;
+	border-top: 4px solid #3b5998;
 }
 
 ul.circlings li img {
 	width: 128px;
 	height: 128px;
 	float: left;
+	margin-right: 10px;
 }
 
-ul.circlings li .btns{
-    background: #fafbfc;
-    border-top: 1px solid #ccd3e4;
-    padding: 10px 0px;
-    font-size: 12px;
-    position: relative;
-    text-align: right;	
+ul.circlings li .btns {
+	background: #fafbfc;
+	border-top: 1px solid #ccd3e4;
+	padding: 6px;
+	font-size: 12px;
+	position: relative;
+	text-align: right;
+}
+
+ul.circlings .cl-info {
+	display: inline-block;
 }
