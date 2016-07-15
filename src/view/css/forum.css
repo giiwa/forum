@@ -439,3 +439,27 @@ div.topic-f0, div.topic-fn {
 	float: left;
 	overflow: hidden;
 }
+ul.circlings {
+	list-style: none;
+}
+
+ul.circlings li {
+	margin-bottom: 40px;
+	border-bottom: 5px solid #ccd3e4;
+    padding: 0;	
+}
+
+ul.circlings li img {
+	width: 128px;
+	height: 128px;
+	float: left;
+}
+
+ul.circlings li .btns{
+    background: #fafbfc;
+    border-top: 1px solid #ccd3e4;
+    padding: 10px 0px;
+    font-size: 12px;
+    position: relative;
+    text-align: right;	
+}
