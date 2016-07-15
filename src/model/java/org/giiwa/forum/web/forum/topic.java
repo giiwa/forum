@@ -128,6 +128,7 @@ public class topic extends Model {
       V v = V.create("parent", id);
       v.set("cid", t.getCid());
       v.set("content", content);
+      v.set("floor", last == null ? 1 : last.getFloor() + 1);
       v.set("owner", login.getId());
       if (!X.isEmpty(refer)) {
         v.set("refer", refer);

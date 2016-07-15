@@ -59,9 +59,11 @@
 		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_down('$f.id', this)">$lang.get('a.topic.down')(<span>$!f.down</span>)</a>
 		#if($f.deleted != 1)
 			<a class="btn btn-xs btn-warning" href="javascript:;" onclick="_expose('$f.id', this)">$lang.get('a.topic.expose')</a>
+			
 			#if($me.id == $t.owner && $f == $t)
 			<a class="btn btn-xs btn-primary" href="/forum/topic/edit?id=$t.id">$lang.get('a.edit')</a>
 			#end
+			
 			#if(!$c.isForbidden($me))
 			<a class="btn btn-xs btn-info" href="javascript:;" onclick="_reply('$f.id', '$f.owner_obj.nickname')">$lang.get('a.reply')</a>
 			#end
@@ -71,6 +73,12 @@
 			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_delete('$f.id', 0, this)">$lang.get('a.recover')</a>
 			#else
 			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_delete('$f.id', 1, this)">$lang.get('a.delete')</a>
+			#end
+			
+			#if($f == $t)
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_top('$f.id', 1)">$lang.get('a.top1')</a>
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_top('$f.id', 0)">$lang.get('a.top0')</a>
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_cream('$f.id')">$lang.get('a.cream')</a>
 			#end
 		#end
 	</div>	

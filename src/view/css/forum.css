@@ -412,3 +412,31 @@ div.topic-f0, div.topic-fn {
 	height: 128px;
 	float: left;
 }
+.topic-state {
+	width: 32px;
+	height: 32px;
+	display: inline-block;
+	margin-top: 10px;
+	margin-left: 2px;
+	float: left;
+}
+.topic-title {
+	line-height: 50px;
+	font-size: 16px;
+}
+
+.cl-recommends {
+	margin-bottom: 20px;
+	background-color: #fafbfc;
+	border: 1px solid #ccd3e4;
+	display: inline-block;
+	margin-top: 20px;
+	list-style: none;
+	padding: 20px;
+}
+
+.cl-recommends li {
+	width: 200px;
+	float: left;
+	overflow: hidden;
+}
