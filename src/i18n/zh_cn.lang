@@ -88,3 +88,4 @@ circling.user_state_accepted=自动接受
 circling.user_state_pending=等待确认
 a.follow.accepted=进入
 a.users=用户管理
+circling.search.text=输入圈子名称
