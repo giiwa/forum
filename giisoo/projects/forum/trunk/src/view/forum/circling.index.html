@@ -13,6 +13,10 @@
 </div>
 
 <div class='col-sm-12 text-right'>
+	<form class="search-inline">
+      <input type="text" placeholder="$lang.get('circling.search.text')">
+      <button type='submit' class="icon-search"></button>
+	</form>
 	<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
 </div>
 
@@ -58,77 +62,8 @@
 
 <ul class='col-sm-10 circlings'>
 	#foreach($f in $list)
-	#set($f1 = $f.getFollower($me))
-	<li class='col-sm-12'>
-		<img src='$f.photo'/>
-		<div class='cl-info'>
-			<div class='col-sm-12'>
-				<h1>
-					#if($f1.state == 'accepted' || $f1.state == 'owner')
-					<a href='/forum/topic?cid=$f.id'>$!f.name</a>
-					#else
-					$!f.name
-					#end
-				</h1>
-				<p>$lang.get('circling.followers'): 
-					#if($f1.state == 'owner')
-					<a href='/forum/circling/user'>$!f.followers</a>
-					<em class='text-muted'>
-						<span>|</span> 
-						$lang.get('circling.followers_accepted'): 
-						<a href='/forum/circling/user?state=accepted'>$!f.followers_accepted</a>
-						<span>|</span>
-						$lang.get('circling.followers_pending'): 
-						<a class='text-danger' href='/forum/circling/user?state=pending'>$!f.followers_pending</a>
-						<span>|</span> 
-						$lang.get('circling.followers_rejected'): 
-						<a href='/forum/circling/user?state=rejected'>$!f.followers_rejected</a>
-					</em>
-					#else
-					$!f.followers
-					<em class='text-muted'>
-						<span>|</span> 
-						$lang.get('circling.followers_accepted'): 
-						$!f.followers_accepted
-						<span>|</span> 
-						$lang.get('circling.followers_pending'): 
-						$!f.followers_pending
-						<span>|</span> 
-						$lang.get('circling.followers_rejected'): 
-						$!f.followers_rejected
-					</em>
-					#end
-				</p>
-				<p>$lang.get('circling.topics'):
-					#if($f1.state == 'accepted' || $f1.state == 'owner')
-					<a href='/forum/topic?cid=$f.id'>$!f.topics</a>
-					#else
-					$!f.topics
-					#end
-				</p>
-				<p class='text-muted'>
-					<em>$!f.memo</em>
-				</p>
-			</div>
-		</div>
-		<div class='btns col-sm-12 text-right'>
-			<h5 class='pull-left text-warning icon-user'>$!f.owner_obj.nickname</h5>
-			#if(!$f1)
-				<a class='btn btn-sm btn-info'>$lang.get('a.follow')</a>
-			#elseif($f1.state == 'pending')
-				<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.pending')</a>
-			#elseif($f1.state == 'accepted')
-				<a class='btn btn-sm btn-success' href='/forum/topic?cid=$f.id'>$lang.get('a.follow.accepted')</a>
-			#elseif($f1.state == 'owner')
-				<a class='btn btn-sm btn-info' href='/forum/circling/edit?cid=$f.id'>$lang.get('a.edit')</a>
-				<a class='btn btn-sm btn-info' href='/forum/circling/user?cid=$f.id'>$lang.get('a.users')</a>
-				<a class='btn btn-sm btn-success' href='/forum/topic?cid=$f.id'>$lang.get('a.follow.accepted')</a>
-			#elseif($f1.state == 'rejected')
-				<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.rejected')</a>
-			#end
-			<a class='btn btn-sm btn-warning'>$lang.get('a.delete')</a>
-		</div>
-	</li>
+		#set($f1 = $f.getFollower($me))
+		#parse('/forum/circling.item.html')
 	#end
 </ul>
 	
