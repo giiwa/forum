@@ -1,0 +1,61 @@
+<div class='head'>$lang.get('topic.index.title')</div>
+
+#parse('/widget/widget.message.html')
+
+<div class='tabs'>
+	<a href='/admin/circling'>$lang.get('a.circling')</a>
+	<a href='/admin/topic?cid=$!cid' class='selected'>$lang.get('a.topic')</a>
+</div>
+
+<script type="text/javascript" src="/js/searchbar.js"></script>
+<div class='search'>
+	<form action='/admin/topic' method='get' #if($currentpage>0) style='display:none' #end >
+		<span><label><h3>$lang.get('circling.cid'):</h3><input type='text' name='cid' value='$!cid'/></label></span>
+		<span><label><h3>$lang.get('topic.title'):</h3><input type='text' name='title' value='$!title'/></label></span>
+		<button type='submit' class='btns1 icon icon-search'></button>
+	</form>
+	<div class='s1tab #if($currentpage>0) down #else up #end'>
+		<div class='arrow'></div>
+	</div>
+</div>
+
+<table id='topic-table' class='tablesorter nospace' border="0" cellpadding="0" cellspacing="1">
+	<thead>
+		<tr>
+			<th>$lang.get('topic.id')</th>
+			<th>$lang.get('topic.title')</th>
+			<th>$lang.get('topic.replies')</th>
+			<th>$lang.get('topic.owner')</th>
+			<th>$lang.get('topic.updated')</th>
+			<th>$lang.get('topic.created')</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+#foreach($f in $list)
+	<tr #if($f.deleted==1) class="deleted"#end>
+		<td>$f.id</td>
+		<td>$!f.title</td>
+		<td>$!f.replies</td>
+		<td>$!f.owner.name</td>
+		<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>
+			<a href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
+		</td>
+	</tr>
+#end
+	</tbody>
+</table>
+
+ #parse('/widget/goto.page.html')
+
+<script>
+function _delete(id, o) {
+	if(confirm("$lang.get('title.are_u_sure_delete')")) {
+		$.post("/admin/topic/delete", {id:id}, function(d){
+			$(o).parent().parent().remove();
+		})
+	}
+}
+</script>

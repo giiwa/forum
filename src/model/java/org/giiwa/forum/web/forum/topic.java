@@ -49,7 +49,7 @@ public class topic extends Model {
 
   @Path(path = "create", login = true)
   public void create() {
-    String cid = this.getString("cid");
+    final String cid = this.getString("cid");
     this.set("cid", cid);
     if (method.isPost()) {
       V v = V.create("cid", cid);
@@ -68,6 +68,8 @@ public class topic extends Model {
         @Override
         public void onExecute() {
           UserHelper.count(login.getId());
+
+          Circling.repair(cid);
         }
 
       }.schedule(10);

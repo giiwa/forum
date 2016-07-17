@@ -80,15 +80,12 @@ public class circling extends Model {
       V v = V.create().copy(jo, "name");
       String memo = this.getHtml("memo");
       v.set("memo", memo);
-      // Html h = Html.create(memo);
-      // List<Element> list = h.get("img");
 
       String photo = this.getString("photo");
       v.set("photo", photo);
 
       v.set("access", this.getString("access"));
-      v.set("right_view", X.isSame("on", this.getString("right_view")) ? "yes" : "no");
-      v.set("right_post", X.isSame("on", this.getString("right_post")) ? "yes" : "no");
+      v.set("user_state", this.getString("user_state"));
       v.set("owner", login.getId());
 
       String id = Circling.create(v);
@@ -105,25 +102,49 @@ public class circling extends Model {
     this.show("/forum/circling.create.html");
   }
 
+  @Path(path = "user", login = true, access = "access.forum.admin")
+  public void user() {
+    String cid = this.getString("cid");
+    String state = this.getString("state");
+
+    this.show("/forum/circling.user.html");
+
+  }
+
   @Path(path = "edit", login = true, access = "access.forum.admin")
   public void edit() {
-    String id = this.getString("id");
+    String cid = this.getString("cid");
+    Circling c = Circling.load(cid);
+    Follower f = c.getFollower(login);
+    if (!X.isSame("owner", f.getState())) {
+      deny();
+      return;
+    }
     if (method.isPost()) {
       JSONObject jo = this.getJSON();
       V v = V.create().copy(jo, "name");
 
-      Circling.update(id, v);
+      String memo = this.getHtml("memo");
+      v.set("memo", memo);
 
-      this.set(X.MESSAGE, lang.get("save.success"));
-      onGet();
+      String photo = this.getString("photo");
+      v.set("photo", photo);
+
+      v.set("access", this.getString("access"));
+      v.set("user_state", this.getString("user_state"));
+
+      Circling.update(cid, v);
+
+      Circling.repair(cid);
+
+      this.redirect("/forum/circling");
       return;
     }
 
-    Circling d = Circling.load(id);
-    this.set(d.getJSON());
-    this.set("id", id);
-    this.set("c", d);
-    this.show("/admin/circling.edit.html");
+    this.set(c.getJSON());
+    this.set("cid", cid);
+    this.set("c", c);
+    this.show("/forum/circling.edit.html");
   }
 
 }
