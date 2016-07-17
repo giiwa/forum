@@ -77,4 +77,7 @@ public class Follower extends Bean {
     return Bean.load(q, Follower.class);
   }
 
+  public static long count(BasicDBObject q) {
+    return Bean.count(q, Follower.class);
+  }
 }

@@ -103,6 +103,25 @@ public class Circling extends Bean {
 
       @Override
       public void onExecute() {
+
+        /**
+         * count the users
+         */
+        long total = Follower.count(new BasicDBObject("cid", id));
+        V v = V.create("followers", total - 1);
+        long count = Follower.count(new BasicDBObject("cid", id).append("state", "pending"));
+        v.set("followers_pending", count);
+        count = Follower.count(new BasicDBObject("cid", id).append("state", "accepted"));
+        v.set("followers_accepted", count);
+        count = Follower.count(new BasicDBObject("cid", id).append("state", "rejected"));
+        v.set("followers_rejected", count);
+        count = Topic.count(new BasicDBObject("cid", id).append("parent", "root"));
+        v.set("topics", count);
+        Circling.update(id, v);
+
+        /**
+         * repair all topics in the circling
+         */
         int s = 0;
         BasicDBObject q = new BasicDBObject("cid", id);
         BasicDBObject order = new BasicDBObject(X._ID, 1);

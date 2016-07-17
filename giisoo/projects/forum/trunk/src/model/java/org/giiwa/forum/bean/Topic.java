@@ -180,4 +180,8 @@ public class Topic extends Bean {
     return this.getInt("deleted");
   }
 
+  public static long count(BasicDBObject q) {
+    return Bean.count(q, Topic.class);
+  }
+
 }
