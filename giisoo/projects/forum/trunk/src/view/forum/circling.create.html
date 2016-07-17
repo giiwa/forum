@@ -26,11 +26,16 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="public" class="col-sm-2 control-label">$lang.get('circling.public')</label>
+    <label for="public" class="col-sm-2 control-label">$lang.get('circling.access')</label>
     <div class="col-sm-2">
-      <input type="checkbox" name="public" id="public" checked="checked">
+    	<select name='access'>
+    		<option value='public'>$lang.get('circling.access_public')</option>
+    		<option value='half'>$lang.get('circling.access_half')</option>
+    		<option value='private'>$lang.get('circling.access_private')</option>
+    		<option value='secret'>$lang.get('circling.access_secret')</option>
+    	</select>
     </div>
-	<g>$lang.get("circling.public.hint")</g>
+	<g class='col-sm-offset-2 col-sm-10'>$lang.get("circling.access.hint")</g>
   </div>
   <div class="form-group">
     <label for="public" class="col-sm-2 control-label">$lang.get('circling.public')</label>

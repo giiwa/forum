@@ -8,6 +8,7 @@ import org.giiwa.core.bean.X;
 import org.giiwa.core.base.Html;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.forum.bean.Circling;
+import org.giiwa.forum.bean.Follower;
 import org.giiwa.forum.bean.Log;
 import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
@@ -85,15 +86,18 @@ public class circling extends Model {
       String photo = this.getString("photo");
       v.set("photo", photo);
 
-      v.set("public", X.isSame("on", this.getString("public")) ? "yes" : "no");
+      v.set("access", this.getString("access"));
       v.set("right_view", X.isSame("on", this.getString("right_view")) ? "yes" : "no");
       v.set("right_post", X.isSame("on", this.getString("right_post")) ? "yes" : "no");
       v.set("owner", login.getId());
 
       String id = Circling.create(v);
 
+      Follower.create(login.getId(), id, V.create("state", "owner"));
+
       this.set(X.MESSAGE, lang.get("create.success"));
-      onGet();
+
+      this.redirect("/forum/circling");
 
       return;
     }

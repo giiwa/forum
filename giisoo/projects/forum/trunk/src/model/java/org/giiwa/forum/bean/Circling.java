@@ -37,6 +37,10 @@ public class Circling extends Bean {
     return this.getString("memo");
   }
 
+  public String getAccess() {
+    return this.getString("access");
+  }
+
   public long getOwner() {
     return this.getLong("owner");
   }
@@ -114,6 +118,10 @@ public class Circling extends Bean {
       }
 
     }.schedule(10);
+  }
+
+  public Follower getFollower(User u) {
+    return Follower.load(new BasicDBObject("cid", this.getId()).append("uid", u.getId()));
   }
 
   public boolean isForbidden(User u) {
