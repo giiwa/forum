@@ -13,10 +13,15 @@
         <div class="clba_s">
             <div class="moder">
 				<span>$lang.get('circling.owner'):</span>
-            	<a href="/forum/circling?uid=$c.owner" target="_blank">$!c.owner_obj.nickname</a>
-                <p>
-                    $lang.get('circling.follows'):<span class="fontred" id="carOwnerCount">$!c.follows</span>
-                </p>
+            	<a class='icon-user' href="/forum/circling?uid=$c.owner" target="_blank">$!c.owner_obj.nickname</a>
+                <br>
+                <span>
+                    $lang.get('circling.followers'):<em class='icon-users'>$!c.followers</em>
+                </span>
+                <br>
+                <span>
+                    $lang.get('circling.topics'):<em class='icon-bubbles'>$!c.topics</em>
+                </span>
             </div>
             <a class='btn btn-danger icon-pushpin' href="javascript:;" onclick="_follow('$c.id')" title="$lang.get('a.circling.follow')"></a>
         </div>

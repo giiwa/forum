@@ -60,7 +60,6 @@ expose.reporter=举报人
 expose.topic=话题
 menu.expose=举报
 a.circling.follow=加入圈子
-circling.follows=圈子人数
 circling.owner=负责人
 topic.lastreply=最后回复
 topic.lastreply_created=最后回复
