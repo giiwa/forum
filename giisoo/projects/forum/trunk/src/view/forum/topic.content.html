@@ -55,8 +55,8 @@
 	</div>
 	#end
 	<div class='combomf'>
-		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_up('$f.id', this)">$lang.get('a.topic.up')(<span>$!f.up</span>)</a>
-		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_down('$f.id', this)">$lang.get('a.topic.down')(<span>$!f.down</span>)</a>
+		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_update({id:'$f.id',up:1}, this)">$lang.get('a.topic.up')(<span>$!f.up</span>)</a>
+		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_update({id:'$f.id',down:1}, this)">$lang.get('a.topic.down')(<span>$!f.down</span>)</a>
 		#if($f.deleted != 1)
 			<a class="btn btn-xs btn-warning" href="javascript:;" onclick="_expose('$f.id', this)">$lang.get('a.topic.expose')</a>
 			
@@ -70,15 +70,20 @@
 		#end
 		#if($me.id == $c.owner)
 			#if($f.deleted==1)
-			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_delete('$f.id', 0, this)">$lang.get('a.recover')</a>
+			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_update({id:'$f.id', deleted:0}, this)">$lang.get('a.recover')</a>
 			#else
-			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_delete('$f.id', 1, this)">$lang.get('a.delete')</a>
+			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_update({id:'$f.id', deleted:1}, this)">$lang.get('a.delete')</a>
 			#end
 			
 			#if($f == $t)
-			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_top('$f.id', 1)">$lang.get('a.top1')</a>
-			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_top('$f.id', 0)">$lang.get('a.top0')</a>
-			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_cream('$f.id')">$lang.get('a.cream')</a>
+			#if($f.top != 1)
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:1}, this)">$lang.get('a.top1')</a>
+			#else
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:0}, this)">$lang.get('a.top0')</a>
+			#end
+			#if($f.cream != 1)
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', cream:1}, this)">$lang.get('a.cream')</a>
+			#end
 			#end
 		#end
 	</div>	

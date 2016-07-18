@@ -33,9 +33,7 @@
 		#set($o = $t.owner_obj)
 		#parse('/forum/topic.owner.html')
 		#set($f=$t)
-		<div id="cnt_$f.id">
 		#parse('/forum/topic.content.html')
-		</div>
 	</div>
 	#foreach($f in $list)
 	<div class='col-sm-12 topic-fn'>
@@ -70,14 +68,6 @@
 </div>
 
 <script>
-function _update(p, o) {
-	p.cid = "$!cid";
-	processing && processing.show();
-	$.post('/forum/topic/update', p, function(d){
-		processing && processing.hide();
-		p.id && $('#cnt_' + p.id).html(d);
-	})	
-}
 function _expose(id) {
 	processing && processing.show();
 	$.post('/forum/topic/expose', {id:id}, function(d){
@@ -85,11 +75,32 @@ function _expose(id) {
 		alert(d.message);
 	})	
 }
+function _up(id, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {id:id, up:1, cid:'$cid'}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
+function _down(id, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {id:id, down:1, cid:'$cid'}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
 function _deny(cid, uid) {
 	processing && processing.show();
 	$.post('/forum/circling/deny', {cid:cid, uid:uid}, function(d){
 		processing && processing.hide();
 		$.success(d.messsage);
+	})
+}
+function _delete(id, flag, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {cid:'$cid', id:id, deleted:flag}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
 	})
 }
 function _reply(refer, o){

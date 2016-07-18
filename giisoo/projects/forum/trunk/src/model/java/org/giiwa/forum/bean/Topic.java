@@ -65,6 +65,11 @@ public class Topic extends Bean {
     return this.getInt("replies");
   }
 
+  public long replysInDays(int days) {
+    return Bean.count(new BasicDBObject("cid", this.getCid()).append("parent", this.getId()).append("created",
+        new BasicDBObject("$gt", System.currentTimeMillis() - days * X.ADAY)), Topic.class);
+  }
+
   public long getOwner() {
     return this.getLong("owner");
   }
@@ -182,6 +187,18 @@ public class Topic extends Bean {
 
   public static long count(BasicDBObject q) {
     return Bean.count(q, Topic.class);
+  }
+
+  public Topic getParent_obj() {
+    Topic t = (Topic) this.get("parent_obj");
+    if (t == null) {
+      String parent = this.getString("parent");
+      if (!"root".equals(parent)) {
+        t = Topic.load(parent);
+        this.set("parent_obj", t);
+      }
+    }
+    return t;
   }
 
 }
