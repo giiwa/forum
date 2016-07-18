@@ -58,7 +58,7 @@
 	<classpathentry kind="lib" path="depends/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="depends/core-3.1.0.jar"/>
 	<classpathentry kind="lib" path="depends/jsch-0.1.53.jar"/>
-	<classpathentry kind="lib" path="depends/giiwa-1.0.2.jar"/>
+	<classpathentry kind="lib" path="depends/giiwa-1.0.2.jar" sourcepath="/giiwa"/>
 	<classpathentry kind="lib" path="depends/httpmime-4.3.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
