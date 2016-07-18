@@ -1,5 +1,9 @@
 package org.giiwa.forum.web.forum;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.giiwa.core.base.Html;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
@@ -11,6 +15,7 @@ import org.giiwa.forum.bean.Topic;
 import org.giiwa.forum.bean.UserHelper;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
+import org.jsoup.nodes.Element;
 
 import com.mongodb.BasicDBObject;
 
@@ -60,6 +65,19 @@ public class topic extends Model {
        */
       String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
       v.set("content", content);
+      List<Element> list = Html.create(content).getTags("img");
+      int p = 0;
+      if (list != null && list.size() > 0) {
+        for (Element e : list) {
+          String src = e.attr("src");
+          if (src != null && src.startsWith("/repo")) {
+            p = 1;
+            break;
+          }
+        }
+      }
+      v.set("photo", p);
+
       v.set("owner", login.getId());
       v.set("parent", "root").set("top", 0);
       Topic.create(v);
@@ -74,8 +92,7 @@ public class topic extends Model {
 
       }.schedule(10);
 
-      this.set(X.MESSAGE, lang.get("create.success"));
-      onGet();
+      this.redirect("/forum/topic?cid=" + cid);
       return;
     }
     this.show("/forum/topic.create.html");
@@ -102,12 +119,31 @@ public class topic extends Model {
           v.set("down", t.getDown() + 1);
         }
       }
+      if (this.getString("top") != null) {
+        v.set("top", this.getInt("top"));
+      }
+      if (this.getString("cream") != null) {
+        v.set("cream", this.getInt("cream"));
+      }
 
       Topic.update(id, v);
     }
 
     t = Topic.load(id);
-    this.set("t", t.getRefer());
+    Topic p = t.getParent_obj();
+    if (p == null) {
+      /**
+       * get recommends
+       */
+      Beans<Topic> bs1 = Topic.load(
+          new BasicDBObject("cid", t.getCid()).append("parent", "root").append(X._ID, new BasicDBObject("$ne", id)),
+          new BasicDBObject("updated", -1), 0, 20);
+      this.set("recommends", bs1 == null ? null : bs1.getList());
+      this.set("t", t);
+    } else {
+      this.set("t", p);
+    }
+
     this.set("f", t);
     this.set("c", c);
     this.show("/forum/topic.content.html");
@@ -164,9 +200,22 @@ public class topic extends Model {
       v.set("title", this.getString("title"));
       String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
       v.set("content", content);
+      List<Element> list = Html.create(content).getTags("img");
+      int p = 0;
+      if (list != null && list.size() > 0) {
+        for (Element e : list) {
+          String src = e.attr("src");
+          if (src != null && src.startsWith("/repo")) {
+            p = 1;
+            break;
+          }
+        }
+      }
+      v.set("photo", p);
+
       Topic.update(id, v);
-      this.set(X.MESSAGE, lang.get("save.success"));
-      detail();
+
+      this.redirect("/forum/topic?id=" + id);
       return;
     }
     this.set("t", t);
@@ -240,5 +289,29 @@ public class topic extends Model {
     sb.append("</div>");
     sb.append("</blockquote>");
     return sb.toString();
+  }
+
+  public String flags(Topic t) {
+    StringBuilder sb = new StringBuilder();
+    int f1 = 0;
+    if (t.getInt("cream") == 1) {
+      // cream topic
+      sb.append("<img src='/images/flags/cream.png'/>");
+      f1++;
+    }
+    if (t.getInt("top") == 1) {
+      sb.append("<img src='/images/flags/top.png'/>");
+      f1++;
+    }
+    if (t.replysInDays(1) > 10) {
+      sb.append("<img src='/images/flags/hot.png'/>");
+      f1++;
+    }
+    if (t.getInt("photo") == 1) {
+      sb.append("<img src='/images/flags/photo.png'/>");
+      f1++;
+    }
+
+    return "<span class='flags flag-" + f1 + "'>" + sb.toString() + "</span>";
   }
 }

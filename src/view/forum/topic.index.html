@@ -1,17 +1,5 @@
 #parse('/forum/head.html')
 
-<div id='title'>
-	<div class="blue-wrap">
-		<div class="container">
-			<div class="row">	
-				<div class="col-sm-8">
-					<h1>Topic list</h1>
-				</div>
-			</div>
-		</div>
-	</div>	
-</div>
-
 <div class='tabs'>
 	<a href='/forum' class='selected'>$lang.get('circling.index.title')</a>
 	<span>&gt;</span>
@@ -36,7 +24,12 @@
 </div>
 
 <div class='text-right col-sm-12'>
-	<a href='/forum/topic/create?cid=$!cid' class='btn btn-success'>$lang.get('a.create')</a>
+	<form class="search-inline">
+		<input type='hidden' name='cid' value="$cid"/>
+      <input type="text" placeholder="$lang.get('topic.search.text')">
+      <button type='submit' class="icon-search"></button>
+	</form>
+	<a href='/forum/topic/create?cid=$!cid' class='btn btn-success'>$lang.get('a.topic.create')</a>
 </div>
 
 <div class='col-sm-12 topic'>
@@ -54,12 +47,11 @@
 			#foreach($f in $list)
 			<tr>
 				<td style='padding:0'> 
-					<span class="topic-state">
-					</span>
+					$this.flags($f)
 					<a class='topic-title' href="/forum/topic/detail?id=$f.id">$!f.title</a> 
 				</td>
 				<td>
-					<a href="/forum/circling?uid=$f.owner">$!f.owner_obj.nickname</a>
+					<a class="icon-user" href="/forum/circling?uid=$f.owner">$!f.owner_obj.nickname</a>
 					<br/>
 					<span class='text-muted'>$!lang.format($f.created, 'yyyy-MM-dd')</span>
 				</td>
@@ -69,9 +61,15 @@
 					<span class='text-muted'>$!f.reads</span>
 				</td>
 				<td>
-					<a href="/forum/circling?uid=$f.owner">$!f.last.owner_obj.nickname</a>
+					#if($f.last.owner_obj.nickname)
+					<a class="icon-user" href="/forum/circling?uid=$f.owner">$f.last.owner_obj.nickname</a>
+					#end
 					<br/>
-					<span class='text-muted'>$!lang.format($f.last.created, 'yyyy-MM-dd HH:mm')</span>
+					<span class='text-muted'>
+						#if($f.last.created>0)
+						$!lang.format($f.last.created, 'yyyy-MM-dd HH:mm')
+						#end
+					</span>
 				</td>
 			</tr>
 			#end

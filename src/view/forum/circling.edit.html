@@ -1,21 +1,9 @@
 #parse('/forum/head.html')
 
-<div id='title'>
-	<div class="blue-wrap">
-		<div class="container">
-			<div class="row">	
-				<div class="col-sm-8">
-					<h1>Create a circling</h1>
-				</div>
-			</div>
-		</div>
-	</div>	
-</div>
-
 <div class='tabs'>
 	<a href='/forum/circling'>$lang.get('circling.index.title')</a>
 	<span>&gt;</span>
-	<a href='/forum/circling/create' class='selected'>$lang.get('circling.create.title')</a>
+	<a href='/forum/circling/edit?cid=$!cid' class='selected'>$lang.get('circling.edit.title')</a>
 </div>
 
 <form class="form-horizontal" action='/forum/circling/edit'  method='post'>
