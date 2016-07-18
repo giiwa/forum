@@ -11,7 +11,7 @@
 			</h1>
 			<p>$lang.get('circling.followers'): 
 				#if($f1.state == 'owner')
-				<a href='/forum/circling/user'>$!f.followers</a>
+				<a class='icon-users' href='/forum/circling/user'>$!f.followers</a>
 				<em class='text-muted'>
 					<span>|</span> 
 					$lang.get('circling.followers_accepted'): 
@@ -24,15 +24,15 @@
 					<a href='/forum/circling/user?state=rejected'>$!f.followers_rejected</a>
 				</em>
 				#else
-				$!f.followers
+				<em>$!f.followers</em>
 				<em class='text-muted'>
 					<span>|</span> 
 					$lang.get('circling.followers_accepted'): 
 					$!f.followers_accepted
-					<span>|</span> 
+					<span>|</span>
 					$lang.get('circling.followers_pending'): 
 					$!f.followers_pending
-					<span>|</span> 
+					<span>|</span>
 					$lang.get('circling.followers_rejected'): 
 					$!f.followers_rejected
 				</em>
@@ -40,9 +40,9 @@
 			</p>
 			<p>$lang.get('circling.topics'):
 				#if($f1.state == 'accepted' || $f1.state == 'owner')
-				<a href='/forum/topic?cid=$f.id'>$!f.topics</a>
+				<a class='icon-bubbles' href='/forum/topic?cid=$f.id'>$!f.topics</a>
 				#else
-				$!f.topics
+				<em>$!f.topics</em>
 				#end
 			</p>
 			<p class='text-muted'>
