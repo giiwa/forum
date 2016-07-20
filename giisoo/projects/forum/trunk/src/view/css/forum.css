@@ -550,3 +550,16 @@ form.search-inline button {
 blockquote {
 	padding-top: 0;
 }
+
+ul.circlings li img.user-sm {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-right: 2px;
+}
+
+img.user-bg{
+	display: inline-block;
+	width: 128px;
+	height: 128px;
+}

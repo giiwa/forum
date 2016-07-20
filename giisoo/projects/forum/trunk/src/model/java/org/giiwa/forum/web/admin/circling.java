@@ -37,7 +37,7 @@ public class circling extends Model {
 
   @Path(path = "update", login = true, access = "access.forum.admin")
   public void update() {
-    String id = this.getString("id");
+    long id = this.getLong("id");
     if (this.getString("state") != null) {
       int i = this.getInt("state");
       Circling.update(id, V.create("state", i));

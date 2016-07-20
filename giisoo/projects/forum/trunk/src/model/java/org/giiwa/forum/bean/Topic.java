@@ -24,8 +24,8 @@ public class Topic extends Bean {
    */
   private static final long serialVersionUID = 1L;
 
-  public String getId() {
-    return this.getString(X._ID);
+  public long getId() {
+    return this.getLong(X._ID);
   }
 
   public String getTitle() {
@@ -51,7 +51,7 @@ public class Topic extends Bean {
   public Topic getRefer() {
     Topic t = (Topic) this.get("refer_obj");
     if (t == null && !X.isEmpty(this.get("refer"))) {
-      t = Topic.load(this.getString("refer"));
+      t = Topic.load(this.getLong("refer"));
       this.set("refer_obj", t);
     }
     return t;
@@ -85,24 +85,24 @@ public class Topic extends Bean {
 
   // ------------
 
-  public static String create(V v) {
+  public static long create(V v) {
     /**
      * generate a unique id in distribute system
      */
-    String id = "t" + UID.next("topic.id");
+    long id = UID.next("topic.id");
     try {
       while (exists(id)) {
-        id = "t" + UID.next("topic.id");
+        id = UID.next("topic.id");
       }
       Bean.insert(v.set(X._ID, id), Topic.class);
       return id;
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
     }
-    return null;
+    return -1;
   }
 
-  public static boolean exists(String id) {
+  public static boolean exists(long id) {
     try {
       return Bean.exists(new BasicDBObject(X._ID, id), Topic.class);
     } catch (Exception e1) {
@@ -111,7 +111,7 @@ public class Topic extends Bean {
     return false;
   }
 
-  public static int update(String id, V v) {
+  public static int update(long id, V v) {
     return Bean.updateCollection(id, v, Topic.class);
   }
 
@@ -119,17 +119,17 @@ public class Topic extends Bean {
     return Bean.load(q, order, s, n, Topic.class);
   }
 
-  public static Topic load(String id) {
+  public static Topic load(long id) {
     return Bean.load(new BasicDBObject(X._ID, id), Topic.class);
   }
 
-  public static void delete(String id) {
+  public static void delete(long id) {
     Bean.delete(new BasicDBObject(X._ID, id), Topic.class);
   }
 
-  public String getCid() {
+  public long getCid() {
     // TODO Auto-generated method stub
-    return this.getString("cid");
+    return this.getLong("cid");
   }
 
   public Topic getLast() {
@@ -144,7 +144,7 @@ public class Topic extends Bean {
 
       @Override
       public void onExecute() {
-        String id = getId();
+        long id = getId();
         int s = 0;
         BasicDBObject q = new BasicDBObject("parent", id);
         BasicDBObject order = new BasicDBObject("created", 1);
@@ -192,7 +192,7 @@ public class Topic extends Bean {
   public Topic getParent_obj() {
     Topic t = (Topic) this.get("parent_obj");
     if (t == null) {
-      String parent = this.getString("parent");
+      long parent = this.getLong("parent");
       if (!"root".equals(parent)) {
         t = Topic.load(parent);
         this.set("parent_obj", t);

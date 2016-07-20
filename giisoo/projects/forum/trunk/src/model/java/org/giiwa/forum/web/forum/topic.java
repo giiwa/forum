@@ -31,14 +31,14 @@ public class topic extends Model {
 
   @Path(login = true)
   public void onGet() {
-    String cid = this.getString("cid");
+    long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
     this.set("cid", cid);
     this.set("c", c);
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", "root"),
+    Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", 0),
         new BasicDBObject("updated", -1), s, n);
     this.set(bs, s, n);
     this.query.path("/forum/topic");
@@ -54,7 +54,7 @@ public class topic extends Model {
 
   @Path(path = "create", login = true)
   public void create() {
-    final String cid = this.getString("cid");
+    final long cid = this.getLong("cid");
     this.set("cid", cid);
     if (method.isPost()) {
       V v = V.create("cid", cid);
@@ -79,7 +79,7 @@ public class topic extends Model {
       v.set("photo", p);
 
       v.set("owner", login.getId());
-      v.set("parent", "root").set("top", 0);
+      v.set("parent", 0).set("top", 0);
       Topic.create(v);
       new Task() {
 
@@ -100,9 +100,9 @@ public class topic extends Model {
 
   @Path(path = "update", login = true)
   public void update() {
-    String cid = this.getString("cid");
+    long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
-    String id = this.getString("id");
+    long id = this.getLong("id");
     Topic t = Topic.load(id);
     if (c.getOwner() == login.getId()) {
       V v = V.create();
@@ -136,7 +136,7 @@ public class topic extends Model {
        * get recommends
        */
       Beans<Topic> bs1 = Topic.load(
-          new BasicDBObject("cid", t.getCid()).append("parent", "root").append(X._ID, new BasicDBObject("$ne", id)),
+          new BasicDBObject("cid", t.getCid()).append("parent", 0).append(X._ID, new BasicDBObject("$ne", id)),
           new BasicDBObject("updated", -1), 0, 20);
       this.set("recommends", bs1 == null ? null : bs1.getList());
       this.set("t", t);
@@ -152,8 +152,8 @@ public class topic extends Model {
   @Path(path = "reply", login = true)
   public void reply() {
 
-    String id = this.getString("id");
-    String refer = this.getString("refer");
+    long id = this.getLong("id");
+    long refer = this.getLong("refer");
 
     Topic t = Topic.load(id);
     Topic last = t.getLast();
@@ -193,7 +193,7 @@ public class topic extends Model {
 
   @Path(path = "edit", login = true)
   public void edit() {
-    String id = this.getString("id");
+    long id = this.getLong("id");
     Topic t = Topic.load(id);
     if (method.isPost()) {
       V v = V.create();
@@ -229,7 +229,7 @@ public class topic extends Model {
   @Path(path = "expose", login = true)
   public void expose() {
     JSONObject jo = new JSONObject();
-    String id = this.getString("id");
+    long id = this.getLong("id");
 
     Topic t = Topic.load(id);
     Circling c = t.getCircling();
@@ -242,7 +242,7 @@ public class topic extends Model {
 
   @Path(path = "detail", login = true)
   public void detail() {
-    String id = this.getString("id");
+    long id = this.getLong("id");
     Topic t = Topic.load(id);
     this.set("t", t);
     this.set("c", t.getCircling());
@@ -264,7 +264,7 @@ public class topic extends Model {
      * get recommends
      */
     Beans<Topic> bs1 = Topic.load(
-        new BasicDBObject("cid", t.getCid()).append("parent", "root").append(X._ID, new BasicDBObject("$ne", id)),
+        new BasicDBObject("cid", t.getCid()).append("parent", 0).append(X._ID, new BasicDBObject("$ne", id)),
         new BasicDBObject("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");

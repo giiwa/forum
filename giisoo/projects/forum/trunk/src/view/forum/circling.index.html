@@ -14,7 +14,7 @@
 
 <div class='col-sm-12 text-right'>
 	<form class="search-inline">
-      <input type="text" placeholder="$lang.get('circling.search.text')">
+      <input type="text" name="q" value="$q" placeholder="$lang.get('circling.search.text')">
       <button type='submit' class="icon-search"></button>
 	</form>
 	<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
@@ -28,7 +28,7 @@
 		#if($me.id == $u.id)
 		<a href='/forum/user/edit'>
 			#if($u.photo)
-			<img src='$u.photo'/>
+			<img src='$u.photo' class="user-bg"/>
 			#else
 			<img src='/images/user_default.gif'/>
 			#end
@@ -36,7 +36,7 @@
 		#else
 		<a href='/forum/circling?uid=$u.owner'>
 			#if($u.photo)
-			<img src='$u.photo'/>
+			<img src='$u.photo' class='user-bg'/>
 			#else
 			<img src='/images/user_default.gif'/>
 			#end

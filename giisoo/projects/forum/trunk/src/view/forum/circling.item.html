@@ -51,7 +51,13 @@
 		</div>
 	</div>
 	<div class='btns col-sm-12 text-right'>
-		<h5 class='pull-left text-warning icon-user'>
+		<h5 class='pull-left text-warning'>
+			#if($f.owner_obj.photo)
+			<img src="$f.owner_obj.photo" class='user-sm'/>
+			#else
+			<span class='icon-user'></span>
+			#end
+			
 			#if($me.id == $f.owner_obj.id)
 			$!f.owner_obj.nickname
 			#else
