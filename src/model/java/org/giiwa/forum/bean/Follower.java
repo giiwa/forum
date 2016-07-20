@@ -30,8 +30,8 @@ public class Follower extends Bean {
     return u;
   }
 
-  public String getCid() {
-    return this.getString("cid");
+  public long getCid() {
+    return this.getLong("cid");
   }
 
   public Circling getCircling_obj() {
@@ -57,7 +57,7 @@ public class Follower extends Bean {
     return false;
   }
 
-  public static boolean create(long uid, String cid, V v) {
+  public static boolean create(long uid, long cid, V v) {
     String id = UID.id(uid, cid);
     try {
       if (!Bean.exists(new BasicDBObject(X._ID, id), Follower.class)) {

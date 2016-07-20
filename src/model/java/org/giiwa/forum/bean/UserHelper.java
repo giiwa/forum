@@ -24,7 +24,7 @@ public class UserHelper {
     /**
      * count replies
      */
-    long c1 = Bean.count(new BasicDBObject("owner", uid).append("parent", "root"), Topic.class);
+    long c1 = Bean.count(new BasicDBObject("owner", uid).append("parent", 0), Topic.class);
     v.set("replies", count - c1);
 
     User.update(uid, v);

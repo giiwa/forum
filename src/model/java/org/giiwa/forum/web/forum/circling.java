@@ -1,11 +1,17 @@
 package org.giiwa.forum.web.forum;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
-import org.giiwa.core.base.Html;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Follower;
@@ -13,16 +19,18 @@ import org.giiwa.forum.bean.Log;
 import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
-import org.jsoup.nodes.Element;
+import org.giiwa.tinyse.se.SE;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 import net.sf.json.JSONObject;
 
 public class circling extends Model {
 
-  @Path(login = true, access = "access.forum.admin")
+  @Path(login = true)
   public void onGet() {
+
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
@@ -30,33 +38,49 @@ public class circling extends Model {
     User u = User.loadById(uid);
     this.set("u", u);
 
-    BasicDBObject q = new BasicDBObject("owner", uid);
-    String name = this.getString("name");
+    String q1 = this.getString("q");
+    Beans<Circling> bs = null;
+    if (!X.isEmpty(q1) && path == null) {
+      Query q2 = SE.parse(q1, new String[] { "name", "nickname", "memo" });
+      TopDocs docs = SE.search("circling", q2, s);
+      if (docs != null) {
+        bs = new Beans<Circling>();
+        bs.setTotal(docs.totalHits);
 
-    if (!X.isEmpty(name) && path == null) {
-      Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
-      q.append("name", pattern);
-      this.set("name", name);
+        List<Circling> list = new ArrayList<Circling>();
+        int m1 = Math.min(s + n, docs.totalHits);
+        ScoreDoc[] dd = docs.scoreDocs;
+        
+        for (int i = s; i < m1; i++) {
+          Object id = SE.get(dd[i].doc);
+          Circling c = Circling.load(X.toLong(id, -1));
+          if(c != null && c.getstate)
+        }
+      }
+
+      this.set("q", q1);
+    } else {
+      BasicDBObject q = new BasicDBObject("owner", uid);
+      bs = Circling.load(q, new BasicDBObject("updated", -1), s, n);
     }
-    Beans<Circling> bs = Circling.load(q, new BasicDBObject("updated", -1), s, n);
     this.set(bs, s, n);
     this.query.path("/forum/circling");
 
     this.show("/forum/circling.index.html");
   }
 
-  @Path(path = "delete", login = true, access = "access.forum.admin")
+  @Path(path = "delete", login = true)
   public void delete() {
-    String id = this.getString("id");
+    long id = this.getLong("id");
     Circling.delete(id);
     JSONObject jo = new JSONObject();
     jo.put(X.STATE, 200);
     this.response(jo);
   }
 
-  @Path(path = "deny", login = true, access = "access.forum.admin")
+  @Path(path = "deny", login = true)
   public void _deny() {
-    String cid = this.getString("cid");
+    long cid = this.getLong("cid");
     long uid = this.getLong("uid");
 
     Circling c = Circling.load(cid);
@@ -72,7 +96,7 @@ public class circling extends Model {
     this.response(jo);
   }
 
-  @Path(path = "create", login = true, access = "access.corum.admin")
+  @Path(path = "create", login = true)
   public void create() {
 
     if (method.isPost()) {
@@ -88,7 +112,7 @@ public class circling extends Model {
       v.set("user_state", this.getString("user_state"));
       v.set("owner", login.getId());
 
-      String id = Circling.create(v);
+      long id = Circling.create(v);
 
       Follower.create(login.getId(), id, V.create("state", "owner"));
 
@@ -102,7 +126,7 @@ public class circling extends Model {
     this.show("/forum/circling.create.html");
   }
 
-  @Path(path = "user", login = true, access = "access.forum.admin")
+  @Path(path = "user", login = true)
   public void user() {
     String cid = this.getString("cid");
     String state = this.getString("state");
@@ -111,9 +135,9 @@ public class circling extends Model {
 
   }
 
-  @Path(path = "edit", login = true, access = "access.forum.admin")
+  @Path(path = "edit", login = true)
   public void edit() {
-    String cid = this.getString("cid");
+    long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
     Follower f = c.getFollower(login);
     if (!X.isSame("owner", f.getState())) {

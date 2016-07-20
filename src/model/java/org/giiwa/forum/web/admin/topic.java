@@ -19,8 +19,8 @@ public class topic extends Model {
     int n = this.getInt("n", 20, "number.per.page");
 
     BasicDBObject q = new BasicDBObject();
-    String cid = this.getString("cid");
-    if (!X.isEmpty(cid)) {
+    long cid = this.getLong("cid");
+    if (cid > 0) {
       Circling c = Circling.load(cid);
       this.set("c", c);
       q.append("cid", cid);

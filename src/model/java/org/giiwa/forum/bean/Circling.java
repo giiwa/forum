@@ -25,8 +25,8 @@ public class Circling extends Bean {
    */
   private static final long serialVersionUID = 1L;
 
-  public String getId() {
-    return this.getString(X._ID);
+  public long getId() {
+    return this.getLong(X._ID);
   }
 
   public String getName() {
@@ -35,6 +35,10 @@ public class Circling extends Bean {
 
   public String getMemo() {
     return this.getString("memo");
+  }
+
+  public String getState() {
+    return this.getString("state");
   }
 
   public String getAccess() {
@@ -56,24 +60,24 @@ public class Circling extends Bean {
 
   // ------------
 
-  public static String create(V v) {
+  public static long create(V v) {
     /**
      * generate a unique id in distribute system
      */
-    String id = "c" + UID.next("circling.id");
+    long id = UID.next("circling.id");
     try {
       while (exists(id)) {
-        id = "c" + UID.next("circling.id");
+        id = UID.next("circling.id");
       }
       Bean.insert(v.set(X._ID, id), Circling.class);
       return id;
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
     }
-    return null;
+    return -1;
   }
 
-  public static boolean exists(String id) {
+  public static boolean exists(long id) {
     try {
       return Bean.exists(new BasicDBObject(X._ID, id), Circling.class);
     } catch (Exception e1) {
@@ -82,7 +86,7 @@ public class Circling extends Bean {
     return false;
   }
 
-  public static int update(String id, V v) {
+  public static int update(long id, V v) {
     return Bean.updateCollection(id, v, Circling.class);
   }
 
@@ -90,15 +94,15 @@ public class Circling extends Bean {
     return Bean.load(q, order, s, n, Circling.class);
   }
 
-  public static Circling load(String id) {
+  public static Circling load(long id) {
     return Bean.load(new BasicDBObject(X._ID, id), Circling.class);
   }
 
-  public static void delete(String id) {
+  public static void delete(long id) {
     Bean.delete(new BasicDBObject(X._ID, id), Circling.class);
   }
 
-  public static void repair(final String id) {
+  public static void repair(final long id) {
     new Task() {
 
       @Override
@@ -108,14 +112,14 @@ public class Circling extends Bean {
          * count the users
          */
         long total = Follower.count(new BasicDBObject("cid", id));
-        V v = V.create("followers", total - 1);
+        V v = V.create("followers", total);
         long count = Follower.count(new BasicDBObject("cid", id).append("state", "pending"));
         v.set("followers_pending", count);
         count = Follower.count(new BasicDBObject("cid", id).append("state", "accepted"));
         v.set("followers_accepted", count);
         count = Follower.count(new BasicDBObject("cid", id).append("state", "rejected"));
         v.set("followers_rejected", count);
-        count = Topic.count(new BasicDBObject("cid", id).append("parent", "root"));
+        count = Topic.count(new BasicDBObject("cid", id).append("parent", 0));
         v.set("topics", count);
         Circling.update(id, v);
 
@@ -167,6 +171,11 @@ public class Circling extends Bean {
 
     return Bean.load(new BasicDBObject("$or", list), order, s, n, Circling.class);
 
+  }
+
+  public static Circling load(BasicDBObject q, BasicDBObject order) {
+    // TODO Auto-generated method stub
+    return Bean.load(q, order, Circling.class);
   }
 
 }

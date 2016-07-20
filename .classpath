@@ -60,5 +60,14 @@
 	<classpathentry kind="lib" path="depends/jsch-0.1.53.jar"/>
 	<classpathentry kind="lib" path="depends/giiwa-1.0.2.jar" sourcepath="/giiwa"/>
 	<classpathentry kind="lib" path="depends/httpmime-4.3.4.jar"/>
+	<classpathentry kind="lib" path="depends/tinyse-1.0.1.jar" sourcepath="/tinyse"/>
+	<classpathentry kind="lib" path="depends/lucene-analyzers-3.6.2.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-analyzers-common-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-core-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-highlighter-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-memory-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-queries-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-queryparser-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/lucene-sandbox-4.10.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

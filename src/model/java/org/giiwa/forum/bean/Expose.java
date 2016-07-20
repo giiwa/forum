@@ -5,7 +5,6 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
-import org.giiwa.core.task.Task;
 import org.giiwa.framework.bean.User;
 
 import com.mongodb.BasicDBObject;
@@ -40,7 +39,7 @@ public class Expose extends Bean {
   public Circling getCircling_obj() {
     Circling u = (Circling) this.get("circling_obj");
     if (u == null) {
-      u = Circling.load(this.getString("cid"));
+      u = Circling.load(this.getLong("cid"));
       this.set("circling_obj", u);
     }
     return u;
@@ -49,7 +48,7 @@ public class Expose extends Bean {
   public Topic getTopic_obj() {
     Topic u = (Topic) this.get("topic_obj");
     if (u == null) {
-      u = Topic.load(this.getString("tid"));
+      u = Topic.load(this.getLong("tid"));
       this.set("topic_obj", u);
     }
     return u;

@@ -13,14 +13,22 @@
         <div class="clba_s">
             <div class="moder">
 				<span>$lang.get('circling.owner'):</span>
-            	<a class='icon-user' href="/forum/circling?uid=$c.owner" target="_blank">$!c.owner_obj.nickname</a>
+            	<a href="/forum/circling?uid=$c.owner" target="_blank">
+					#if($c.owner_obj.photo)
+					<img src="$c.owner_obj.photo" class='user'/>
+					#else
+					<span class='icon-user'></span>
+					#end
+            		
+            		$!c.owner_obj.nickname
+            	</a>
                 <br>
                 <span>
-                    $lang.get('circling.followers'):<em>$!c.followers</em>
+                    $lang.get('circling.followers'):<em class='icon-users'>$!c.followers</em>
                 </span>
                 <br>
                 <span>
-                    $lang.get('circling.topics'):<em>$!c.topics</em>
+                    $lang.get('circling.topics'):<em class='icon-bubbles'>$!c.topics</em>
                 </span>
             </div>
             <a class='btn btn-danger icon-pushpin' href="javascript:;" onclick="_follow('$c.id')" title="$lang.get('a.circling.follow')"></a>
@@ -56,7 +64,14 @@
 					<a class='topic-title' href="/forum/topic/detail?id=$f.id">$!f.title</a> 
 				</td>
 				<td>
-					<a class="icon-user" href="/forum/circling?uid=$f.owner">$!f.owner_obj.nickname</a>
+					<a href="/forum/circling?uid=$f.owner">
+						#if($c.owner_obj.photo)
+						<img src="$c.owner_obj.photo" class='user-sm'/>
+						#else
+						<span class='icon-user'></span>
+						#end
+						$!f.owner_obj.nickname
+					</a>
 					<br/>
 					<span class='text-muted'>$!lang.format($f.created, 'yyyy-MM-dd')</span>
 				</td>
@@ -67,7 +82,14 @@
 				</td>
 				<td>
 					#if($f.last.owner_obj.nickname)
-					<a class="icon-user" href="/forum/circling?uid=$f.owner">$f.last.owner_obj.nickname</a>
+					<a href="/forum/circling?uid=$f.owner">
+						#if($f.last.owner_obj.photo)
+						<img src="$f.last.owner_obj.photo" class='user-sm'/>
+						#else
+						<span class='icon-user'></span>
+						#end
+						$f.last.owner_obj.nickname
+					</a>
 					#end
 					<br/>
 					<span class='text-muted'>
