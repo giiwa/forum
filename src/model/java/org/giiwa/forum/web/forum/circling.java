@@ -38,31 +38,42 @@ public class circling extends Model {
     User u = User.loadById(uid);
     this.set("u", u);
 
-    String q1 = this.getString("q");
+    String name = this.getString("q");
     Beans<Circling> bs = null;
-    if (!X.isEmpty(q1) && path == null) {
-      Query q2 = SE.parse(q1, new String[] { "name", "nickname", "memo" });
-      TopDocs docs = SE.search("circling", q2, s);
-      if (docs != null) {
-        bs = new Beans<Circling>();
-        bs.setTotal(docs.totalHits);
+    if (!X.isEmpty(name) && path == null) {
+      /**
+       * searching
+       */
+      bs = new Beans<Circling>();
+      Query q1 = SE.parse(name, new String[] { "name", "nickname", "memo" });
+      TopDocs docs = SE.search("circling", q1);
+      ScoreDoc[] dd = docs.scoreDocs;
+      bs.setTotal(docs.totalHits);
+      List<Circling> list = new ArrayList<Circling>();
+      bs.setList(list);
 
-        List<Circling> list = new ArrayList<Circling>();
-        int m1 = Math.min(s + n, docs.totalHits);
-        ScoreDoc[] dd = docs.scoreDocs;
-        
-        for (int i = s; i < m1; i++) {
-          Object id = SE.get(dd[i].doc);
-          Circling c = Circling.load(X.toLong(id, -1));
-          if(c != null && c.getstate)
+      int min = s + n;
+      int i = s;
+      while (i < min && i < dd.length) {
+
+        ScoreDoc d = dd[i];
+        Long id = (Long) SE.get(d.doc);
+        if (id != null) {
+          Circling e = Circling.load((long) id);
+          list.add(e);
+        }
+        i++;
+        if (list.size() >= n) {
+          break;
         }
       }
 
-      this.set("q", q1);
+      this.set("q", name);
     } else {
       BasicDBObject q = new BasicDBObject("owner", uid);
       bs = Circling.load(q, new BasicDBObject("updated", -1), s, n);
     }
+    
     this.set(bs, s, n);
     this.query.path("/forum/circling");
 
