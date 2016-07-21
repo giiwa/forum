@@ -69,4 +69,13 @@
 	
 #parse('/forum/goto.page.html')
 
+<script>
+function _follow(p, o) {
+	processing && processing.show();
+	$.post('/forum/circling/follow', p, function(d){
+		processing && processing.hide();
+		
+	});
+}	
+</script>
 #parse('/forum/foot.html')

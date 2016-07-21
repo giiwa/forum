@@ -11,17 +11,17 @@
 			</h1>
 			<p>$lang.get('circling.followers'): 
 				#if($f1.state == 'owner')
-				<a class='icon-users' href='/forum/circling/user'>$!f.followers</a>
+				<a class='icon-users' href='/forum/circling/user?cid=$f.id'>$!f.followers</a>
 				<em class='text-muted'>
 					<span>|</span> 
 					$lang.get('circling.followers_accepted'): 
-					<a href='/forum/circling/user?state=accepted'>$!f.followers_accepted</a>
+					<a href='/forum/circling/user?cid=$f.id&state=accepted'>$!f.followers_accepted</a>
 					<span>|</span>
 					$lang.get('circling.followers_pending'): 
-					<a class='text-danger' href='/forum/circling/user?state=pending'>$!f.followers_pending</a>
+					<a class='text-danger' href='/forum/circling/user?cid=$f.id&state=pending'>$!f.followers_pending</a>
 					<span>|</span> 
 					$lang.get('circling.followers_rejected'): 
-					<a href='/forum/circling/user?state=rejected'>$!f.followers_rejected</a>
+					<a href='/forum/circling/user?cid=$f.id&state=rejected'>$!f.followers_rejected</a>
 				</em>
 				#else
 				<em>$!f.followers</em>
@@ -75,7 +75,7 @@
 			#end
 		</h5>
 		#if(!$f1)
-			<a class='btn btn-sm btn-info'>$lang.get('a.follow')</a>
+			<a class='btn btn-sm btn-info' onclick="_follow({cid:'$f.id',follow:1}, this)">$lang.get('a.follow')</a>
 		#elseif($f1.state == 'pending')
 			<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.pending')</a>
 		#elseif($f1.state == 'accepted')
@@ -87,6 +87,6 @@
 		#elseif($f1.state == 'rejected')
 			<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.rejected')</a>
 		#end
-		<a class='btn btn-sm btn-warning'>$lang.get('a.delete')</a>
+		<a class='btn btn-sm btn-warning' onclick="_follow({id:'$!f.id',delete:1}, this)">$lang.get('a.delete')</a>
 	</div>
 </li>

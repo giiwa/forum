@@ -37,8 +37,8 @@ public class Circling extends Bean {
     return this.getString("memo");
   }
 
-  public String getState() {
-    return this.getString("state");
+  public String getUser_state() {
+    return this.getString("user_state");
   }
 
   public String getAccess() {
