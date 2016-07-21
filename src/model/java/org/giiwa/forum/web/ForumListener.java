@@ -8,14 +8,14 @@ import org.giiwa.framework.web.IListener;
 import org.giiwa.framework.web.Module;
 import org.giiwa.tinyse.se.SE;
 
-public class CirclingListener implements IListener {
+public class ForumListener implements IListener {
 
-  static Log log = LogFactory.getLog(CirclingListener.class);
+  static Log log = LogFactory.getLog(ForumListener.class);
 
   @Override
   public void onStart(Configuration conf, Module m) {
     // TODO Auto-generated method stub
-    log.info("ticket is starting ...");
+    log.info("forum is starting ...");
 
     SE.init(conf);
     SE.register("circling", new CirclingIndexer());
