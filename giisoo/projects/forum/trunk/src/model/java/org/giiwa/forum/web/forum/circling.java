@@ -10,7 +10,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.forum.bean.Circling;
@@ -21,7 +20,6 @@ import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 import net.sf.json.JSONObject;
@@ -40,7 +38,7 @@ public class circling extends Model {
 
     String name = this.getString("q");
     Beans<Circling> bs = null;
-    if (!X.isEmpty(name) && path == null) {
+    if (!X.isEmpty(name) && X.isEmpty(path)) {
       /**
        * searching
        */
@@ -57,9 +55,25 @@ public class circling extends Model {
       while (i < min && i < dd.length) {
 
         ScoreDoc d = dd[i];
-        Long id = (Long) SE.get(d.doc);
-        if (id != null) {
-          Circling e = Circling.load((long) id);
+        long id = X.toLong(SE.get(d.doc), -1);
+        if (id > -1) {
+          Circling e = Circling.load(id);
+          // SE.highlight();
+          String s1 = SE.highlight(d.doc, "name", q1, null);
+          if (s1 != null) {
+            e.set("name", s1);
+          }
+
+          s1 = SE.highlight(d.doc, "memo", q1, null);
+          if (s1 != null) {
+            e.set("memo", s1);
+          }
+
+          s1 = SE.highlight(d.doc, "nickname", q1, null);
+          if (s1 != null) {
+            e.set("owner_nickname", s1);
+          }
+
           list.add(e);
         }
         i++;
@@ -73,7 +87,7 @@ public class circling extends Model {
       BasicDBObject q = new BasicDBObject("owner", uid);
       bs = Circling.load(q, new BasicDBObject("updated", -1), s, n);
     }
-    
+
     this.set(bs, s, n);
     this.query.path("/forum/circling");
 
@@ -167,6 +181,7 @@ public class circling extends Model {
 
       v.set("access", this.getString("access"));
       v.set("user_state", this.getString("user_state"));
+      v.set("se_timestamp", 0);
 
       Circling.update(cid, v);
 

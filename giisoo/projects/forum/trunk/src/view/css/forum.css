@@ -460,12 +460,19 @@ ul.circlings {
 	margin-top: 10px;
 }
 
+ul.circlings:before {
+	border-top: 4px solid #3b5998;
+	padding-top: 10px;
+	content: ' ';
+	width: 100%;
+	display: inline-block;
+}
+
 ul.circlings li {
 	margin-bottom: 40px;
 	border-bottom: 5px solid #ccd3e4;
 	padding: 0;
 	border: 1px solid #ccd3e4;
-	border-top: 4px solid #3b5998;
 }
 
 ul.circlings li img {
@@ -558,7 +565,7 @@ ul.circlings li img.user-sm {
 	margin-right: 2px;
 }
 
-img.user-bg{
+img.user-bg {
 	display: inline-block;
 	width: 128px;
 	height: 128px;

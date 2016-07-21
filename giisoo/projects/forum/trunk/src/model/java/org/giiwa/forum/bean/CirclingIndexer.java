@@ -30,11 +30,11 @@ public class CirclingIndexer implements Indexer {
     if (c != null) {
       Document d = new Document();
       if (!X.isEmpty(c.getName()))
-        d.add(new TextField("name", c.getName(), Store.NO));
+        d.add(new TextField("name", c.getName(), Store.YES));
       if (c.getOwner_obj() != null && !X.isEmpty(c.getOwner_obj().getNickname()))
-        d.add(new TextField("owner", c.getOwner_obj().getName(), Store.NO));
+        d.add(new TextField("nickname", c.getOwner_obj().getName(), Store.YES));
       if (!X.isEmpty(c.getMemo()))
-        d.add(new TextField("memo", c.getMemo(), Store.NO));
+        d.add(new TextField("memo", c.getMemo(), Store.YES));
       return d;
     }
     return null;
