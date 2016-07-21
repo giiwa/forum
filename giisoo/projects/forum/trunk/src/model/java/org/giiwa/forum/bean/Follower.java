@@ -1,6 +1,7 @@
 package org.giiwa.forum.bean;
 
 import org.giiwa.core.bean.Bean;
+import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.DBMapping;
 import org.giiwa.core.bean.UID;
@@ -16,6 +17,10 @@ public class Follower extends Bean {
    * 
    */
   private static final long serialVersionUID = 1L;
+
+  public String getId() {
+    return this.getString(X._ID);
+  }
 
   public long getUid() {
     return this.getLong("uid");
@@ -79,5 +84,15 @@ public class Follower extends Bean {
 
   public static long count(BasicDBObject q) {
     return Bean.count(q, Follower.class);
+  }
+
+  public static void delete(BasicDBObject q) {
+    // TODO Auto-generated method stub
+    Bean.delete(q, Follower.class);
+  }
+
+  public static int update(BasicDBObject q, V v) {
+    // TODO Auto-generated method stub
+    return Bean.updateCollection(q, v, Follower.class);
   }
 }

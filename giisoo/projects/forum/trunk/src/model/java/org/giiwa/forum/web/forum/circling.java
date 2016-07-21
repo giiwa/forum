@@ -139,7 +139,7 @@ public class circling extends Model {
 
       long id = Circling.create(v);
 
-      Follower.create(login.getId(), id, V.create("state", "owner"));
+      Follower.create(login.getId(), id, V.create("state", "owner").set("name", login.getNickname()));
 
       this.set(X.MESSAGE, lang.get("create.success"));
 
@@ -153,11 +153,51 @@ public class circling extends Model {
 
   @Path(path = "user", login = true)
   public void user() {
-    String cid = this.getString("cid");
+    long cid = this.getLong("cid");
     String state = this.getString("state");
+
+    int s = this.getInt("s");
+    int n = this.getInt("n", 20, "number.per.page");
+
+    BasicDBObject q = new BasicDBObject("cid", cid);
+    if (!X.isEmpty(state)) {
+      q.append("state", state);
+      this.set("state", state);
+    }
+    String name = this.getString("name");
+    if (!X.isEmpty(name)) {
+      Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
+      q.append("name", pattern);
+      this.set("name", name);
+    }
+    BasicDBObject order = new BasicDBObject();
+    Beans<Follower> bs = Follower.load(q, order, s, n);
+
+    this.set(bs, s, n);
 
     this.show("/forum/circling.user.html");
 
+  }
+
+  @Path(path = "follow", login = true)
+  public void follow() {
+    long cid = this.getLong("cid");
+    Circling c = Circling.load(cid);
+
+    JSONObject jo = new JSONObject();
+    if (!X.isEmpty(this.getString("follow"))) {
+      Follower.create(login.getId(), cid, V.create("state", c.getUser_state()).set("name", login.getNickname()));
+    } else if (!X.isEmpty(this.getString("delete"))) {
+      Follower.delete(new BasicDBObject("uid", login.getId()).append("cid", cid));
+    } else if (!X.isEmpty(this.getString("state"))) {
+      
+    }
+
+    Circling.repair(cid);
+
+    jo.put(X.STATE, 200);
+    jo.put(X.MESSAGE, "ok");
+    this.response(jo);
   }
 
   @Path(path = "edit", login = true)
@@ -184,6 +224,13 @@ public class circling extends Model {
       v.set("se_timestamp", 0);
 
       Circling.update(cid, v);
+
+      if (X.isSame("accepted", this.getString("user_state"))) {
+        /**
+         * auto accept all pending that create before
+         */
+        Follower.update(new BasicDBObject("cid", cid).append("state", "pending"), V.create("state", "accepted"));
+      }
 
       Circling.repair(cid);
 
