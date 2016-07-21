@@ -39,10 +39,22 @@
 		<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
 		<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
 		<td>
-			<a href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
-			<a href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.accepted')</a>
-			<a href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"locked"}, this)'>$lang.get('a.locked')</a>
-			<a href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"owner"}, this)'>$lang.get('a.upgrade.owner')</a>
+			#if($f.uid != $me.id)
+			<a class='btn btn-xs btn-danger' href='javascript:;' onclick='_delete({cid:"$f.cid",id:"$!f.id",delete:"$f.uid"}, this)'>$lang.get('a.delete')</a>
+			#end
+			#if($f.state == 'pending')
+			<a class='btn btn-xs btn-success' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.accepted')</a>
+			#end
+			#if($f.state == 'accepted')
+			<a class='btn btn-xs btn-warning' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"locked"}, this)'>$lang.get('a.locked')</a>
+			<a class='btn btn-xs btn-success' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"owner"}, this)'>$lang.get('a.upgrade.owner')</a>
+			#end
+			#if($f.state == 'locked')
+			<a class='btn btn-xs btn-success' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.unlocked')</a>
+			#end
+			#if($f.state == 'owner')
+			<a class='btn btn-xs btn-warning' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.downgrade.owner')</a>
+			#end
 		</td>
 	</tr>
 #end
@@ -52,10 +64,10 @@
  #parse('/forum/goto.page.html')
 
 <script>
-function _delete(id, o) {
+function _delete(p, o) {
 	if(confirm("$lang.get('title.are_u_sure_delete')")) {
 		processing && processing.show();
-		$.post("/forum/circling/user/delete", {id:id}, function(d){
+		$.post("/forum/circling/follow", p, function(d){
 			processing && processing.hide();
 			$(o).parent().parent().remove();
 		})

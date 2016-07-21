@@ -87,6 +87,6 @@
 		#elseif($f1.state == 'rejected')
 			<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.rejected')</a>
 		#end
-		<a class='btn btn-sm btn-warning' onclick="_follow({id:'$!f.id',delete:1}, this)">$lang.get('a.delete')</a>
+		<a class='btn btn-sm btn-warning' onclick="_follow({id:'$!f.id',delete:'$!me.id'}, this)">$lang.get('a.delete')</a>
 	</div>
 </li>

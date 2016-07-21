@@ -159,21 +159,25 @@ public class circling extends Model {
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    BasicDBObject q = new BasicDBObject("cid", cid);
-    if (!X.isEmpty(state)) {
-      q.append("state", state);
-      this.set("state", state);
-    }
-    String name = this.getString("name");
-    if (!X.isEmpty(name)) {
-      Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
-      q.append("name", pattern);
-      this.set("name", name);
-    }
-    BasicDBObject order = new BasicDBObject();
-    Beans<Follower> bs = Follower.load(q, order, s, n);
+    Follower f = Follower.load(new BasicDBObject("cid", cid).append("uid", login.getId()));
 
-    this.set(bs, s, n);
+    if (f != null && X.isSame("owner", f.getState())) {
+      BasicDBObject q = new BasicDBObject("cid", cid);
+      if (!X.isEmpty(state)) {
+        q.append("state", state);
+        this.set("state", state);
+      }
+      String name = this.getString("name");
+      if (!X.isEmpty(name)) {
+        Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
+        q.append("name", pattern);
+        this.set("name", name);
+      }
+      BasicDBObject order = new BasicDBObject();
+      Beans<Follower> bs = Follower.load(q, order, s, n);
+
+      this.set(bs, s, n);
+    }
 
     this.show("/forum/circling.user.html");
 
@@ -188,9 +192,18 @@ public class circling extends Model {
     if (!X.isEmpty(this.getString("follow"))) {
       Follower.create(login.getId(), cid, V.create("state", c.getUser_state()).set("name", login.getNickname()));
     } else if (!X.isEmpty(this.getString("delete"))) {
-      Follower.delete(new BasicDBObject("uid", login.getId()).append("cid", cid));
+      Follower f = Follower.load(new BasicDBObject("cid", cid).append("uid", login.getId()));
+      if (f != null && X.isSame("owner", f.getState())) {
+        long uid = this.getLong("delete");
+        Follower.delete(new BasicDBObject("uid", uid).append("cid", cid));
+      }
     } else if (!X.isEmpty(this.getString("state"))) {
-      
+      Follower f = Follower.load(new BasicDBObject("cid", cid).append("uid", login.getId()));
+      if (f != null && X.isSame("owner", f.getState())) {
+        String state = this.getString("state");
+        String id = this.getString("id");
+        Follower.update(new BasicDBObject(X._ID, id), V.create("state", state));
+      }
     }
 
     Circling.repair(cid);
