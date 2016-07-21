@@ -59,9 +59,19 @@
 			#end
 			
 			#if($me.id == $f.owner_obj.id)
-			$!f.owner_obj.nickname
+				#if($f.owner_nickname)
+				$f.owner_nickname
+				#else
+				$!f.owner_obj.nickname
+				#end
 			#else
-			<a href='/forum/circling?uid=$f.owner_obj.id'>$!f.owner_obj.nickname</a>
+			<a href='/forum/circling?uid=$f.owner_obj.id'>
+				#if($f.owner_nickname)
+				$f.owner_nickname
+				#else
+				$!f.owner_obj.nickname
+				#end
+			</a>
 			#end
 		</h5>
 		#if(!$f1)
