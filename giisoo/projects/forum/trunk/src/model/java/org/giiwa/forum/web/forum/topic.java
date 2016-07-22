@@ -61,6 +61,7 @@ public class topic extends Model {
     Follower f1 = c.getFollower(login);
     if (!"public".equals(c.getAccess()) || f1 == null || !f1.getPost()) {
       deny();
+      return;
     }
 
     if (method.isPost()) {
