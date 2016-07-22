@@ -499,7 +499,7 @@ form.search-inline {
 	position: relative;
 	margin-right: 10px;
 }
-form.search-inline input {
+form.search-inline input,form.search-inline select {
 	background-image: none;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -517,7 +517,10 @@ form.search-inline input {
 	line-height: 32px;
 	height: 32px;
 }
-form.search-inline input:focus {
+form.search-inline select{
+	width: auto;
+}
+form.search-inline input:focus,form.search-inline select:focus {
 	border-color: #66afe9;
 	outline: 0;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
@@ -569,4 +572,7 @@ img.user-bg {
 	display: inline-block;
 	width: 128px;
 	height: 128px;
+}
+div.users{
+    margin-top: 10px;	
 }

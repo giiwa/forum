@@ -154,6 +154,7 @@ public class circling extends Model {
   @Path(path = "user", login = true)
   public void user() {
     long cid = this.getLong("cid");
+    this.set("cid", cid);
     String state = this.getString("state");
 
     int s = this.getInt("s");
