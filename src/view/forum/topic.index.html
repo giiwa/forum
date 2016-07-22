@@ -6,6 +6,8 @@
 	<a href='/forum/topic?cid=$!cid'>$lang.get('topic.index.title')</a>
 </div>
 
+#set($f1 = $c.getFollower($me))
+
 <div class="circlinginfo">
     <img id="_club_logo" title="$!c.name" alt="$!c.name" class="circling-photo" src=#if($c.photo)"$c.photo" #else '' #end>
     <div class="clinfo">
@@ -15,7 +17,7 @@
 				<span>$lang.get('circling.owner'):</span>
             	<a href="/forum/circling?uid=$c.owner" target="_blank">
 					#if($c.owner_obj.photo)
-					<img src="$c.owner_obj.photo" class='user'/>
+					<img src="$c.owner_obj.photo" class='user-sm'/>
 					#else
 					<span class='icon-user'></span>
 					#end
@@ -31,7 +33,6 @@
                     $lang.get('circling.topics'):<em class='icon-bubbles'>$!c.topics</em>
                 </span>
             </div>
-            <a class='btn btn-danger icon-pushpin' href="javascript:;" onclick="_follow('$c.id')" title="$lang.get('a.circling.follow')"></a>
         </div>
     </div>
 </div>
@@ -42,7 +43,18 @@
       <input type="text" placeholder="$lang.get('topic.search.text')">
       <button type='submit' class="icon-search"></button>
 	</form>
+	#if($f1.state == 'owner' || $f1.state == 'accepted' || $c.access == 'public')
 	<a href='/forum/topic/create?cid=$!cid' class='btn btn-success'>$lang.get('a.topic.create')</a>
+	#end
+
+	#if(!$f1)
+		<a class='btn btn-info' onclick="_follow({cid:'$c.id',follow:1}, this)">$lang.get('a.follow')</a>
+	#elseif($f1.state == 'pending')
+		<a class='btn btn-info disabled'>$lang.get('a.follow.pending')</a>
+	#elseif($f1.state == 'rejected')
+		<a class='btn btn-info disabled'>$lang.get('a.follow.rejected')</a>
+	#end
+	
 </div>
 
 <div class='col-sm-12 topic'>
@@ -111,4 +123,13 @@
 	#end
 </ul>
 
+<script>
+function _follow(p, o) {
+	processing && processing.show();
+	$.post('/forum/circling/follow', p, function(d){
+		processing && processing.hide();
+		
+	});
+}	
+</script>
 #parse('/forum/foot.html')
