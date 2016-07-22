@@ -646,6 +646,7 @@ header a {
 }
 .owner {
 	border: 1px solid #ccd3e4;
+	padding-top: 10px;
 }
 
 footer .footer-credits {
