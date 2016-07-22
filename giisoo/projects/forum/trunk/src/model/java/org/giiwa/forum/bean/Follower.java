@@ -95,4 +95,10 @@ public class Follower extends Bean {
     // TODO Auto-generated method stub
     return Bean.updateCollection(q, v, Follower.class);
   }
+
+  public boolean getPost() {
+    // TODO Auto-generated method stub
+    String state = this.getState();
+    return "owner".equals(state) || "accepted".equals(state);
+  }
 }

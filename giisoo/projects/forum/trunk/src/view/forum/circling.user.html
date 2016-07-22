@@ -38,11 +38,20 @@
 		<tbody>
 	#foreach($f in $list)
 		<tr>
-			<td>$!f.name</td>
+			<td>
+				<a href="/forum/circling?uid=$f.uid">
+				#if($f.user_obj.photo)
+				<img class="user-sm" src="$f.user_obj.photo"/>
+				#else
+				<span class='icon-user'></span>
+				#end
+				$!f.name
+				</a>
+			</td>
 			<td>$lang.get("circling.user_state_$f.state")</td>
-			<td>$!f.topics</td>
-			<td>$!f.replies</td>
-			<td>$!f.from</td>
+			<td>$!f.user_obj.topics</td>
+			<td>$!f.user_obj.replies</td>
+			<td>$!f.user_obj.from</td>
 			<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
 			<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
 			<td>

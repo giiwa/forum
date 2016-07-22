@@ -3,7 +3,7 @@
 	<div class='cl-info'>
 		<div class='col-sm-12'>
 			<h1>
-				#if($f1.state == 'accepted' || $f1.state == 'owner')
+				#if($f1.state == 'accepted' || $f1.state == 'owner' || $f.access == 'public' || $f.access=='half')
 				<a href='/forum/topic?cid=$f.id'>$!f.name</a>
 				#else
 				$!f.name
@@ -74,16 +74,18 @@
 			</a>
 			#end
 		</h5>
+		
+		#if($f1.state == 'accepted' || $f1.state == 'owner' || $f.access == 'public' || $f.access=='half')
+			<a class='btn btn-sm btn-success' href='/forum/topic?cid=$f.id'>$lang.get('a.follow.accepted')</a>
+		#end
+		
 		#if(!$f1)
 			<a class='btn btn-sm btn-info' onclick="_follow({cid:'$f.id',follow:1}, this)">$lang.get('a.follow')</a>
 		#elseif($f1.state == 'pending')
 			<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.pending')</a>
-		#elseif($f1.state == 'accepted')
-			<a class='btn btn-sm btn-success' href='/forum/topic?cid=$f.id'>$lang.get('a.follow.accepted')</a>
 		#elseif($f1.state == 'owner')
 			<a class='btn btn-sm btn-info' href='/forum/circling/edit?cid=$f.id'>$lang.get('a.edit')</a>
 			<a class='btn btn-sm btn-info' href='/forum/circling/user?cid=$f.id'>$lang.get('a.users')</a>
-			<a class='btn btn-sm btn-success' href='/forum/topic?cid=$f.id'>$lang.get('a.follow.accepted')</a>
 		#elseif($f1.state == 'rejected')
 			<a class='btn btn-sm btn-info disabled'>$lang.get('a.follow.rejected')</a>
 		#end

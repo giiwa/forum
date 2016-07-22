@@ -561,10 +561,10 @@ blockquote {
 	padding-top: 0;
 }
 
-ul.circlings li img.user-sm {
+img.user-sm {
 	display: inline-block;
-	width: 14px;
-	height: 14px;
+	width: 14px!important;
+	height: 14px!important;
 	margin-right: 2px;
 }
 

@@ -6,8 +6,6 @@ import java.util.regex.Pattern;
 
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -37,12 +35,11 @@ public class circling extends Model {
     this.set("u", u);
 
     String name = this.getString("q");
-    Beans<Circling> bs = null;
+    Beans<Circling> bs = new Beans<Circling>();
     if (!X.isEmpty(name) && X.isEmpty(path)) {
       /**
        * searching
        */
-      bs = new Beans<Circling>();
       Query q1 = SE.parse(name, new String[] { "name", "nickname", "memo" });
       TopDocs docs = SE.search("circling", q1);
       ScoreDoc[] dd = docs.scoreDocs;
@@ -84,8 +81,18 @@ public class circling extends Model {
 
       this.set("q", name);
     } else {
-      BasicDBObject q = new BasicDBObject("owner", uid);
-      bs = Circling.load(q, new BasicDBObject("updated", -1), s, n);
+      BasicDBObject q = new BasicDBObject("uid", uid);
+      Beans<Follower> b1 = Follower.load(q, new BasicDBObject("updated", -1), s, n);
+      if (b1 != null) {
+        bs.setTotal(b1.getTotal());
+        if (b1.getList() != null) {
+          List<Circling> l1 = new ArrayList<Circling>();
+          bs.setList(l1);
+          for (Follower f1 : b1.getList()) {
+            l1.add(f1.getCircling_obj());
+          }
+        }
+      }
     }
 
     this.set(bs, s, n);

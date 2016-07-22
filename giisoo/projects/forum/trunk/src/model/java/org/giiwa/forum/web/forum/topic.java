@@ -10,6 +10,7 @@ import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Expose;
+import org.giiwa.forum.bean.Follower;
 import org.giiwa.forum.bean.Log;
 import org.giiwa.forum.bean.Topic;
 import org.giiwa.forum.bean.UserHelper;
@@ -38,8 +39,8 @@ public class topic extends Model {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", 0),
-        new BasicDBObject("updated", -1), s, n);
+    Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", 0), new BasicDBObject("updated", -1), s,
+        n);
     this.set(bs, s, n);
     this.query.path("/forum/topic");
 
@@ -56,6 +57,12 @@ public class topic extends Model {
   public void create() {
     final long cid = this.getLong("cid");
     this.set("cid", cid);
+    Circling c = Circling.load(cid);
+    Follower f1 = c.getFollower(login);
+    if (!"public".equals(c.getAccess()) || f1 == null || !f1.getPost()) {
+      deny();
+    }
+
     if (method.isPost()) {
       V v = V.create("cid", cid);
       v.set("title", this.getString("title"));
@@ -157,6 +164,12 @@ public class topic extends Model {
 
     Topic t = Topic.load(id);
     Topic last = t.getLast();
+
+    Circling c = t.getCircling();
+    Follower f1 = c.getFollower(login);
+    if (!"public".equals(c.getAccess()) || f1 == null || !f1.getPost()) {
+      deny();
+    }
 
     /**
      * remove the "FFF" background, that may blink eyes
