@@ -6,6 +6,7 @@ html, body {
 	background: #fff;
 	text-align: center;
 	position: relative;
+	overflow-x: hidden;
 }
 
 label {
@@ -137,13 +138,15 @@ form {
 }
 
 .expand footer {
-	position: fixed;
+	position: relative;
 }
 
 footer {
 	left: 0;
 	bottom: 0;
 	width: 100%;
+	position: fixed;
+	display: none;
 }
 
 #processing {
@@ -367,7 +370,6 @@ div.topic-f0, div.topic-fn {
 	float: left;
 	border: 1px solid #ccd3e4;
 	position: relative;
-	z-index: 300;
 }
 
 .clinfo {
@@ -644,4 +646,33 @@ header a {
 }
 .owner {
 	border: 1px solid #ccd3e4;
+}
+
+footer .footer-credits {
+	background-color: #626262;
+	min-height: 40px;
+	color: #999999;
+	font-size: 14px;
+	text-align: center;
+	line-height: 2.5;
+}
+footer ul.nav-footer {
+	line-height: 1;
+	margin: 10px auto;
+	padding: 0;
+}
+footer ul.nav-footer li {
+	display: inline-block;
+	padding: 0 10px;
+}
+footer ul.nav-footer li+ li {
+	border-left: solid 1px #999999;
+}
+footer ul.nav-footer li.terms {
+	border-left: none;
+	padding-left: 0;
+}
+footer .footer-credits a {
+	color: #CCCCCC;
+	text-decoration: none;
 }

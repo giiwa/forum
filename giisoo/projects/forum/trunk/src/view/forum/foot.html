@@ -39,10 +39,11 @@ var processing = {
 $(function(){
 	$('body').removeClass('expand');
 	var h0 = $(window).height();
-	var h1 = $('footer').offset().top + $('footer').height();
-	if(h0 >= h1) {
+	var h1 = $('#main').height() + $('#main').offset().top + $('footer').height();
+	if(h0 < h1) {
 		$('body').addClass('expand');
 	}
+	$('footer').fadeIn();
 })
 </script>
 
