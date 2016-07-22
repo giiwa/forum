@@ -6,17 +6,17 @@
 		#if($me.id == $o.id)
 		<a href='/forum/user/edit'>
 			#if($o.photo)
-			<img src='$o.photo'/>
+			<img src='$o.photo' class="user-bg"/>
 			#else
-			<img src='/images/user_default.gif'/>
+			<img src='/images/user_default.gif' class="user-bg"/>
 			#end
 		</a>
 		#else
 		<a href='/forum/circling?uid=$f.owner'>
 			#if($o.photo)
-			<img src='$o.photo'/>
+			<img src='$o.photo' class="user-bg"/>
 			#else
-			<img src='/images/user_default.gif'/>
+			<img src='/images/user_default.gif' class="user-bg"/>
 			#end
 		</a>
 		#end
