@@ -59,7 +59,7 @@ public class topic extends Model {
     this.set("cid", cid);
     Circling c = Circling.load(cid);
     Follower f1 = c.getFollower(login);
-    if (!"public".equals(c.getAccess()) || f1 == null || !f1.getPost()) {
+    if (!"public".equals(c.getAccess()) && (f1 == null || !f1.getPost())) {
       deny();
       return;
     }
