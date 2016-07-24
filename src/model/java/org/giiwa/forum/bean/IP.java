@@ -3,8 +3,8 @@ package org.giiwa.forum.bean;
 import java.net.URLEncoder;
 
 import org.giiwa.core.base.GString;
+import org.giiwa.core.base.Http;
 import org.giiwa.core.bean.X;
-import org.giiwa.framework.utils.Http;
 
 public class IP {
 
