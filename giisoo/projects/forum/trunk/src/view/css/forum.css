@@ -682,3 +682,6 @@ footer .footer-credits a {
 	color: #CCCCCC;
 	text-decoration: none;
 }
+header a:hover{
+	color: #f33;
+}
