@@ -4,6 +4,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.giiwa.forum.bean.CirclingIndexer;
+import org.giiwa.forum.bean.TopicIndexer;
 import org.giiwa.framework.web.IListener;
 import org.giiwa.framework.web.Module;
 import org.giiwa.tinyse.se.SE;
@@ -19,6 +20,7 @@ public class ForumListener implements IListener {
 
     SE.init(conf);
     SE.register("circling", new CirclingIndexer());
+    SE.register("topic", new TopicIndexer());
 
   }
 

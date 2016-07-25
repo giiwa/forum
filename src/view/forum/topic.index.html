@@ -38,9 +38,9 @@
 </div>
 
 <div class='text-right col-sm-12'>
-	<form class="search-inline">
+	<form class="search-inline" action="/forum/topic">
 		<input type='hidden' name='cid' value="$cid"/>
-      <input type="text" placeholder="$lang.get('topic.search.text')">
+      <input type="text" name="name" value="$!name" placeholder="$lang.get('topic.search.text')">
       <button type='submit' class="icon-search"></button>
 	</form>
 	#if($f1.state == 'owner' || $f1.state == 'accepted' || $c.access == 'public')
