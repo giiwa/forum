@@ -201,4 +201,9 @@ public class Topic extends Bean {
     return t;
   }
 
+  public static Topic load(BasicDBObject q, BasicDBObject order) {
+    // TODO Auto-generated method stub
+    return Bean.load(q, order, Topic.class);
+  }
+
 }

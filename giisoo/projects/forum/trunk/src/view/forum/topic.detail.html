@@ -11,9 +11,9 @@
 		<a href='/forum/topic/detail?id=$!t.id'>$!t.title</a>
 	</div>
 	<div class='pull-right'>
-		<form class="search-inline">
+		<form class="search-inline" action="/forum/topic">
 			<input type='hidden' name='cid' value="$cid"/>
-	      <input type="text" placeholder="$lang.get('topic.search.text')">
+	      <input type="text" name="name" value="$!name" placeholder="$lang.get('topic.search.text')">
 	      <button type='submit' class="icon-search"></button>
 		</form>
 		#if($f1.post || $c.access == 'public')

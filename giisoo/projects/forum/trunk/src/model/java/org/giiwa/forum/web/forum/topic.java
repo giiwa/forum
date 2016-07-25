@@ -3,6 +3,9 @@ package org.giiwa.forum.web.forum;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.giiwa.core.base.Html;
 import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
@@ -16,6 +19,7 @@ import org.giiwa.forum.bean.Topic;
 import org.giiwa.forum.bean.UserHelper;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
+import org.giiwa.tinyse.se.SE;
 import org.jsoup.nodes.Element;
 
 import com.mongodb.BasicDBObject;
@@ -39,8 +43,49 @@ public class topic extends Model {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(new BasicDBObject("cid", cid).append("parent", 0), new BasicDBObject("updated", -1), s,
-        n);
+
+    Beans<Topic> bs = null;
+    String name = this.getString("name");
+    if (!X.isEmpty(name) && X.isEmpty(path)) {
+      bs = new Beans<Topic>();
+
+      /**
+       * searching
+       */
+      Query q1 = SE.parse(name, new String[] { "title", "nickname", "content" });
+      TopDocs docs = SE.search("topic", q1);
+      ScoreDoc[] dd = docs.scoreDocs;
+      bs.setTotal(docs.totalHits);
+      List<Topic> list = new ArrayList<Topic>();
+      bs.setList(list);
+
+      int min = s + n;
+      int i = s;
+      while (i < min && i < dd.length) {
+
+        ScoreDoc d = dd[i];
+        long id = X.toLong(SE.get(d.doc), -1);
+        if (id > -1) {
+          Topic e = Topic.load(id);
+          // SE.highlight();
+          String s1 = SE.highlight(d.doc, "title", q1, null);
+          if (s1 != null) {
+            e.set("title", s1);
+          }
+
+          list.add(e);
+        }
+        i++;
+        if (list.size() >= n) {
+          break;
+        }
+      }
+
+      this.set("name", name);
+    } else {
+      bs = Topic.load(new BasicDBObject("cid", cid).append("parent", 0), new BasicDBObject("updated", -1), s, n);
+    }
+
     this.set(bs, s, n);
     this.query.path("/forum/topic");
 
