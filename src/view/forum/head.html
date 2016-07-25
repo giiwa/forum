@@ -24,9 +24,14 @@
 			</div>
 			<div class="right">
 				<div class="top">
-					<div class="item"><a class="icon icon-user" href="/user/edit">giiwa</a></div>
-					<div class="item"><a class="icon icon-image" href="/docs/icomoon/demo.html" target="_blank">Icomoon</a></div>
-					<div class="item"><a class="icon icon-exit" href="/user/logout">Exit</a></div>
+					#if($me)
+					<div class="item"><a class="icon icon-user" href="/user/edit">$!me.nickname</a></div>
+					<div class="item"><a class="icon icon-laptop" href="/jin">$lang.get('a.dashboard')</a></div>
+					<div class="item"><a class="icon icon-exit" href="/user/logout">$lang.get('a.logout')</a></div>
+					#else
+					<div class="item"><a class="icon icon-key" href="/user/login">$lang.get('a.login')</a></div>
+					<div class="item"><a class="icon icon-quill" href="/user/register">$lang.get('a.register')</a></div>
+					#end
 				</div>
 			</div>
 		</div>
