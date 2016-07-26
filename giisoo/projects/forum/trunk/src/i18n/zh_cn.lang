@@ -108,3 +108,5 @@ followers.state_owner=负责人
 followers.state_pending=待确认
 forum.title=Jin社区
 a.forum=社区
+topic.content=内容
+topic.create.title=创建新话题
