@@ -110,3 +110,5 @@ forum.title=Jin社区
 a.forum=社区
 topic.content=内容
 topic.create.title=创建新话题
+topic.detail.title=话题详情
+topic.edit.title=修改话题

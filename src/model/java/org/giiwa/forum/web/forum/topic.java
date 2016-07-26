@@ -274,7 +274,7 @@ public class topic extends Model {
 
       Topic.update(id, v);
 
-      this.redirect("/forum/topic?id=" + id);
+      this.redirect("/forum/topic/detail?id=" + id);
       return;
     }
     this.set("t", t);
@@ -336,14 +336,14 @@ public class topic extends Model {
       sb.append(toHtml(r1));
     }
     sb.append("<div class='block'><div class='user'>");
-    
+
     if (!X.isEmpty(r.getOwner_obj().get("photo"))) {
       sb.append("<img src=").append(r.getOwner_obj().get("photo")).append(" class='user-sm'>");
     } else {
       sb.append("<span class='icon-user'></span>");
     }
     sb.append(r.getOwner_obj().getNickname()).append(":</div>");
-    
+
     if (r.getDeleted() == 1) {
       sb.append("<div class='del icon icon-warning'>");
       sb.append(lang.get("topic.was.deleted"));
