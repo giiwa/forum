@@ -335,8 +335,15 @@ public class topic extends Model {
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
-    sb.append("<div class='block'><div class='icon-user'>").append(r.getOwner_obj().getNickname())
-        .append(":</div>");
+    sb.append("<div class='block'><div class='user'>");
+    
+    if (!X.isEmpty(r.getOwner_obj().get("photo"))) {
+      sb.append("<img src=").append(r.getOwner_obj().get("photo")).append(" class='user-sm'>");
+    } else {
+      sb.append("<span class='icon-user'></span>");
+    }
+    sb.append(r.getOwner_obj().getNickname()).append(":</div>");
+    
     if (r.getDeleted() == 1) {
       sb.append("<div class='del icon icon-warning'>");
       sb.append(lang.get("topic.was.deleted"));
