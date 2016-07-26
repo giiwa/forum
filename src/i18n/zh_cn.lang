@@ -112,3 +112,5 @@ topic.content=内容
 topic.create.title=创建新话题
 topic.detail.title=话题详情
 topic.edit.title=修改话题
+user.photo=头像
+user.photo.hint=上传头像，128x128像素
