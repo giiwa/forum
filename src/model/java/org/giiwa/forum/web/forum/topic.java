@@ -335,7 +335,7 @@ public class topic extends Model {
     if (r1 != null) {
       sb.append(toHtml(r1));
     }
-    sb.append("<div class='block'><div class='owner icon-user'>").append(r.getOwner_obj().getNickname())
+    sb.append("<div class='block'><div class='icon-user'>").append(r.getOwner_obj().getNickname())
         .append(":</div>");
     if (r.getDeleted() == 1) {
       sb.append("<div class='del icon icon-warning'>");

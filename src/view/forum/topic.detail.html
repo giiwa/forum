@@ -67,7 +67,7 @@
 		
 		  <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
-		      <button class="btn btn-primary" onclick="_reply()">$lang.get('btn.ok')</button>
+		      <button class="btn btn-primary" type="submit">$lang.get('btn.ok')</button>
 		    </div>
 		  </div>
 		</form>
@@ -102,7 +102,7 @@ function _reply(refer, o){
 	$('#reply input[name=refer]').val(refer);
 	var e = $('#reply label[for=content]');
 	if(refer.length > 0) {
-		e.html('@' + o);
+		e.html("$lang.get('topic.reply')@" + o);
 	} else {
 		e.html("$lang.get('topic.reply')");
 	}
