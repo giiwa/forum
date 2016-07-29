@@ -13,9 +13,6 @@
 
 <div class='col-sm-2 owner'>
 	<p class='text-center'>
-		<a href='/forum/circling?uid=$!u.id'>$!u.nickname</a>
-	</p>
-	<p class='text-center'>
 		#if($me.id == $u.id)
 		<a href='/forum/user/edit'>
 			#if($u.photo)
@@ -33,6 +30,9 @@
 			#end
 		</a>
 		#end
+	</p>
+	<p class='text-center'>
+		<a href='/forum/circling?uid=$!u.id'>$!u.nickname</a>
 	</p>
 	<p class='text-center'>
 		$lang.get('user.tops'):$!u.tops
