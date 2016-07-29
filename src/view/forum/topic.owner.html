@@ -1,8 +1,5 @@
 <div class='topic-owner'>
 	<p class='text-center'>
-		<a href='/forum/circling?uid=$f.id'>$o.nickname</a>
-	</p>
-	<p class='text-center'>
 		#if($me.id == $o.id)
 		<a href='/forum/user/edit'>
 			#if($o.photo)
@@ -20,6 +17,9 @@
 			#end
 		</a>
 		#end
+	</p>
+	<p class='text-center'>
+		<a href='/forum/circling?uid=$f.id'>$o.nickname</a>
 	</p>
 	<p class='text-center'>
 		$lang.get('user.tops'):$!o.tops
