@@ -3,7 +3,8 @@ package org.giiwa.forum.bean;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
-import org.giiwa.core.bean.Bean.V;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
 import org.giiwa.framework.web.Model;
 import org.giiwa.tinyse.se.SE.Indexer;
@@ -47,8 +48,7 @@ public class CirclingIndexer implements Indexer {
   public Object next(long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling c = Circling.load(new BasicDBObject(node + "_timestamp", new BasicDBObject("$ne", flag)),
-        new BasicDBObject(X._ID, 1));
+    Circling c = Circling.load(W.create().and(node + "_timestamp", flag, W.OP_NEQ).sort(X._ID, 1));
     return c == null ? null : c.getId();
   }
 

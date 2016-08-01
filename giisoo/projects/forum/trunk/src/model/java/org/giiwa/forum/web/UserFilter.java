@@ -1,6 +1,6 @@
 package org.giiwa.forum.web;
 
-import org.giiwa.core.bean.Bean.V;
+import org.giiwa.core.bean.Helper.V;
 import org.giiwa.forum.bean.IP;
 import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.IFilter;

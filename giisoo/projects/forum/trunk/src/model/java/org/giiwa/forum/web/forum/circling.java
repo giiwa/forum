@@ -2,14 +2,14 @@ package org.giiwa.forum.web.forum;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.giiwa.core.bean.Beans;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.giiwa.core.bean.Bean.V;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Follower;
 import org.giiwa.forum.bean.Log;
@@ -17,8 +17,6 @@ import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
-
-import com.mongodb.BasicDBObject;
 
 import net.sf.json.JSONObject;
 
@@ -81,8 +79,8 @@ public class circling extends Model {
 
       this.set("q", name);
     } else {
-      BasicDBObject q = new BasicDBObject("uid", uid);
-      Beans<Follower> b1 = Follower.load(q, new BasicDBObject("updated", -1), s, n);
+      W q = W.create("uid", uid);
+      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), s, n);
       if (b1 != null) {
         bs.setTotal(b1.getTotal());
         if (b1.getList() != null) {
@@ -167,22 +165,20 @@ public class circling extends Model {
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    Follower f = Follower.load(new BasicDBObject("cid", cid).append("uid", login.getId()));
+    Follower f = Follower.load(W.create("cid", cid).and("uid", login.getId()));
 
     if (f != null && X.isSame("owner", f.getState())) {
-      BasicDBObject q = new BasicDBObject("cid", cid);
+      W q = W.create("cid", cid);
       if (!X.isEmpty(state)) {
-        q.append("state", state);
+        q.and("state", state);
         this.set("state", state);
       }
       String name = this.getString("name");
       if (!X.isEmpty(name)) {
-        Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
-        q.append("name", pattern);
+        q.and("name", name, W.OP_LIKE);
         this.set("name", name);
       }
-      BasicDBObject order = new BasicDBObject();
-      Beans<Follower> bs = Follower.load(q, order, s, n);
+      Beans<Follower> bs = Follower.load(q, s, n);
 
       this.set(bs, s, n);
     }
@@ -200,17 +196,17 @@ public class circling extends Model {
     if (!X.isEmpty(this.getString("follow"))) {
       Follower.create(login.getId(), cid, V.create("state", c.getUser_state()).set("name", login.getNickname()));
     } else if (!X.isEmpty(this.getString("delete"))) {
-      Follower f = Follower.load(new BasicDBObject("cid", cid).append("uid", login.getId()));
+      Follower f = Follower.load(W.create("cid", cid).and("uid", login.getId()));
       if (f != null && X.isSame("owner", f.getState())) {
         long uid = this.getLong("delete");
-        Follower.delete(new BasicDBObject("uid", uid).append("cid", cid));
+        Follower.delete(W.create("uid", uid).and("cid", cid));
       }
     } else if (!X.isEmpty(this.getString("state"))) {
-      Follower f = Follower.load(new BasicDBObject("cid", cid).append("uid", login.getId()));
+      Follower f = Follower.load(W.create("cid", cid).and("uid", login.getId()));
       if (f != null && X.isSame("owner", f.getState())) {
         String state = this.getString("state");
         String id = this.getString("id");
-        Follower.update(new BasicDBObject(X._ID, id), V.create("state", state));
+        Follower.update(W.create(X._ID, id), V.create("state", state));
       }
     }
 
@@ -250,7 +246,7 @@ public class circling extends Model {
         /**
          * auto accept all pending that create before
          */
-        Follower.update(new BasicDBObject("cid", cid).append("state", "pending"), V.create("state", "accepted"));
+        Follower.update(W.create("cid", cid).and("state", "pending"), V.create("state", "accepted"));
       }
 
       Circling.repair(cid);
