@@ -36,7 +36,6 @@
 	<classpathentry kind="lib" path="depends/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="depends/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="lib" path="depends/hawtdispatch-1.20.jar"/>
-	<classpathentry kind="lib" path="depends/giiwa-1.0-sources.jar"/>
 	<classpathentry kind="lib" path="depends/ant-contrib-1.0b3.jar"/>
 	<classpathentry kind="lib" path="depends/commons-compress-1.1.jar"/>
 	<classpathentry kind="lib" path="depends/httpcore-nio-4.3.2.jar"/>
@@ -58,7 +57,6 @@
 	<classpathentry kind="lib" path="depends/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="depends/core-3.1.0.jar"/>
 	<classpathentry kind="lib" path="depends/jsch-0.1.53.jar"/>
-	<classpathentry kind="lib" path="depends/giiwa-1.0.2.jar" sourcepath="/giiwa"/>
 	<classpathentry kind="lib" path="depends/httpmime-4.3.4.jar"/>
 	<classpathentry kind="lib" path="depends/tinyse-1.0.1.jar" sourcepath="/tinyse"/>
 	<classpathentry kind="lib" path="depends/lucene-analyzers-3.6.2.jar"/>
@@ -69,5 +67,6 @@
 	<classpathentry kind="lib" path="depends/lucene-queries-4.10.4.jar"/>
 	<classpathentry kind="lib" path="depends/lucene-queryparser-4.10.4.jar"/>
 	<classpathentry kind="lib" path="depends/lucene-sandbox-4.10.4.jar"/>
+	<classpathentry kind="lib" path="depends/giiwa-1.1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

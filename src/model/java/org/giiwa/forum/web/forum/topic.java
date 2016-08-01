@@ -7,8 +7,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.giiwa.core.base.Html;
-import org.giiwa.core.bean.Bean.V;
 import org.giiwa.core.bean.Beans;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.forum.bean.Circling;
@@ -21,8 +22,6 @@ import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
 import org.jsoup.nodes.Element;
-
-import com.mongodb.BasicDBObject;
 
 import net.sf.json.JSONObject;
 
@@ -83,7 +82,7 @@ public class topic extends Model {
 
       this.set("name", name);
     } else {
-      bs = Topic.load(new BasicDBObject("cid", cid).append("parent", 0), new BasicDBObject("updated", -1), s, n);
+      bs = Topic.load(W.create("cid", cid).and("parent", 0).sort("updated", -1), s, n);
     }
 
     this.set(bs, s, n);
@@ -92,7 +91,7 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Circling> bs1 = Circling.load(login.getId(), new BasicDBObject("updated", -1), 0, 20);
+    Beans<Circling> bs1 = Circling.load(login.getId(), W.create().sort("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
 
     this.show("/forum/topic.index.html");
@@ -188,9 +187,8 @@ public class topic extends Model {
       /**
        * get recommends
        */
-      Beans<Topic> bs1 = Topic.load(
-          new BasicDBObject("cid", t.getCid()).append("parent", 0).append(X._ID, new BasicDBObject("$ne", id)),
-          new BasicDBObject("updated", -1), 0, 20);
+      Beans<Topic> bs1 = Topic
+          .load(W.create("cid", t.getCid()).and("parent", 0).and(X._ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
       this.set("recommends", bs1 == null ? null : bs1.getList());
       this.set("t", t);
     } else {
@@ -315,7 +313,7 @@ public class topic extends Model {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(new BasicDBObject("parent", t.getId()), new BasicDBObject("created", 1), s, n);
+    Beans<Topic> bs = Topic.load(W.create("parent", t.getId()).sort("created", 1), s, n);
 
     this.set(bs, s, n);
     this.query.path("/forum/topic/detail");
@@ -323,9 +321,8 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Topic> bs1 = Topic.load(
-        new BasicDBObject("cid", t.getCid()).append("parent", 0).append(X._ID, new BasicDBObject("$ne", id)),
-        new BasicDBObject("updated", -1), 0, 20);
+    Beans<Topic> bs1 = Topic
+        .load(W.create("cid", t.getCid()).and("parent", 0).and(X._ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");
   }

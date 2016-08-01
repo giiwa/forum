@@ -1,10 +1,9 @@
 package org.giiwa.forum.bean;
 
-import org.giiwa.core.bean.Bean;
-import org.giiwa.core.bean.Bean.V;
+import org.giiwa.core.bean.Helper;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
 import org.giiwa.framework.bean.User;
-
-import com.mongodb.BasicDBObject;
 
 public class UserHelper {
 
@@ -12,19 +11,19 @@ public class UserHelper {
     /**
      * count top topic
      */
-    long count = Bean.count(new BasicDBObject("owner", uid).append("top", 1), Topic.class);
+    long count = Helper.count(W.create("owner", uid).and("top", 1), Topic.class);
     V v = V.create("tops", count);
 
     /**
      * count topics
      */
-    count = Bean.count(new BasicDBObject("owner", uid), Topic.class);
+    count = Helper.count(W.create("owner", uid), Topic.class);
     v.set("topics", count);
 
     /**
      * count replies
      */
-    long c1 = Bean.count(new BasicDBObject("owner", uid).append("parent", 0), Topic.class);
+    long c1 = Helper.count(W.create("owner", uid).and("parent", 0), Topic.class);
     v.set("replies", count - c1);
 
     User.update(uid, v);

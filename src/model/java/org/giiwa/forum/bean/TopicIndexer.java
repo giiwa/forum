@@ -4,8 +4,9 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.TextField;
-import org.giiwa.core.bean.Bean.V;
 import org.giiwa.framework.web.Model;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
 import org.giiwa.tinyse.se.SE.Indexer;
 
@@ -51,8 +52,7 @@ public class TopicIndexer implements Indexer {
   public Object next(long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Topic c = Topic.load(new BasicDBObject(node + "_timestamp", new BasicDBObject("$ne", flag)),
-        new BasicDBObject(X._ID, 1));
+    Topic c = Topic.load(W.create().and(node + "_timestamp", flag, W.OP_GT).sort(X._ID, 1));
     return c == null ? null : c.getId();
   }
 

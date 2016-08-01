@@ -2,13 +2,14 @@ package org.giiwa.forum.bean;
 
 import org.giiwa.core.bean.Bean;
 import org.giiwa.core.bean.Beans;
-import org.giiwa.core.bean.DBMapping;
+import org.giiwa.core.bean.Helper;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
+import org.giiwa.core.bean.Table;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.framework.bean.User;
-
-import com.mongodb.BasicDBObject;
 
 /**
  * Demo bean
@@ -16,7 +17,7 @@ import com.mongodb.BasicDBObject;
  * @author joe
  * 
  */
-@DBMapping(collection = "gi_topic")
+@Table(name = "gi_topic")
 public class Topic extends Bean {
 
   /**
@@ -66,8 +67,8 @@ public class Topic extends Bean {
   }
 
   public long replysInDays(int days) {
-    return Bean.count(new BasicDBObject("cid", this.getCid()).append("parent", this.getId()).append("created",
-        new BasicDBObject("$gt", System.currentTimeMillis() - days * X.ADAY)), Topic.class);
+    return Helper.count(W.create("cid", this.getCid()).and("parent", this.getId()).and("created",
+        System.currentTimeMillis() - days * X.ADAY, W.OP_GT), Topic.class);
   }
 
   public long getOwner() {
@@ -94,7 +95,7 @@ public class Topic extends Bean {
       while (exists(id)) {
         id = UID.next("topic.id");
       }
-      Bean.insert(v.set(X._ID, id), Topic.class);
+      Helper.insert(v.set(X._ID, id), Topic.class);
       return id;
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
@@ -104,7 +105,7 @@ public class Topic extends Bean {
 
   public static boolean exists(long id) {
     try {
-      return Bean.exists(new BasicDBObject(X._ID, id), Topic.class);
+      return Helper.exists(id, Topic.class);
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
     }
@@ -112,19 +113,19 @@ public class Topic extends Bean {
   }
 
   public static int update(long id, V v) {
-    return Bean.updateCollection(id, v, Topic.class);
+    return Helper.update(id, v, Topic.class);
   }
 
-  public static Beans<Topic> load(BasicDBObject q, BasicDBObject order, int s, int n) {
-    return Bean.load(q, order, s, n, Topic.class);
+  public static Beans<Topic> load(W q, int s, int n) {
+    return Helper.load(q, s, n, Topic.class);
   }
 
   public static Topic load(long id) {
-    return Bean.load(new BasicDBObject(X._ID, id), Topic.class);
+    return Helper.load(id, Topic.class);
   }
 
   public static void delete(long id) {
-    Bean.delete(new BasicDBObject(X._ID, id), Topic.class);
+    Helper.delete(id, Topic.class);
   }
 
   public long getCid() {
@@ -133,11 +134,11 @@ public class Topic extends Bean {
   }
 
   public Topic getLast() {
-    return Bean.load(new BasicDBObject("parent", this.getId()), new BasicDBObject("created", -1), Topic.class);
+    return Helper.load(W.create("parent", this.getId()).sort("created", -1), Topic.class);
   }
 
   public void repair() {
-    long c = Bean.count(new BasicDBObject("parent", this.getId()), Topic.class);
+    long c = Helper.count(W.create("parent", this.getId()), Topic.class);
     update(this.getId(), V.create("replies", (int) c));
 
     new Task() {
@@ -146,9 +147,8 @@ public class Topic extends Bean {
       public void onExecute() {
         long id = getId();
         int s = 0;
-        BasicDBObject q = new BasicDBObject("parent", id);
-        BasicDBObject order = new BasicDBObject("created", 1);
-        Beans<Topic> bs = Topic.load(q, order, s, 100);
+        W q = W.create("parent", id).sort("created", 1);
+        Beans<Topic> bs = Topic.load(q, s, 100);
         int f = 1;
         while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
 
@@ -159,7 +159,7 @@ public class Topic extends Bean {
             f++;
           }
           s += bs.getList().size();
-          bs = Topic.load(q, order, s, 100);
+          bs = Topic.load(q, s, 100);
 
         }
       }
@@ -185,8 +185,8 @@ public class Topic extends Bean {
     return this.getInt("deleted");
   }
 
-  public static long count(BasicDBObject q) {
-    return Bean.count(q, Topic.class);
+  public static long count(W q) {
+    return Helper.count(q, Topic.class);
   }
 
   public Topic getParent_obj() {
@@ -201,9 +201,9 @@ public class Topic extends Bean {
     return t;
   }
 
-  public static Topic load(BasicDBObject q, BasicDBObject order) {
+  public static Topic load(W q) {
     // TODO Auto-generated method stub
-    return Bean.load(q, order, Topic.class);
+    return Helper.load(q, Topic.class);
   }
 
 }

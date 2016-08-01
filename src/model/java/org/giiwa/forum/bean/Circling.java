@@ -2,7 +2,10 @@ package org.giiwa.forum.bean;
 
 import org.giiwa.core.bean.Bean;
 import org.giiwa.core.bean.Beans;
-import org.giiwa.core.bean.DBMapping;
+import org.giiwa.core.bean.Helper;
+import org.giiwa.core.bean.Helper.V;
+import org.giiwa.core.bean.Helper.W;
+import org.giiwa.core.bean.Table;
 import org.giiwa.core.bean.UID;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
@@ -17,7 +20,7 @@ import com.mongodb.BasicDBObject;
  * @author joe
  * 
  */
-@DBMapping(collection = "gi_circling")
+@Table(name = "gi_circling")
 public class Circling extends Bean {
 
   /**
@@ -69,7 +72,7 @@ public class Circling extends Bean {
       while (exists(id)) {
         id = UID.next("circling.id");
       }
-      Bean.insert(v.set(X._ID, id), Circling.class);
+      Helper.insert(v.set(X._ID, id), Circling.class);
       return id;
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
@@ -79,7 +82,7 @@ public class Circling extends Bean {
 
   public static boolean exists(long id) {
     try {
-      return Bean.exists(new BasicDBObject(X._ID, id), Circling.class);
+      return Helper.exists(id, Circling.class);
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
     }
@@ -87,19 +90,19 @@ public class Circling extends Bean {
   }
 
   public static int update(long id, V v) {
-    return Bean.updateCollection(id, v, Circling.class);
+    return Helper.update(id, v, Circling.class);
   }
 
-  public static Beans<Circling> load(BasicDBObject q, BasicDBObject order, int s, int n) {
-    return Bean.load(q, order, s, n, Circling.class);
+  public static Beans<Circling> load(W q, int s, int n) {
+    return Helper.load(q, s, n, Circling.class);
   }
 
   public static Circling load(long id) {
-    return Bean.load(new BasicDBObject(X._ID, id), Circling.class);
+    return Helper.load(id, Circling.class);
   }
 
   public static void delete(long id) {
-    Bean.delete(new BasicDBObject(X._ID, id), Circling.class);
+    Helper.delete(id, Circling.class);
   }
 
   public static void repair(final long id) {
@@ -111,15 +114,15 @@ public class Circling extends Bean {
         /**
          * count the users
          */
-        long total = Follower.count(new BasicDBObject("cid", id));
+        long total = Follower.count(W.create("cid", id));
         V v = V.create("followers", total);
-        long count = Follower.count(new BasicDBObject("cid", id).append("state", "pending"));
+        long count = Follower.count(W.create("cid", id).and("state", "pending"));
         v.set("followers_pending", count);
-        count = Follower.count(new BasicDBObject("cid", id).append("state", "accepted"));
+        count = Follower.count(W.create("cid", id).and("state", "accepted"));
         v.set("followers_accepted", count);
-        count = Follower.count(new BasicDBObject("cid", id).append("state", "rejected"));
+        count = Follower.count(W.create("cid", id).and("state", "rejected"));
         v.set("followers_rejected", count);
-        count = Topic.count(new BasicDBObject("cid", id).append("parent", 0));
+        count = Topic.count(W.create("cid", id).and("parent", 0));
         v.set("topics", count);
         Circling.update(id, v);
 
@@ -127,16 +130,15 @@ public class Circling extends Bean {
          * repair all topics in the circling
          */
         int s = 0;
-        BasicDBObject q = new BasicDBObject("cid", id);
-        BasicDBObject order = new BasicDBObject(X._ID, 1);
+        W q = W.create("cid", id).sort(X._ID, 1);
 
-        Beans<Topic> bs = Topic.load(q, order, s, 10);
+        Beans<Topic> bs = Topic.load(q, s, 10);
         while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
           for (Topic t : bs.getList()) {
             t.repair();
           }
           s += bs.getList().size();
-          bs = Topic.load(q, order, s, 10);
+          bs = Topic.load(q, s, 10);
         }
       }
 
@@ -144,38 +146,38 @@ public class Circling extends Bean {
   }
 
   public Follower getFollower(User u) {
-    return Follower.load(new BasicDBObject("cid", this.getId()).append("uid", u.getId()));
+    return Follower.load(W.create("cid", this.getId()).and("uid", u.getId()));
   }
 
   public boolean isForbidden(User u) {
-    return Log.exists(new BasicDBObject("data", "forbidden").append("cid", this.getId()).append("uid", u.getId())
-        .append("expired", new BasicDBObject("$gt", System.currentTimeMillis())));
+    return Log.exists(W.create("data", "forbidden").and("cid", this.getId()).and("uid", u.getId()).and("expired",
+        System.currentTimeMillis(), W.OP_GT));
   }
 
-  public static Beans<Circling> load(long uid, BasicDBObject order, int s, int n) {
+  public static Beans<Circling> load(long uid, W q, int s, int n) {
 
     BasicDBList list = new BasicDBList();
     list.add(new BasicDBObject("owner", uid));
 
     int s1 = 0;
-    BasicDBObject q = new BasicDBObject("uid", uid).append("data", "follower");
-    BasicDBObject order1 = new BasicDBObject(X._ID, 1);
-    Beans<Log> bs1 = Log.load(q, order1, s1, 100);
+    W w = W.create();
+    W q1 = W.create("uid", uid).and("data", "follower").sort(X._ID, 1);
+    Beans<Log> bs1 = Log.load(q1, s1, 100);
     while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
       for (Log l : bs1.getList()) {
-        list.add(new BasicDBObject(X._ID, l.getString("cid")));
+        w.or(X._ID, l.getString("cid"));
       }
       s1 += bs1.getList().size();
-      bs1 = Log.load(q, order1, s1, 100);
+      bs1 = Log.load(q1, s1, 100);
     }
 
-    return Bean.load(new BasicDBObject("$or", list), order, s, n, Circling.class);
+    return Helper.load(q.and(w), s, n, Circling.class);
 
   }
 
-  public static Circling load(BasicDBObject q, BasicDBObject order) {
+  public static Circling load(W q) {
     // TODO Auto-generated method stub
-    return Bean.load(q, order, Circling.class);
+    return Helper.load(q, Circling.class);
   }
 
 }

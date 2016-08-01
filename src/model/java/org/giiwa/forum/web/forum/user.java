@@ -1,6 +1,6 @@
 package org.giiwa.forum.web.forum;
 
-import org.giiwa.core.bean.Bean.V;
+import org.giiwa.core.bean.Helper.V;
 import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
