@@ -29,7 +29,7 @@ public class Circling extends Bean {
   private static final long serialVersionUID = 1L;
 
   public long getId() {
-    return this.getLong(X._ID);
+    return this.getLong(X.ID);
   }
 
   public String getName() {
@@ -72,7 +72,7 @@ public class Circling extends Bean {
       while (exists(id)) {
         id = UID.next("circling.id");
       }
-      Helper.insert(v.set(X._ID, id), Circling.class);
+      Helper.insert(v.set(X.ID, id), Circling.class);
       return id;
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);
@@ -130,7 +130,7 @@ public class Circling extends Bean {
          * repair all topics in the circling
          */
         int s = 0;
-        W q = W.create("cid", id).sort(X._ID, 1);
+        W q = W.create("cid", id).sort(X.ID, 1);
 
         Beans<Topic> bs = Topic.load(q, s, 10);
         while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
@@ -161,11 +161,11 @@ public class Circling extends Bean {
 
     int s1 = 0;
     W w = W.create();
-    W q1 = W.create("uid", uid).and("data", "follower").sort(X._ID, 1);
+    W q1 = W.create("uid", uid).and("data", "follower").sort(X.ID, 1);
     Beans<Log> bs1 = Log.load(q1, s1, 100);
     while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
       for (Log l : bs1.getList()) {
-        w.or(X._ID, l.getString("cid"));
+        w.or(X.ID, l.getString("cid"));
       }
       s1 += bs1.getList().size();
       bs1 = Log.load(q1, s1, 100);

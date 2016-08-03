@@ -25,7 +25,7 @@ public class Expose extends Bean {
   private static final long serialVersionUID = 1L;
 
   public String getId() {
-    return this.getString(X._ID);
+    return this.getString(X.ID);
   }
 
   public User getReporter_obj() {
@@ -77,7 +77,7 @@ public class Expose extends Bean {
     String id = UID.id(v.toString());
     try {
       if (!exists(id)) {
-        Helper.insert(v.set(X._ID, id), Expose.class);
+        Helper.insert(v.set(X.ID, id), Expose.class);
         return id;
       }
     } catch (Exception e1) {

@@ -30,7 +30,7 @@ public class Log extends Bean {
     String id = UID.id(v.toString());
     try {
       if (!Helper.exists(id, Log.class)) {
-        return Helper.insert(v.set(X._ID, id), Log.class) > 0;
+        return Helper.insert(v.set(X.ID, id), Log.class) > 0;
       }
     } catch (Exception e) {
       log.error(v.toString(), e);

@@ -19,7 +19,7 @@ public class Follower extends Bean {
   private static final long serialVersionUID = 1L;
 
   public String getId() {
-    return this.getString(X._ID);
+    return this.getString(X.ID);
   }
 
   public long getUid() {
@@ -66,7 +66,7 @@ public class Follower extends Bean {
     String id = UID.id(uid, cid);
     try {
       if (!Helper.exists( id, Follower.class)) {
-        return Helper.insert(v.set(X._ID, id).set("uid", uid).set("cid", cid), Follower.class) > 0;
+        return Helper.insert(v.set(X.ID, id).set("uid", uid).set("cid", cid), Follower.class) > 0;
       }
     } catch (Exception e) {
       log.error(v.toString(), e);
