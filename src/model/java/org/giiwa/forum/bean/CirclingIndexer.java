@@ -9,22 +9,20 @@ import org.giiwa.core.bean.X;
 import org.giiwa.framework.web.Model;
 import org.giiwa.tinyse.se.SE.Indexer;
 
-import com.mongodb.BasicDBObject;
-
 public class CirclingIndexer implements Indexer {
 
   @Override
   public void bad(Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling.update(X.toLong(id, -1), V.create(node + "_timestamp", flag).set(node + "_state", "bad"));
+    Circling.update(X.toLong(id, -1), V.create("index_flag", flag).set(node + "_state", "bad"));
   }
 
   @Override
   public void done(Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling.update(X.toLong(id, -1), V.create(node + "_timestamp", flag).set(node + "_state", "done"));
+    Circling.update(X.toLong(id, -1), V.create("index_flag", flag).set(node + "_state", "done"));
   }
 
   @Override
@@ -48,7 +46,7 @@ public class CirclingIndexer implements Indexer {
   public Object next(long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling c = Circling.load(W.create().and(node + "_timestamp", flag, W.OP_NEQ).sort(X._ID, 1));
+    Circling c = Circling.load(W.create().and("index_flag", flag, W.OP_NEQ).sort(X.ID, 1));
     return c == null ? null : c.getId();
   }
 

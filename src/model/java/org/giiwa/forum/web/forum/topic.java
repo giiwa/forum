@@ -188,7 +188,7 @@ public class topic extends Model {
        * get recommends
        */
       Beans<Topic> bs1 = Topic
-          .load(W.create("cid", t.getCid()).and("parent", 0).and(X._ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
+          .load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
       this.set("recommends", bs1 == null ? null : bs1.getList());
       this.set("t", t);
     } else {
@@ -322,7 +322,7 @@ public class topic extends Model {
      * get recommends
      */
     Beans<Topic> bs1 = Topic
-        .load(W.create("cid", t.getCid()).and("parent", 0).and(X._ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
+        .load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");
   }

@@ -26,7 +26,7 @@ public class Topic extends Bean {
   private static final long serialVersionUID = 1L;
 
   public long getId() {
-    return this.getLong(X._ID);
+    return this.getLong(X.ID);
   }
 
   public String getTitle() {
@@ -95,7 +95,7 @@ public class Topic extends Bean {
       while (exists(id)) {
         id = UID.next("topic.id");
       }
-      Helper.insert(v.set(X._ID, id), Topic.class);
+      Helper.insert(v.set(X.ID, id), Topic.class);
       return id;
     } catch (Exception e1) {
       log.error(e1.getMessage(), e1);

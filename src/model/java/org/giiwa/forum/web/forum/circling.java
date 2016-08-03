@@ -206,7 +206,7 @@ public class circling extends Model {
       if (f != null && X.isSame("owner", f.getState())) {
         String state = this.getString("state");
         String id = this.getString("id");
-        Follower.update(W.create(X._ID, id), V.create("state", state));
+        Follower.update(W.create(X.ID, id), V.create("state", state));
       }
     }
 
