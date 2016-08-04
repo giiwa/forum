@@ -43,7 +43,7 @@
 	</div>
 	#foreach($f in $list)
 	<div class='col-sm-12 topic-fn'>
-		#set($o = $t.owner_obj)
+		#set($o = $f.owner_obj)
 		#parse('/forum/topic.owner.html')
 		<div id="cnt_$f.id">
 		#parse('/forum/topic.content.html')
