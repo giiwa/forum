@@ -18,6 +18,7 @@ import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public class circling extends Model {
@@ -97,6 +98,92 @@ public class circling extends Model {
     this.query.path("/forum/circling");
 
     this.show("/forum/circling.index.html");
+  }
+
+  @Path(path = "get", login = true)
+  public void get() {
+
+    int s = this.getInt("s");
+    int n = this.getInt("n", 20, "number.per.page");
+
+    long uid = this.getLong("uid", login.getId());
+    User u = User.loadById(uid);
+    this.set("u", u);
+
+    JSONObject jo = new JSONObject();
+
+    String name = this.getString("q");
+    if (!X.isEmpty(name)) {
+      /**
+       * searching
+       */
+      Query q1 = SE.parse(name, new String[] { "name", "nickname", "memo" });
+      TopDocs docs = SE.search("circling", q1);
+      ScoreDoc[] dd = docs.scoreDocs;
+
+      jo.put("tptal", docs.totalHits);
+      JSONArray arr = new JSONArray();
+
+      int min = s + n;
+      int i = s;
+      while (i < min && i < dd.length) {
+
+        ScoreDoc d = dd[i];
+        long id = X.toLong(SE.get(d.doc), -1);
+        if (id > -1) {
+          Circling e = Circling.load(id);
+          // SE.highlight();
+          String s1 = SE.highlight(d.doc, "name", q1, null);
+          if (s1 != null) {
+            e.set("name", s1);
+          }
+
+          s1 = SE.highlight(d.doc, "memo", q1, null);
+          if (s1 != null) {
+            e.set("memo", s1);
+          }
+
+          s1 = SE.highlight(d.doc, "nickname", q1, null);
+          if (s1 != null) {
+            e.set("owner_nickname", s1);
+          }
+
+          arr.add(e.getJSON());
+        }
+        i++;
+        if (arr.size() >= n) {
+          break;
+        }
+      }
+      jo.put("list", arr);
+      jo.put("name", name);
+      jo.put("s", s);
+      jo.put("n", n);
+      jo.put(X.STATE, 200);
+      jo.put(X.MESSAGE, "ok");
+
+    } else {
+      W q = W.create("uid", uid);
+      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), s, n);
+      if (b1 != null) {
+        jo.put("total", Follower.count(q));
+        if (b1.getList() != null) {
+          JSONArray arr = new JSONArray();
+          for (Follower f1 : b1.getList()) {
+            arr.add(f1.getCircling_obj().getJSON());
+          }
+          jo.put("list", arr);
+        }
+      }
+      jo.put("s", s);
+      jo.put("n", n);
+      jo.put("name", name);
+      jo.put(X.STATE, 200);
+      jo.put(X.MESSAGE, "ok");
+
+    }
+
+    this.response(jo);
   }
 
   @Path(path = "delete", login = true)
