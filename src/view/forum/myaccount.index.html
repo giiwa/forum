@@ -1,0 +1,44 @@
+<div class='head'>$lang.get('myaccount.index.title')</div>
+
+#parse('/widget/widget.message.html')
+
+<table id='topic-table' class='table'>
+	<thead>
+		<tr>
+			<th>$lang.get('topic.id')</th>
+			<th>$lang.get('topic.title')</th>
+			<th>$lang.get('topic.replies')</th>
+			<th>$lang.get('topic.owner')</th>
+			<th>$lang.get('topic.updated')</th>
+			<th>$lang.get('topic.created')</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+#foreach($f in $list)
+	<tr #if($f.deleted==1) class="deleted"#end>
+		<td>$f.id</td>
+		<td>$!f.title</td>
+		<td>$!f.replies</td>
+		<td>$!f.owner.name</td>
+		<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>
+			<a href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
+		</td>
+	</tr>
+#end
+	</tbody>
+</table>
+
+ #parse('/widget/goto.page.html')
+
+<script>
+function _delete(id, o) {
+	if(confirm("$lang.get('title.are_u_sure_delete')")) {
+		$.post("/forum/account/delete", {id:id}, function(d){
+			$(o).parent().parent().remove();
+		})
+	}
+}
+</script>

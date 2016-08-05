@@ -1,0 +1,28 @@
+<td>$f.id</td>
+<td>$!f.name</td>
+<td>$lang.get("circling.state_$!f.state")</td>
+<td>$!f.public</td>
+<td>$!f.initial</td>
+<td>
+	#if($f.topics>0) 
+	<a href="/admin/topic?cid=$f.id">$f.topics</a> 
+	#end
+</td>
+<td>
+	#if($f.members >0)
+	<a href="/admin/member?cid=$f.id">$f.members</a>
+	#end
+</td>
+<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
+<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
+<td>
+	<a href='javascript:;' onclick='_repair("$f.id", this)'>$lang.get('a.repair')</a>
+	#if($f.state == 1)
+	<a href='javascript:;' onclick='_state("$f.id", this, 0)'>$lang.get('a.enable')</a>
+	#else
+	<a href='javascript:;' onclick='_state("$f.id", this, 1)'>$lang.get('a.disable')</a>
+	#end
+	#if($f.deleted != 1)
+	<a href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
+	#end
+</td>

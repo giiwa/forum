@@ -1,0 +1,44 @@
+<div class='topic-owner'>
+	<p class='text-center'>
+		#if($me.id == $o.id)
+		<a href='/forum/user/edit'>
+			#if($o.photo)
+			<img src='$o.photo' class="user-bg"/>
+			#else
+			<img src='/images/user_default.gif' class="user-bg"/>
+			#end
+		</a>
+		#else
+		<a href='/forum/circling?uid=$f.owner'>
+			#if($o.photo)
+			<img src='$o.photo' class="user-bg"/>
+			#else
+			<img src='/images/user_default.gif' class="user-bg"/>
+			#end
+		</a>
+		#end
+	</p>
+	<p class='text-center'>
+		<a href='/forum/circling?uid=$f.id'>$o.nickname</a>
+	</p>
+	<p class='text-center'>
+		$lang.get('user.tops'):$!o.tops
+	</p>
+	<p class='text-center'>
+		$lang.get('user.topics'):$!o.topics 
+	</p>
+	<p class='text-center'>
+		$lang.get('user.replies'):$!o.replies
+	</p>
+	<p class='text-center'>
+		$lang.get('user.created'):$!lang.format($o.created, 'yyyy-MM-dd')
+	</p>
+	<p class='text-center'>
+		$lang.get('user.from'):$!o.from
+	</p>
+	#if($me.id != $o.id && $me.id == $c.owner)
+	<p class='text-center'>
+		<a href="javascript:;" onclick="_deny('$cid','$f.owner')">deny</a> 
+	</p>
+	#end
+</div>

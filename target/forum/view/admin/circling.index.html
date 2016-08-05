@@ -1,0 +1,69 @@
+<div class='head'>$lang.get('circling.index.title')</div>
+
+#parse('/widget/widget.message.html')
+
+<div class='tabs'>
+	<a href='/admin/circling' class='selected'>$lang.get('a.circling')</a>
+	<a href='/admin/circling/import'>$lang.get('a.import')</a>
+</div>
+
+<script type="text/javascript" src="/js/searchbar.js"></script>
+<div class='search'>
+	<form action='/admin/circling' method='get' #if($currentpage>0) style='display:none' #end >
+		<span><label><h3>$lang.get('circling.name'):</h3><input type='text' name='name' value='$!name'/></label></span>
+
+		<button type='submit' class='btns1 icon icon-search'></button>
+	</form>
+	
+	<div class='s1tab #if($currentpage>0) down #else up #end'>
+		<div class='arrow'></div>
+	</div>
+</div>
+
+<table id='group-table' class='tablesorter nospace' border="0" cellpadding="0" cellspacing="1">
+	<thead>
+		<tr>
+			<th>$lang.get('circling.id')</th>
+			<th>$lang.get('circling.name')</th>
+			<th>$lang.get('circling.state')</th>
+			<th>$lang.get('circling.public')</th>
+			<th>$lang.get('circling.initial')</th>
+			<th>$lang.get('circling.topics')</th>
+			<th>$lang.get('circling.members')</th>
+			<th>$lang.get('circling.updated')</th>
+			<th>$lang.get('circling.created')</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+#foreach($f in $list)
+	<tr #if($f.deleted==1) class="deleted" #end>
+		#parse("/admin/circling.item.html")
+	</tr>
+#end
+	</tbody>
+</table>
+
+ #parse('/widget/goto.page.html')
+
+<script>
+function _repair(id, o) {
+	$.post("/admin/circling/update", {id:id, repair:1}, function(d){
+		$(o).parent().parent().html(d);
+		$.message('已经启动修复！');
+	})
+}
+function _delete(id, o) {
+	if(confirm("$lang.get('title.are_u_sure_delete')")) {
+		$.post("/admin/circling/update", {id:id, deleted:1}, function(d){
+			$(o).parent().parent().addClass('deleted');
+			$(o).parent().parent().html(d);
+		})
+	}
+}
+function _state(id, o, i) {
+	$.post("/admin/circling/update", {id:id,state:i}, function(d){
+		$(o).parent().parent().html(d);
+	});
+}
+</script>

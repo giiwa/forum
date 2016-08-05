@@ -1,0 +1,78 @@
+#parse('/forum/head.html')
+
+<div class='tabs'>
+	<a href='/forum/circling'>$lang.get('circling.index.title')</a>
+	<span>&gt;</span>
+	<a href='/forum/circling/edit?cid=$!cid' class='selected'>$lang.get('circling.edit.title')</a>
+</div>
+
+<form class="form-horizontal" action='/forum/circling/edit'  method='post'>
+	<input type='hidden' name='cid' value='$!cid'/>
+	
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">$lang.get('circling.name')(<r>*</r>)</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="name" id="name" value="$!name" placeholder="$lang.get('circling.name')">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="access" class="col-sm-2 control-label">$lang.get('circling.access')</label>
+    <div class="col-sm-2">
+    	<select name='access' id="access">
+    		<option value='public' #if($access == 'public') selected="selected" #end>$lang.get('circling.access_public')</option>
+    		<option value='half' #if($access == 'half') selected="selected" #end>$lang.get('circling.access_half')</option>
+    		<option value='private' #if($access == 'private') selected="selected" #end>$lang.get('circling.access_private')</option>
+    	</select>
+    </div>
+	<g class='col-sm-offset-2 col-sm-10'>$lang.get("circling.access.hint")</g>
+  </div>
+  <div class="form-group">
+    <label for="user_state" class="col-sm-2 control-label">$lang.get('circling.user_state')</label>
+    <div class="col-sm-2">
+    	<select name='user_state' id="user_state">
+    		<option value='pending' #if($user_state == 'pending') selected="selected" #end)>$lang.get('circling.user_state_pending')</option>
+    		<option value='accepted' #if($user_state == 'accepted') selected="selected" #end>$lang.get('circling.user_state_accepted')</option>
+    	</select>
+    </div>
+	<g>$lang.get("circling.user_state.hint")</g>
+  </div>
+
+  <div class="form-group">
+    <label for="photo" class="col-sm-2 control-label">$lang.get('circling.photo')</label>
+    <div class="col-sm-2">
+      <input type="hidden" name="photo" value="$!photo">
+      <input type="file" id="photo" onchange="_upload(this)">
+    </div>
+	<div class="col-sm-10 col-xs-offset-2"><g>$lang.get("circling.photo.hint")</g></div>
+    <div class="col-sm-10 col-xs-offset-2"><img id='preview' class="circling-photo" #if($photo) src="$!photo" #end/></div>
+  </div>
+
+  <div class="form-group">
+    <label for="memo" class="col-sm-2 control-label">$lang.get('circling.memo')</label>
+    <div class="col-sm-4">
+      <textarea class="form-control" name="memo" id="memo">$!memo</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">$lang.get('btn.save')</button>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript" src='/js/jquery.sfupload.js'></script>
+
+<script>
+function _upload(o){
+	$.upload({
+		obj:o,
+		done : function(d) {
+			$('#preview').attr('src', d.url);
+			$('input[name=photo]').val(d.url);
+		}
+	});
+}
+</script>
+#parse('/forum/foot.html')
+

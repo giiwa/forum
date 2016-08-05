@@ -1,0 +1,72 @@
+#parse('/forum/head.html')
+
+<div class="tabs">
+</div>
+
+<div class='col-sm-12 text-right'>
+	<form class="search-inline">
+      <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
+      <button type='submit' class="icon-search"></button>
+	</form>
+	<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
+</div>
+
+<div class='col-sm-2 owner'>
+	<p class='text-center'>
+		#if($me.id == $u.id)
+		<a href='/forum/user/edit'>
+			#if($u.photo)
+			<img src='$u.photo' class="user-bg"/>
+			#else
+			<img src='/images/user_default.gif'/>
+			#end
+		</a>
+		#else
+		<a href='/forum/circling?uid=$u.owner'>
+			#if($u.photo)
+			<img src='$u.photo' class='user-bg'/>
+			#else
+			<img src='/images/user_default.gif'/>
+			#end
+		</a>
+		#end
+	</p>
+	<p class='text-center'>
+		<a href='/forum/circling?uid=$!u.id'>$!u.nickname</a>
+	</p>
+	<p class='text-center'>
+		$lang.get('user.tops'):$!u.tops
+	</p>
+	<p class='text-center'>
+		$lang.get('user.topics'):$!u.topics 
+	</p>
+	<p class='text-center'>
+		$lang.get('user.replies'):$!u.replies
+	</p>
+	<p class='text-center'>
+		$lang.get('user.created'):$!lang.format($u.created, 'yyyy-MM-dd')
+	</p>
+	<p class='text-center'>
+		$lang.get('user.from'):$!u.from
+	</p>
+</div>
+
+<ul class='col-sm-10 circlings'>
+	#foreach($f in $list)
+		#set($f1 = $f.getFollower($me))
+		#parse('/forum/circling.item.html')
+	#end
+</ul>
+	
+#parse('/forum/goto.page.html')
+
+<script>
+function _follow(p, o) {
+	processing && processing.show();
+	$.post('/forum/circling/follow', p, function(d){
+		processing && processing.hide();
+		
+	});
+}	
+</script>
+#parse('/forum/foot.html')

@@ -1,0 +1,102 @@
+#parse('/forum/head.html')
+
+<div class='tabs'>
+	<a href='/forum/circling'>$lang.get('circling.index.title')</a>
+	<span>&gt;</span>
+	<a href='/forum/circling/user?cid=$!cid'>$lang.get('circling.user.title')</a>
+</div>
+
+<div class='col-sm-12 text-right'>
+	<form class="search-inline">
+	  <input type='hidden' name='cid' value='$!cid'/>
+	  <select name="state" placeholder="$lang.get('follower.state')">
+	  	<option value='' #if($state == '') selected="selected" #end>$lang.get('followers.state_')</option>
+	  	<option value='pending' #if($state == 'pending') selected="selected" #end>$lang.get('followers.state_pending')</option>
+	  	<option value='accepted' #if($state == 'accepted') selected="selected" #end>$lang.get('followers.state_accepted')</option>
+	  	<option value='locked' #if($state == 'locked') selected="selected" #end>$lang.get('followers.state_locked')</option>
+	  	<option value='owner' #if($state == 'owner') selected="selected" #end>$lang.get('followers.state_owner')</option>
+	  </select>
+      <input type="text" name="name" value="$!name" placeholder="$lang.get('user.name')">
+      <button type='submit' class="icon-search"></button>
+	</form>
+</div>
+
+<div class='col-sm-12 users'>
+	<table class='table table-hover'>
+		<thead>
+			<tr>
+				<th>$lang.get('user.name')</th>
+				<th>$lang.get('circling.state')</th>
+				<th>$lang.get('user.topics')</th>
+				<th>$lang.get('user.replies')</th>
+				<th>$lang.get('user.from')</th>
+				<th>$lang.get('follower.updated')</th>
+				<th>$lang.get('follower.created')</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+	#foreach($f in $list)
+		<tr>
+			<td>
+				<a href="/forum/circling?uid=$f.uid">
+				#if($f.user_obj.photo)
+				<img class="user-sm" src="$f.user_obj.photo"/>
+				#else
+				<span class='icon-user'></span>
+				#end
+				$!f.name
+				</a>
+			</td>
+			<td>$lang.get("circling.user_state_$f.state")</td>
+			<td>$!f.user_obj.topics</td>
+			<td>$!f.user_obj.replies</td>
+			<td>$!f.user_obj.from</td>
+			<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
+			<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
+			<td>
+				#if($f.uid != $me.id)
+				<a class='btn btn-xs btn-danger' href='javascript:;' onclick='_delete({cid:"$f.cid",id:"$!f.id",delete:"$f.uid"}, this)'>$lang.get('a.delete')</a>
+				#end
+				#if($f.state == 'pending')
+				<a class='btn btn-xs btn-success' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.accepted')</a>
+				#end
+				#if($f.state == 'accepted')
+				<a class='btn btn-xs btn-warning' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"locked"}, this)'>$lang.get('a.locked')</a>
+				<a class='btn btn-xs btn-success' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"owner"}, this)'>$lang.get('a.upgrade.owner')</a>
+				#end
+				#if($f.state == 'locked')
+				<a class='btn btn-xs btn-success' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.unlocked')</a>
+				#end
+				#if($f.state == 'owner')
+				<a class='btn btn-xs btn-warning' href='javascript:;' onclick='_update({cid:"$f.cid",id:"$!f.id",state:"accepted"}, this)'>$lang.get('a.downgrade.owner')</a>
+				#end
+			</td>
+		</tr>
+	#end
+		</tbody>
+	</table>
+	
+	 #parse('/forum/goto.page.html')
+</div>
+
+<script>
+function _delete(p, o) {
+	if(confirm("$lang.get('title.are_u_sure_delete')")) {
+		processing && processing.show();
+		$.post("/forum/circling/follow", p, function(d){
+			processing && processing.hide();
+			$(o).parent().parent().remove();
+		})
+	}
+}
+function _update(p, o) {
+	processing && processing.show();
+	$.post("/forum/circling/follow", p, function(d){
+		processing && processing.hide();
+		alert('$lang.get("please_refresh_later")');
+	})
+}
+</script>
+
+#parse('/forum/foot.html')

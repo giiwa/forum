@@ -1,0 +1,50 @@
+#parse('/forum/head.html')
+
+<div class='tabs'>
+	<a href='/forum' class='selected'>$lang.get('circling.index.title')</a>
+	<span>&gt;</span>
+	<a href='/forum/topic?cid=$!cid' class='selected'>$lang.get('topic.index.title')</a>
+	<span>&gt;</span>
+	<a href='/forum/topic/create?cid=$!cid' class='selected'>$lang.get('topic.create.title')</a>
+</div>
+
+<form class="form-horizontal" action='/forum/topic/create'  method='post'>
+  <input type='hidden' name='cid' value='$!cid' />
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">$lang.get('topic.title')(<r>*</r>)</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="title" id="name" value="$!title" placeholder="$lang.get('topic.title')">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="content" class="col-sm-2 control-label">$lang.get('topic.content')</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" name="content" id="content">$!content</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">$lang.get('btn.create')</button>
+    </div>
+  </div>
+</form>
+<script>
+var editor;
+$(function(){
+	editor = KindEditor.create('textarea[name="content"]', {
+				basePath : '/ke/',
+				resizeType : 1,
+				allowPreviewEmoticons : false,
+				allowImageUpload : true,
+				items : ['fontname', 'fontsize', '|', 'forecolor',
+						'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'justifyleft', 'justifycenter',
+						'justifyright', 'insertorderedlist',
+						'insertunorderedlist', '|', 'emoticons', 'image',
+						'link']
+			});	
+})
+</script>
+
+#parse('/forum/foot.html')

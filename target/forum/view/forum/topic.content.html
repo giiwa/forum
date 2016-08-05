@@ -1,0 +1,89 @@
+<div class='topic-cnt'>
+	<div class='col-sm-12 rtopcon'>
+		<div class='pull-left'>
+			<span>$!lang.get('topic.created'):$!lang.format($f.created,'yyyy-MM-dd hh:mm:ss')</span>
+			<span>|</span>
+			<span>$!lang.get('topic.createdby'):$!lang.get('topic.createdby_$f.createdby')</span>
+		</div>
+		<div class='pull-right'>
+			<a class='btn btn-xs btn-default' id='f_$f.floor'>
+				#if($f.floor > 3)
+				$!{f.floor}$!lang.get("topic.floor")
+				#else
+				$!lang.get("topic.floor_$f.floor")
+				#end
+			</a>
+		</div>
+	</div>
+	<div class='rconten'>
+		#if($f == $t)
+		<div class="rtitle">
+			$!f.title
+        </div>
+        #end
+        <div>
+			#if($f.refer)
+			#set($r=$f.refer)
+			$this.toHtml($r)
+			#end
+			#if($f.deleted == 1)
+			<div class='del icon-warning'>$lang.get('topic.was.deleted')</div>
+			#else
+			<div>
+			$!f.content
+			</div>
+			#end
+        </div>
+	</div>
+</div>
+<div class='conbutton'>
+	#if($f == $t)
+	<div class='recommends'>
+		<div class='rec-tt'>
+			<span class="list-recommend-tit">$lang.get('recommends.title')</span>
+			<a class='pull-right' href="/forum/topic?cid=$cid">$lang.get('a.more.tops')&gt;&gt;</a>
+		</div>
+		<ul class='rec-list'>
+			#foreach($f in $recommends)
+			<li><a href="/forum/topic/detail?id=$f.id">$!f.title</a></li>
+			#end
+		</ul>
+	</div>
+	<div class='shares'>
+		<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+		<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>	</div>
+	#end
+	<div class='combomf'>
+		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_update({id:'$f.id',up:1}, this)">$lang.get('a.topic.up')(<span>$!f.up</span>)</a>
+		<a class="btn btn-xs btn-default" href="javascript:;" onclick="_update({id:'$f.id',down:1}, this)">$lang.get('a.topic.down')(<span>$!f.down</span>)</a>
+		#if($f.deleted != 1)
+			<a class="btn btn-xs btn-warning" href="javascript:;" onclick="_expose('$f.id', this)">$lang.get('a.topic.expose')</a>
+			
+			#if($me.id == $t.owner && $f == $t)
+			<a class="btn btn-xs btn-primary" href="/forum/topic/edit?id=$t.id">$lang.get('a.edit')</a>
+			#end
+			
+			#if(!$c.isForbidden($me))
+			<a class="btn btn-xs btn-info" href="javascript:;" onclick="_reply('$f.id', '$f.owner_obj.nickname')">$lang.get('a.reply')</a>
+			#end
+		#end
+		#if($me.id == $c.owner)
+			#if($f.deleted==1)
+			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_update({id:'$f.id', deleted:0}, this)">$lang.get('a.recover')</a>
+			#else
+			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_update({id:'$f.id', deleted:1}, this)">$lang.get('a.delete')</a>
+			#end
+			
+			#if($f == $t)
+			#if($f.top != 1)
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:1}, this)">$lang.get('a.top1')</a>
+			#else
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:0}, this)">$lang.get('a.top0')</a>
+			#end
+			#if($f.cream != 1)
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', cream:1}, this)">$lang.get('a.cream')</a>
+			#end
+			#end
+		#end
+	</div>	
+</div>

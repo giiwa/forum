@@ -1,0 +1,136 @@
+#parse('/forum/head.html')
+
+<div class='tabs'>
+	<div class='pull-left'>
+		<a href='/forum'>$lang.get('circling.index.title')</a>
+		<span>&gt;</span>
+		<a href='/forum/topic?cid=$!cid'>$lang.get('topic.index.title')</a>
+		<span>&gt;</span>
+		<a href='/forum/topic/detail?id=$!t.id'>$!t.title</a>
+	</div>
+	<div class='pull-right'>
+		<form class="search-inline">
+			<input type='hidden' name='cid' value="$cid"/>
+	      <input type="text" placeholder="$lang.get('topic.search.text')">
+	      <button type='submit' class="icon-search"></button>
+		</form>
+		<a class="btn btn-success" href="/forum/topic/create?cid=$cid">$lang.get('a.topic.create')</a>
+		<a class="btn btn-info" href="javascript:;" onclick="_reply('')">$lang.get('a.reply')</a>
+	</div>
+</div>
+
+<div class='col-sm-12 topic'>
+	<div class='topic-summary'>
+		<strong><a href='/forum/topic?cid=$!cid'>$!c.name</a></strong>&nbsp;&gt;&nbsp;<span>$!t.title</span>
+		<div class='pull-right'>
+			<span>$lang.get('topic.reads'):$t.reads</span>
+			<span>|</span>
+			<span>$lang.get('topic.replies'):$t.replies</span>
+		</div>
+	</div>
+	
+	<div class='col-sm-12 topic-f0'>
+		#set($o = $t.owner_obj)
+		#parse('/forum/topic.owner.html')
+		#set($f=$t)
+		#parse('/forum/topic.content.html')
+	</div>
+	#foreach($f in $list)
+	<div class='col-sm-12 topic-fn'>
+		#set($o = $t.owner_obj)
+		#parse('/forum/topic.owner.html')
+		<div id="cnt_$f.id">
+		#parse('/forum/topic.content.html')
+		</div>
+	</div>
+	#end
+	
+	#parse('/forum/goto.page.html')
+	
+	<div id='reply' class="col-sm-12">
+		<form class="form-horizontal" method="post" action="/forum/topic/reply">
+		  <input type='hidden' name='id' value='$!t.id' />
+		  <input type='hidden' name='refer' value='' />
+		  <div class="form-group">
+		    <label for="content" class="col-sm-2 control-label">$lang.get('topic.reply')</label>
+		    <div class="col-sm-10">
+		      <textarea class="form-control" name="content" id="content">$!content</textarea>
+		    </div>
+		  </div>
+		
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+		      <button class="btn btn-primary" onclick="_reply()">$lang.get('btn.ok')</button>
+		    </div>
+		  </div>
+		</form>
+	</div>
+</div>
+
+<script>
+function _expose(id) {
+	processing && processing.show();
+	$.post('/forum/topic/expose', {id:id}, function(d){
+		processing && processing.hide();
+		alert(d.message);
+	})	
+}
+function _up(id, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {id:id, up:1, cid:'$cid'}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
+function _down(id, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {id:id, down:1, cid:'$cid'}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
+function _deny(cid, uid) {
+	processing && processing.show();
+	$.post('/forum/circling/deny', {cid:cid, uid:uid}, function(d){
+		processing && processing.hide();
+		$.success(d.messsage);
+	})
+}
+function _delete(id, flag, o) {
+	processing && processing.show();
+	$.post('/forum/topic/update', {cid:'$cid', id:id, deleted:flag}, function(d){
+		processing && processing.hide();
+		$('#cnt_' + id).html(d);
+	})
+}
+function _reply(refer, o){
+	$('#reply input[name=refer]').val(refer);
+	var e = $('#reply label[for=content]');
+	if(refer.length > 0) {
+		e.html('@' + o);
+	} else {
+		e.html("$lang.get('topic.reply')");
+	}
+	editor.html('');
+	
+	//smoothscroll to #reply
+	$.scrollTo('#reply', 500);
+}
+var editor = false;
+$(function(){
+	editor = KindEditor.create('textarea[name="content"]', {
+			basePath : '/ke/',
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			allowImageUpload : true,
+			items : ['fontname', 'fontsize', '|', 'forecolor',
+					'hilitecolor', 'bold', 'italic', 'underline',
+					'removeformat', '|', 'justifyleft', 'justifycenter',
+					'justifyright', 'insertorderedlist',
+					'insertunorderedlist', '|', 'emoticons', 'image',
+					'link']
+		});	
+})
+</script>
+
+#parse('/forum/foot.html')
