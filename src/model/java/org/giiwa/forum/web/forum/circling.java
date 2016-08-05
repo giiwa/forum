@@ -159,6 +159,7 @@ public class circling extends Model {
       jo.put("name", name);
       jo.put("s", s);
       jo.put("n", n);
+      jo.put("hasmore", arr.size() >= n);
       jo.put(X.STATE, 200);
       jo.put(X.MESSAGE, "ok");
 
@@ -173,7 +174,12 @@ public class circling extends Model {
             arr.add(f1.getCircling_obj().getJSON());
           }
           jo.put("list", arr);
+          jo.put("hasmore", arr.size() >= n);
+        } else {
+          jo.put("hasmore", false);
         }
+      } else {
+        jo.put("hasmore", false);
       }
       jo.put("s", s);
       jo.put("n", n);

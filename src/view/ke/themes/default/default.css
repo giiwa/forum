@@ -493,7 +493,7 @@
 	overflow: auto;
 }
 .ke-edit-textarea {
-	font: 12px/1.5 "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	font: 16px/1.5 "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
 	color: #000;
 	overflow: auto;
 	resize: none;
@@ -695,7 +695,7 @@
 	cursor: pointer;
 }
 .ke-dialog-body {
-	font: 12px/1.5 "sans serif",tahoma,verdana,helvetica;
+	font: 16px/1.5 "sans serif",tahoma,verdana,helvetica;
 	text-align: left;
 	overflow: hidden;
 	width: 100%;
