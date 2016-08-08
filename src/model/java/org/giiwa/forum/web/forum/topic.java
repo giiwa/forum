@@ -44,7 +44,7 @@ public class topic extends Model {
     Follower f = c.getFollower(login);
     if (c.isPrivate() && (f == null || !f.getPost())) {
       log.warn("deny to access the circling, user=" + login + ", circling=" + cid);
-      this.deny();
+      this.deny("/forum", null);
       return;
     }
 
@@ -112,7 +112,7 @@ public class topic extends Model {
     Circling c = Circling.load(cid);
     Follower f1 = c.getFollower(login);
     if (!"public".equals(c.getAccess()) && (f1 == null || !f1.getPost())) {
-      deny();
+      this.deny("/forum", null);
       return;
     }
 
@@ -220,7 +220,7 @@ public class topic extends Model {
     Circling c = t.getCircling();
     Follower f1 = c.getFollower(login);
     if (!"public".equals(c.getAccess()) && (f1 == null || !f1.getPost())) {
-      deny();
+      this.deny("/forum", null);
       return;
     }
 
@@ -331,7 +331,7 @@ public class topic extends Model {
     Follower f = c.getFollower(login);
     if (c.isPrivate() && (f == null || !f.getPost())) {
       log.warn("deny to access the circling, user=" + login + ", circling=" + c.getId());
-      this.deny();
+      this.deny("/forum", null);
       return;
     }
 
