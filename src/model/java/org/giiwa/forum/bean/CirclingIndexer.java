@@ -15,14 +15,14 @@ public class CirclingIndexer implements Indexer {
   public void bad(Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling.update(X.toLong(id, -1), V.create("index_flag", flag).set(node + "_state", "bad"));
+    Circling.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "bad"));
   }
 
   @Override
   public void done(Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling.update(X.toLong(id, -1), V.create("index_flag", flag).set(node + "_state", "done"));
+    Circling.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "done"));
   }
 
   @Override
@@ -46,7 +46,7 @@ public class CirclingIndexer implements Indexer {
   public Object next(long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Circling c = Circling.load(W.create().and("index_flag", flag, W.OP_NEQ).sort(X.ID, 1));
+    Circling c = Circling.load(W.create().and("index_flag", flag, W.OP_LT).sort(X.ID, 1));
     return c == null ? null : c.getId();
   }
 

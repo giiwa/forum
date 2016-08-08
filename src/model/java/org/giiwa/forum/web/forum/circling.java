@@ -36,7 +36,7 @@ public class circling extends Model {
     this.set("u", u);
 
     String name = this.getString("q");
-    if (!X.isEmpty(name) && X.isEmpty(path)) {
+    if (!X.isEmpty(name)) {
       /**
        * searching, whatever login or not
        */
