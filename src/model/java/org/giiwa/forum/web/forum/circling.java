@@ -23,21 +23,22 @@ import net.sf.json.JSONObject;
 
 public class circling extends Model {
 
-  @Path(login = true)
   public void onGet() {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    long uid = this.getLong("uid", login.getId());
+    this.set("me", getUser());
+    long uid = this.getLong("uid", login == null ? -1 : login.getId());
+    Beans<Circling> bs = new Beans<Circling>();
+
     User u = User.loadById(uid);
     this.set("u", u);
 
     String name = this.getString("q");
-    Beans<Circling> bs = new Beans<Circling>();
     if (!X.isEmpty(name) && X.isEmpty(path)) {
       /**
-       * searching
+       * searching, whatever login or not
        */
       Query q1 = SE.parse(name, new String[] { "name", "nickname", "memo" });
       TopDocs docs = SE.search("circling", q1);
@@ -79,7 +80,8 @@ public class circling extends Model {
       }
 
       this.set("q", name);
-    } else {
+
+    } else if (u != null) {
       W q = W.create("uid", uid);
       Beans<Follower> b1 = Follower.load(q.sort("updated", -1), s, n);
       if (b1 != null) {
@@ -92,12 +94,37 @@ public class circling extends Model {
           }
         }
       }
+    } else {
+      this.redirect("/forum/circling/pub");
+      return;
     }
 
     this.set(bs, s, n);
     this.query.path("/forum/circling");
 
+    // load public circling
+    Beans<Circling> b1 = Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("score", -1), 0, 30);
+    this.set("pub", b1 != null ? b1.getList() : null);
+
     this.show("/forum/circling.index.html");
+
+  }
+
+  @Path(path = "pub")
+  public void pub() {
+
+    this.set("me", this.getUser());
+    this.set("u", this.getUser());
+
+    int s = this.getInt("s");
+    int n = this.getInt("n", 20, "number.per.page");
+
+    Beans<Circling> b1 = Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("score", -1), 0, 30);
+    this.set(b1, s, n);
+
+    this.query.path("/forum/circling/pub");
+    this.show("/forum/circling.pub.html");
+
   }
 
   @Path(path = "get", login = true)

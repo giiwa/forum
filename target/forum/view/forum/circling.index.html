@@ -22,7 +22,7 @@
 			#end
 		</a>
 		#else
-		<a href='/forum/circling?uid=$u.owner'>
+		<a href='/forum/circling?uid=$u.id'>
 			#if($u.photo)
 			<img src='$u.photo' class='user-bg'/>
 			#else
@@ -60,6 +60,19 @@
 	
 #parse('/forum/goto.page.html')
 
+<ul class="col-sm-12 circlings cl-recommends">
+	#foreach($p in $pub)
+	<li class="col-sm-2 text-center" style='margin: 2px;overflow:hidden'>
+		<a href="/forum/topic?cid=$p.id">
+			<img src='$p.photo' style='float: initial;margin:0'/>
+			<span class='col-sm-12'>
+				$!p.name
+			</span>
+		</a>
+	</li>
+	#end
+</ul>
+	
 <script>
 function _follow(p, o) {
 	processing && processing.show();

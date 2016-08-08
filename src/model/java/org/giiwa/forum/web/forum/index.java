@@ -11,7 +11,7 @@ import org.giiwa.framework.web.Path;
  */
 public class index extends Model {
 
-  @Path(login = true)
+  @Path()
   public void home() {
     this.redirect("/forum/circling");
   }

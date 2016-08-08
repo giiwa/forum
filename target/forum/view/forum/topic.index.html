@@ -117,9 +117,17 @@
 	
 	#parse('/forum/goto.page.html')
 </div>
-<ul class='col-sm-12 cl-recommends'>
-	#foreach($f in $recommends)
-	<li class='col-sm-3'><a href="/forum/topic?cid=$f.id">$f.name</a></li>
+
+<ul class="col-sm-12 circlings cl-recommends">
+	#foreach($p in $recommends)
+	<li class="col-sm-2 text-center" style='margin: 2px;overflow:hidden'>
+		<a href="/forum/topic?cid=$p.id">
+			<img src='$p.photo' style='float: initial;margin:0'/>
+			<span class='col-sm-12'>
+				$!p.name
+			</span>
+		</a>
+	</li>
 	#end
 </ul>
 

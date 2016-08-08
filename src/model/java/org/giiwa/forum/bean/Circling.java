@@ -146,6 +146,9 @@ public class Circling extends Bean {
   }
 
   public Follower getFollower(User u) {
+    if (u == null) {
+      return null;
+    }
     return Follower.load(W.create("cid", this.getId()).and("uid", u.getId()));
   }
 
