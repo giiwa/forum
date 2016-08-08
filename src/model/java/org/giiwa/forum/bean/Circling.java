@@ -183,4 +183,8 @@ public class Circling extends Bean {
     return Helper.load(q, Circling.class);
   }
 
+  public boolean isPrivate() {
+    return X.isSame("private", this.getAccess());
+  }
+
 }

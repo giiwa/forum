@@ -33,12 +33,20 @@ import net.sf.json.JSONObject;
  */
 public class topic extends Model {
 
-  @Path(login = true)
   public void onGet() {
     long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
     this.set("cid", cid);
     this.set("c", c);
+
+    login = getUser();
+    this.set("me", login);
+    Follower f = c.getFollower(login);
+    if (c.isPrivate() && !f.getPost()) {
+      log.warn("deny to access the circling, user=" + login + ", circling=" + cid);
+      this.deny();
+      return;
+    }
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
@@ -253,6 +261,15 @@ public class topic extends Model {
   public void edit() {
     long id = this.getLong("id");
     Topic t = Topic.load(id);
+
+    Circling c = t.getCircling();
+    Follower f = c.getFollower(login);
+    if (c.isPrivate() && !f.getPost()) {
+      log.warn("deny to access the circling, user=" + login + ", circling=" + c.getId());
+      this.deny();
+      return;
+    }
+
     if (method.isPost()) {
       V v = V.create();
       v.set("title", this.getString("title"));
@@ -298,14 +315,25 @@ public class topic extends Model {
     this.response(jo);
   }
 
-  @Path(path = "detail", login = true)
+  @Path(path = "detail")
   public void detail() {
     long id = this.getLong("id");
     Topic t = Topic.load(id);
     this.set("t", t);
-    this.set("c", t.getCircling());
+
+    Circling c = t.getCircling();
+    this.set("c", c);
     this.set("id", t.getId());
     this.set("cid", t.getCid());
+
+    login = getUser();
+    this.set("me", login);
+    Follower f = c.getFollower(login);
+    if (c.isPrivate() && !f.getPost()) {
+      log.warn("deny to access the circling, user=" + login + ", circling=" + c.getId());
+      this.deny();
+      return;
+    }
 
     if (Log.create(V.create("topic_id", id).set("sid", sid()))) {
       t.update(V.create("reads", t.getReads() + 1).set("updated", t.getLong("updated")));

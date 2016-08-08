@@ -101,4 +101,5 @@ public class Follower extends Bean {
     String state = this.getState();
     return "owner".equals(state) || "accepted".equals(state);
   }
+  
 }
