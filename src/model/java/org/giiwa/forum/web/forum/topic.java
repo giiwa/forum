@@ -308,7 +308,7 @@ public class topic extends Model {
     this.set("cid", t.getCid());
 
     if (Log.create(V.create("topic_id", id).set("sid", sid()))) {
-      t.update(V.create("reads", t.getReads() + 1));
+      t.update(V.create("reads", t.getReads() + 1).set("updated", t.getLong("updated")));
     }
 
     int s = this.getInt("s");
