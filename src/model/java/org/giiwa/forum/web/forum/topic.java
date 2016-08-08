@@ -99,7 +99,7 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Circling> bs1 = Circling.load(login.getId(), W.create().sort("updated", -1), 0, 20);
+    Beans<Circling> bs1 = Circling.load(login == null ? -1 : login.getId(), W.create().sort("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
 
     this.show("/forum/topic.index.html");

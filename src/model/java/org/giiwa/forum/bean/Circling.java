@@ -153,6 +153,9 @@ public class Circling extends Bean {
   }
 
   public boolean isForbidden(User u) {
+    if (u == null) {
+      return this.isPrivate();
+    }
     return Log.exists(W.create("data", "forbidden").and("cid", this.getId()).and("uid", u.getId()).and("expired",
         System.currentTimeMillis(), W.OP_GT));
   }
@@ -164,14 +167,19 @@ public class Circling extends Bean {
 
     int s1 = 0;
     W w = W.create();
-    W q1 = W.create("uid", uid).and("data", "follower").sort(X.ID, 1);
-    Beans<Log> bs1 = Log.load(q1, s1, 100);
-    while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
-      for (Log l : bs1.getList()) {
-        w.or(X.ID, l.getString("cid"));
+    W q1 = W.create();
+    if (uid < 0) {
+      return Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("score", -1), 0, 30);
+    } else {
+      q1.and("uid", uid).and("data", "follower").sort(X.ID, 1);
+      Beans<Log> bs1 = Log.load(q1, s1, 100);
+      while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
+        for (Log l : bs1.getList()) {
+          w.or(X.ID, l.getString("cid"));
+        }
+        s1 += bs1.getList().size();
+        bs1 = Log.load(q1, s1, 100);
       }
-      s1 += bs1.getList().size();
-      bs1 = Log.load(q1, s1, 100);
     }
 
     return Helper.load(q.and(w), s, n, Circling.class);
