@@ -36,6 +36,13 @@ public class topic extends Model {
   public void onGet() {
     long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
+    if (c == null) {
+      long id = X.toLong(path);
+      if (id > 0) {
+        _detail(id);
+        return;
+      }
+    }
     this.set("cid", cid);
     this.set("c", c);
 
@@ -318,6 +325,10 @@ public class topic extends Model {
   @Path(path = "detail")
   public void detail() {
     long id = this.getLong("id");
+    _detail(id);
+  }
+
+  private void _detail(long id) {
     Topic t = Topic.load(id);
     this.set("t", t);
 
@@ -344,7 +355,7 @@ public class topic extends Model {
     Beans<Topic> bs = Topic.load(W.create("parent", t.getId()).sort("created", 1), s, n);
 
     this.set(bs, s, n);
-    this.query.path("/forum/topic/detail");
+    this.query.path("/forum/topic/" + id);
 
     /**
      * get recommends
