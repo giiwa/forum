@@ -178,7 +178,7 @@ public class circling extends Model {
 
           JSONObject j1 = e.getJSON();
           j1.put("photo", Global.getString("forum.image.server", "") + j1.get("photo"));
-          arr.add(e.getJSON());
+          arr.add(j1);
         }
         i++;
         if (arr.size() >= n) {
@@ -201,7 +201,11 @@ public class circling extends Model {
         if (b1.getList() != null) {
           JSONArray arr = new JSONArray();
           for (Follower f1 : b1.getList()) {
-            arr.add(f1.getCircling_obj().getJSON());
+            
+            JSONObject j1 = f1.getCircling_obj().getJSON();
+            j1.put("photo", Global.getString("forum.image.server", "") + j1.get("photo"));
+            arr.add(j1);
+
           }
           jo.put("list", arr);
           jo.put("hasmore", arr.size() >= n);

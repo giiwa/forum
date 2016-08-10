@@ -10,6 +10,7 @@ import org.giiwa.core.base.Html;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.V;
 import org.giiwa.core.bean.Helper.W;
+import org.giiwa.core.conf.Global;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.forum.bean.Circling;
@@ -18,6 +19,7 @@ import org.giiwa.forum.bean.Follower;
 import org.giiwa.forum.bean.Log;
 import org.giiwa.forum.bean.Topic;
 import org.giiwa.forum.bean.UserHelper;
+import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
@@ -33,6 +35,7 @@ import net.sf.json.JSONObject;
  */
 public class topic extends Model {
 
+  @Path()
   public void onGet() {
     long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
@@ -110,6 +113,131 @@ public class topic extends Model {
     this.set("recommends", bs1 == null ? null : bs1.getList());
 
     this.show("/forum/topic.index.html");
+  }
+
+  @Path(path = "getlist", login = true)
+  public void getlist() {
+
+    JSONObject jo = new JSONObject();
+
+    long cid = this.getLong("cid");
+    Circling c = Circling.load(cid);
+    if (c == null) {
+      jo.put(X.STATE, 201);
+      jo.put(X.MESSAGE, "circling not found");
+      this.response(jo);
+      return;
+    }
+    this.set("cid", cid);
+    this.set("c", c);
+
+    login = getUser();
+    this.set("me", login);
+    Follower f = c.getFollower(login);
+    if (c.isPrivate() && (f == null || !f.getPost())) {
+      log.warn("deny to access the circling, user=" + login + ", circling=" + cid);
+      jo.put(X.STATE, 202);
+      jo.put(X.MESSAGE, "forbidden");
+      this.response(jo);
+      return;
+    }
+
+    int s = this.getInt("s");
+    int n = this.getInt("n", 20, "number.per.page");
+
+    Beans<Topic> bs = null;
+    String name = this.getString("name");
+    if (!X.isEmpty(name) && X.isEmpty(path)) {
+      bs = new Beans<Topic>();
+
+      /**
+       * searching
+       */
+      Query q1 = SE.parse(name, new String[] { "title", "nickname", "content" });
+      TopDocs docs = SE.search("topic", q1);
+      ScoreDoc[] dd = docs.scoreDocs;
+      bs.setTotal(docs.totalHits);
+      List<Topic> list = new ArrayList<Topic>();
+      bs.setList(list);
+
+      int min = s + n;
+      int i = s;
+      while (i < min && i < dd.length) {
+
+        ScoreDoc d = dd[i];
+        long id = X.toLong(SE.get(d.doc), -1);
+        if (id > -1) {
+          Topic e = Topic.load(id);
+          // SE.highlight();
+          String s1 = SE.highlight(d.doc, "title", q1, null);
+          if (s1 != null) {
+            e.set("title", s1);
+          }
+          User u = e.getOwner_obj();
+
+          e.set("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
+          list.add(e);
+        }
+        i++;
+        if (list.size() >= n) {
+          break;
+        }
+      }
+
+      jo.put("hasmore", list.size() >= n);
+      jo.put("name", name);
+
+    } else {
+      bs = Topic.load(W.create("cid", cid).and("parent", 0).sort("top", -1).sort("updated", -1), s, n);
+      if (bs != null && bs.getList() != null) {
+        for (Topic e : bs.getList()) {
+          User u = e.getOwner_obj();
+          e.set("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
+        }
+        jo.put("hasmore", bs.getList().size() >= n);
+      } else {
+        jo.put("hasmore", false);
+      }
+    }
+
+    jo.put("s", s);
+    jo.put("n", n);
+    jo.put("list", bs.getList());
+
+    this.response(jo);
+  }
+
+  @Path(path = "getreplies", login = true)
+  public void getreplies() {
+
+    JSONObject jo = new JSONObject();
+
+    long tid = this.getLong("tid");
+    Topic t = Topic.load(tid);
+    User u = t.getOwner_obj();
+    t.put("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
+    jo.put("topic", t);
+
+    int s = this.getInt("s");
+    int n = this.getInt("n", 20, "number.per.page");
+    Beans<Topic> bs = Topic.load(W.create("parent", t.getId()).sort("created", 1), s, n);
+    if (bs != null && bs.getList() != null) {
+      if (bs != null && bs.getList() != null) {
+        for (Topic e : bs.getList()) {
+          User u1 = e.getOwner_obj();
+          e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
+        }
+        jo.put("hasmore", bs.getList().size() >= n);
+      } else {
+        jo.put("hasmore", false);
+      }
+    }
+
+    jo.put("list", bs.getList());
+    jo.put("s", s);
+    jo.put("n", n);
+
+    this.response(jo);
   }
 
   @Path(path = "create", login = true)
