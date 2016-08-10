@@ -28,44 +28,44 @@ public class Expose extends Bean {
     return this.getString(X.ID);
   }
 
+  private User reporter_obj;
+
   public User getReporter_obj() {
-    User u = (User) this.get("reporter_obj");
-    if (u == null) {
-      u = User.loadById(this.getLong("reporter"));
-      this.set("reporter_obj", u);
+    if (reporter_obj == null) {
+      reporter_obj = User.loadById(this.getLong("reporter"));
     }
-    return u;
+    return reporter_obj;
   }
+
+  private Circling circling_obj;
 
   public Circling getCircling_obj() {
-    Circling u = (Circling) this.get("circling_obj");
-    if (u == null) {
-      u = Circling.load(this.getLong("cid"));
-      this.set("circling_obj", u);
+    if (circling_obj == null) {
+      circling_obj = Circling.load(this.getLong("cid"));
     }
-    return u;
+    return circling_obj;
   }
 
+  private Topic topic_obj;
+
   public Topic getTopic_obj() {
-    Topic u = (Topic) this.get("topic_obj");
-    if (u == null) {
-      u = Topic.load(this.getLong("tid"));
-      this.set("topic_obj", u);
+    if (topic_obj == null) {
+      topic_obj = Topic.load(this.getLong("tid"));
     }
-    return u;
+    return topic_obj;
   }
 
   public long getOwner() {
     return this.getLong("owner");
   }
 
+  private User owner_obj;
+
   public User getOwner_obj() {
-    User u = (User) this.get("owner_obj");
-    if (u == null) {
-      u = User.loadById(this.getOwner());
-      this.set("user_obj", u);
+    if (owner_obj == null) {
+      owner_obj = User.loadById(this.getOwner());
     }
-    return u;
+    return owner_obj;
   }
 
   // ------------

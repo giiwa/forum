@@ -11,9 +11,6 @@ import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.framework.bean.User;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-
 /**
  * Demo bean
  * 
@@ -52,13 +49,12 @@ public class Circling extends Bean {
     return this.getLong("owner");
   }
 
+  private User owner_obj;
   public User getOwner_obj() {
-    User u = (User) this.get("owner_obj");
-    if (u == null) {
-      u = User.loadById(this.getOwner());
-      this.set("user_obj", u);
+    if (owner_obj == null) {
+      owner_obj = User.loadById(this.getOwner());
     }
-    return u;
+    return owner_obj;
   }
 
   // ------------
@@ -162,27 +158,26 @@ public class Circling extends Bean {
 
   public static Beans<Circling> load(long uid, W q, int s, int n) {
 
-    BasicDBList list = new BasicDBList();
-    list.add(new BasicDBObject("owner", uid));
-
     int s1 = 0;
     W w = W.create();
     W q1 = W.create();
-    if (uid < 0) {
-      return Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("score", -1), 0, 30);
-    } else {
-      q1.and("uid", uid).and("data", "follower").sort(X.ID, 1);
-      Beans<Log> bs1 = Log.load(q1, s1, 100);
-      while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
-        for (Log l : bs1.getList()) {
-          w.or(X.ID, l.getString("cid"));
-        }
-        s1 += bs1.getList().size();
-        bs1 = Log.load(q1, s1, 100);
+    q1.and("uid", uid).and("data", "follower").sort(X.ID, 1);
+    Beans<Log> bs1 = Log.load(q1, s1, 100);
+    while (bs1 != null && bs1.getList() != null && bs1.getList().size() > 0) {
+      for (Log l : bs1.getList()) {
+        w.or(X.ID, l.getString("cid"));
       }
+      s1 += bs1.getList().size();
+      bs1 = Log.load(q1, s1, 100);
     }
 
-    return Helper.load(q.and(w), s, n, Circling.class);
+    if (w.size() > 0) {
+      q.and(w);
+    } else {
+      q.and("access", "private", W.OP_NEQ);
+    }
+
+    return Helper.load(q, s, n, Circling.class);
 
   }
 

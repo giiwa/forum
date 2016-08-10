@@ -26,26 +26,24 @@ public class Follower extends Bean {
     return this.getLong("uid");
   }
 
+  private User user_obj;
   public User getUser_obj() {
-    User u = (User) this.get("user_obj");
-    if (u == null) {
-      u = User.loadById(this.getUid());
-      this.set("user_obj", u);
+    if (user_obj == null) {
+      user_obj = User.loadById(this.getUid());
     }
-    return u;
+    return user_obj;
   }
 
   public long getCid() {
     return this.getLong("cid");
   }
 
+  private Circling circling_obj;
   public Circling getCircling_obj() {
-    Circling u = (Circling) this.get("circling_obj");
-    if (u == null) {
-      u = Circling.load(this.getCid());
-      this.set("circling_obj", u);
+    if (circling_obj == null) {
+      circling_obj = Circling.load(this.getCid());
     }
-    return u;
+    return circling_obj;
   }
 
   public String getState() {

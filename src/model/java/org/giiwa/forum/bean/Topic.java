@@ -49,13 +49,13 @@ public class Topic extends Bean {
     return this.getString("content");
   }
 
+  private Topic refer_obj;
+
   public Topic getRefer() {
-    Topic t = (Topic) this.get("refer_obj");
-    if (t == null && !X.isEmpty(this.get("refer"))) {
-      t = Topic.load(this.getLong("refer"));
-      this.set("refer_obj", t);
+    if (refer_obj == null && !X.isEmpty(this.get("refer"))) {
+      refer_obj = Topic.load(this.getLong("refer"));
     }
-    return t;
+    return refer_obj;
   }
 
   public int getReads() {
@@ -75,13 +75,13 @@ public class Topic extends Bean {
     return this.getLong("owner");
   }
 
+  private User owner_obj;
+
   public User getOwner_obj() {
-    User u = (User) this.get("owner_obj");
-    if (u == null) {
-      u = User.loadById(this.getOwner());
-      this.set("user_obj", u);
+    if (owner_obj == null) {
+      owner_obj = User.loadById(this.getOwner());
     }
-    return u;
+    return owner_obj;
   }
 
   // ------------
@@ -172,13 +172,13 @@ public class Topic extends Bean {
     update(this.getId(), v);
   }
 
+  private Circling circling_obj;
+
   public Circling getCircling() {
-    Circling c = (Circling) this.get("circling_obj");
-    if (c == null) {
-      c = Circling.load(this.getCid());
-      this.set("circling_obj", c);
+    if (circling_obj == null) {
+      circling_obj = Circling.load(this.getCid());
     }
-    return c;
+    return circling_obj;
   }
 
   public int getDeleted() {
@@ -189,16 +189,16 @@ public class Topic extends Bean {
     return Helper.count(q, Topic.class);
   }
 
+  private Topic parent_obj;
+
   public Topic getParent_obj() {
-    Topic t = (Topic) this.get("parent_obj");
-    if (t == null) {
+    if (parent_obj == null) {
       long parent = this.getLong("parent");
       if (!"root".equals(parent)) {
-        t = Topic.load(parent);
-        this.set("parent_obj", t);
+        parent_obj = Topic.load(parent);
       }
     }
-    return t;
+    return parent_obj;
   }
 
   public static Topic load(W q) {
