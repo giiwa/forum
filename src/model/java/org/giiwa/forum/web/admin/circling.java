@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.V;
 import org.giiwa.core.bean.Helper.W;
+import org.giiwa.core.conf.Global;
 import org.giiwa.core.bean.X;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.framework.web.Model;
@@ -29,6 +30,15 @@ public class circling extends Model {
 
     this.show("/admin/circling.index.html");
 
+  }
+
+  @Path(path = "setting", login = true, access = "access.config.admin")
+  public void setting() {
+    if (method.isPost()) {
+      Global.setConfig("forum.image.server", this.getString("forum_image_server"));
+    }
+
+    this.show("/admin/circling.setting.html");
   }
 
   @Path(path = "update", login = true, access = "access.forum.admin")

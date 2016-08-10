@@ -1,0 +1,18 @@
+<div class='head'>$lang.get('circling.setting.title')</div>
+
+#parse('/widget/widget.message.html')
+
+<div class='tabs'>
+	<a href='/admin/circling'>$lang.get('a.circling')</a>
+	<a href='/admin/circling/setting' class='selected'>$lang.get('a.circling.setting')</a>
+</div>
+
+<form action='/admin/circling/setting' method='post' class='form' enctype="multipart/form-data">
+	<div><label><h3>Image Server:</h3>
+		<input type='text' name='forum_image_server' value="$system.s('forum.image.server','')"/>
+		<g>$lang.get('forum.image.server.hint')</g>
+	</label></div>
+	
+	<button type='submit'>$lang.get('btn.save')</button>
+	
+</form>

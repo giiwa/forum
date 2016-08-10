@@ -7,6 +7,7 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.V;
 import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
+import org.giiwa.core.conf.Global;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -175,6 +176,8 @@ public class circling extends Model {
             e.set("owner_nickname", s1);
           }
 
+          JSONObject j1 = e.getJSON();
+          j1.put("photo", Global.getString("forum.image.server", "") + j1.get("photo"));
           arr.add(e.getJSON());
         }
         i++;
