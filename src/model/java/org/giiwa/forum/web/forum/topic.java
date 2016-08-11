@@ -176,6 +176,8 @@ public class topic extends Model {
           User u = e.getOwner_obj();
 
           e.set("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
+          if (!X.isEmpty(e.getContent()))
+            e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
           list.add(e);
         }
         i++;
@@ -193,6 +195,8 @@ public class topic extends Model {
         for (Topic e : bs.getList()) {
           User u = e.getOwner_obj();
           e.set("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
+          if (!X.isEmpty(e.getContent()))
+            e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
         }
         jo.put("hasmore", bs.getList().size() >= n);
       } else {
@@ -216,6 +220,8 @@ public class topic extends Model {
     Topic t = Topic.load(tid);
     User u = t.getOwner_obj();
     t.put("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
+    if (!X.isEmpty(t.getContent()))
+      t.set("content", t.getContent().replaceAll("/ke/", "ke/"));
     jo.put("topic", t);
 
     int s = this.getInt("s");
@@ -226,6 +232,8 @@ public class topic extends Model {
         for (Topic e : bs.getList()) {
           User u1 = e.getOwner_obj();
           e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
+          if (!X.isEmpty(e.getContent()))
+            e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
         }
         jo.put("hasmore", bs.getList().size() >= n);
       } else {
@@ -345,6 +353,29 @@ public class topic extends Model {
 
   @Path(path = "reply", login = true)
   public void reply() {
+    String type = this.getString("type");
+    if (X.isSame("json", type)) {
+      JSONObject jo = new JSONObject();
+
+      long tid = this.getLong("tid");
+      String content = this.getHtml("content");
+      Topic t = Topic.load(tid);
+      Topic last = t.getLast();
+
+      V v = V.create("parent", tid);
+      v.set("cid", t.getCid());
+      v.set("content", content);
+      v.set("floor", last == null ? 1 : last.getFloor() + 1);
+      v.set("owner", login.getId());
+
+      Topic.create(v);
+      Topic.update(tid, V.create("replies", t.getReplies() + 1));
+
+      jo.put(X.STATE, 200);
+      jo.put(X.MESSAGE, "ok");
+      this.response(jo);
+      return;
+    }
 
     long id = this.getLong("id");
     long refer = this.getLong("refer");
