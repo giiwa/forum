@@ -240,6 +240,7 @@ public class topic extends Model {
   private void _refine(Topic e) {
     User u1 = e.getOwner_obj();
     e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
+    e.set("nickname", u1.getNickname() == null ? u1.getName() : u1.getNickname());
     if (!X.isEmpty(e.getContent()))
       e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
     e.set("updated", lang.past(e.getLong("updated")));

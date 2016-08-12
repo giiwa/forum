@@ -171,14 +171,8 @@ public class circling extends Model {
             e.set("memo", s1);
           }
 
-          s1 = SE.highlight(d.doc, "nickname", q1, null);
-          if (s1 != null) {
-            e.set("owner_nickname", s1);
-          }
-
-          JSONObject j1 = e.getJSON();
-          j1.put("photo", Global.getString("forum.image.server", "") + j1.get("photo"));
-          arr.add(j1);
+          _refine(e);
+          arr.add(e);
         }
         i++;
         if (arr.size() >= n) {
@@ -201,10 +195,9 @@ public class circling extends Model {
         if (b1.getList() != null) {
           JSONArray arr = new JSONArray();
           for (Follower f1 : b1.getList()) {
-            
-            JSONObject j1 = f1.getCircling_obj().getJSON();
-            j1.put("photo", Global.getString("forum.image.server", "") + j1.get("photo"));
-            arr.add(j1);
+            Circling c1 = f1.getCircling_obj();
+            _refine(c1);
+            arr.add(c1);
 
           }
           jo.put("list", arr);
@@ -224,6 +217,15 @@ public class circling extends Model {
     }
 
     this.response(jo);
+  }
+
+  private void _refine(Circling e) {
+    e.put("photo", Global.getString("forum.image.server", "") + e.get("photo"));
+    User u = e.getOwner_obj();
+    e.put("nickname", u.getNickname() == null ? u.getName() : u.getNickname());
+    e.set("updated", lang.past(e.getLong("updated")));
+    e.set("created", lang.format(e.getLong("created"), "yy-MM-dd HH:mm"));
+
   }
 
   @Path(path = "delete", login = true)
