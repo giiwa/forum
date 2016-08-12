@@ -173,11 +173,9 @@ public class topic extends Model {
           if (s1 != null) {
             e.set("title", s1);
           }
-          User u = e.getOwner_obj();
 
-          e.set("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
-          if (!X.isEmpty(e.getContent()))
-            e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
+          _refine(e);
+
           list.add(e);
         }
         i++;
@@ -193,10 +191,7 @@ public class topic extends Model {
       bs = Topic.load(W.create("cid", cid).and("parent", 0).sort("top", -1).sort("updated", -1), s, n);
       if (bs != null && bs.getList() != null) {
         for (Topic e : bs.getList()) {
-          User u = e.getOwner_obj();
-          e.set("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
-          if (!X.isEmpty(e.getContent()))
-            e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
+          _refine(e);
         }
         jo.put("hasmore", bs.getList().size() >= n);
       } else {
@@ -218,10 +213,7 @@ public class topic extends Model {
 
     long tid = this.getLong("tid");
     Topic t = Topic.load(tid);
-    User u = t.getOwner_obj();
-    t.put("photo", Global.getString("forum.image.server", "") + u.getString("photo"));
-    if (!X.isEmpty(t.getContent()))
-      t.set("content", t.getContent().replaceAll("/ke/", "ke/"));
+    _refine(t);
     jo.put("topic", t);
 
     int s = this.getInt("s");
@@ -230,10 +222,7 @@ public class topic extends Model {
     if (bs != null && bs.getList() != null) {
       if (bs != null && bs.getList() != null) {
         for (Topic e : bs.getList()) {
-          User u1 = e.getOwner_obj();
-          e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
-          if (!X.isEmpty(e.getContent()))
-            e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
+          _refine(e);
         }
         jo.put("hasmore", bs.getList().size() >= n);
       } else {
@@ -246,6 +235,15 @@ public class topic extends Model {
     jo.put("n", n);
 
     this.response(jo);
+  }
+
+  private void _refine(Topic e) {
+    User u1 = e.getOwner_obj();
+    e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
+    if (!X.isEmpty(e.getContent()))
+      e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
+    e.set("updated", lang.past(e.getLong("updated")));
+    e.set("created", lang.format(e.getLong("created"), "yy-MM-dd HH:mm"));
   }
 
   @Path(path = "create", login = true)
@@ -359,6 +357,8 @@ public class topic extends Model {
 
       long tid = this.getLong("tid");
       String content = this.getHtml("content");
+      log.debug("content=" + content);
+
       Topic t = Topic.load(tid);
       Topic last = t.getLast();
 
