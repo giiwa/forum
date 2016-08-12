@@ -241,8 +241,10 @@ public class topic extends Model {
     User u1 = e.getOwner_obj();
     e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
     e.set("nickname", u1.getNickname() == null ? u1.getName() : u1.getNickname());
-    if (!X.isEmpty(e.getContent()))
+    if (!X.isEmpty(e.getContent())) {
       e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
+      e.set("text", lang.truncate(Html.create(e.getContent()).text(), 50));
+    }
     e.set("updated", lang.past(e.getLong("updated")));
     e.set("created", lang.format(e.getLong("created"), "yy-MM-dd HH:mm"));
   }
