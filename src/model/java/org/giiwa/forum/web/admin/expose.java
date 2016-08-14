@@ -2,12 +2,11 @@ package org.giiwa.forum.web.admin;
 
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.X;
+import org.giiwa.core.json.JSON;
 import org.giiwa.core.bean.Helper.W;
 import org.giiwa.forum.bean.Expose;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
-
-import net.sf.json.JSONObject;
 
 public class expose extends Model {
 
@@ -25,7 +24,7 @@ public class expose extends Model {
 
   @Path(path = "delete", login = true, access = "access.forum.admin")
   public void delete() {
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
     String id = this.getString("id");
     Expose.delete(id);
     jo.put(X.STATE, 200);

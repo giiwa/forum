@@ -11,6 +11,7 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.V;
 import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.conf.Global;
+import org.giiwa.core.json.JSON;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.task.Task;
 import org.giiwa.forum.bean.Circling;
@@ -24,8 +25,6 @@ import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
 import org.jsoup.nodes.Element;
-
-import net.sf.json.JSONObject;
 
 /**
  * web api: /demo
@@ -118,7 +117,7 @@ public class topic extends Model {
   @Path(path = "getlist", login = true)
   public void getlist() {
 
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
 
     long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
@@ -209,7 +208,7 @@ public class topic extends Model {
   @Path(path = "getreplies", login = true)
   public void getreplies() {
 
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
 
     long tid = this.getLong("tid");
     Topic t = Topic.load(tid);
@@ -356,7 +355,7 @@ public class topic extends Model {
   public void reply() {
     String type = this.getString("type");
     if (X.isSame("json", type)) {
-      JSONObject jo = new JSONObject();
+      JSON jo = new JSON();
 
       long tid = this.getLong("tid");
       String content = this.getHtml("content");
@@ -472,7 +471,7 @@ public class topic extends Model {
 
   @Path(path = "expose", login = true)
   public void expose() {
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
     long id = this.getLong("id");
 
     Topic t = Topic.load(id);
