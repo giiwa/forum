@@ -39,7 +39,6 @@
 	<classpathentry kind="lib" path="depends/ant-contrib-1.0b3.jar"/>
 	<classpathentry kind="lib" path="depends/commons-compress-1.1.jar"/>
 	<classpathentry kind="lib" path="depends/httpcore-nio-4.3.2.jar"/>
-	<classpathentry kind="lib" path="depends/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="lib" path="depends/metadata-extractor-2.6.4.jar"/>
 	<classpathentry kind="lib" path="depends/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="depends/mongo-java-driver-2.10.0.jar"/>

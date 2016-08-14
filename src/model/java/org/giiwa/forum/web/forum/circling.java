@@ -8,6 +8,7 @@ import org.giiwa.core.bean.Helper.V;
 import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
 import org.giiwa.core.conf.Global;
+import org.giiwa.core.json.JSON;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -18,9 +19,6 @@ import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 import org.giiwa.tinyse.se.SE;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 public class circling extends Model {
 
@@ -138,7 +136,7 @@ public class circling extends Model {
     User u = User.loadById(uid);
     this.set("u", u);
 
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
 
     String name = this.getString("q");
     if (!X.isEmpty(name)) {
@@ -150,7 +148,7 @@ public class circling extends Model {
       ScoreDoc[] dd = docs.scoreDocs;
 
       jo.put("tptal", docs.totalHits);
-      JSONArray arr = new JSONArray();
+      List<JSON> arr = new ArrayList<JSON>();
 
       int min = s + n;
       int i = s;
@@ -172,7 +170,7 @@ public class circling extends Model {
           }
 
           _refine(e);
-          arr.add(e);
+          arr.add(e.getJSON());
         }
         i++;
         if (arr.size() >= n) {
@@ -193,11 +191,11 @@ public class circling extends Model {
       if (b1 != null) {
         jo.put("total", Follower.count(q));
         if (b1.getList() != null) {
-          JSONArray arr = new JSONArray();
+          List<JSON> arr = new ArrayList<JSON>();
           for (Follower f1 : b1.getList()) {
             Circling c1 = f1.getCircling_obj();
             _refine(c1);
-            arr.add(c1);
+            arr.add(c1.getJSON());
 
           }
           jo.put("list", arr);
@@ -232,7 +230,7 @@ public class circling extends Model {
   public void delete() {
     long id = this.getLong("id");
     Circling.delete(id);
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
     jo.put(X.STATE, 200);
     this.response(jo);
   }
@@ -243,7 +241,7 @@ public class circling extends Model {
     long uid = this.getLong("uid");
 
     Circling c = Circling.load(cid);
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
     if (c.getOwner() == login.getId()) {
       Log.create(V.create("data", "forbidden").set("cid", cid).set("uid", uid));
       jo.put(X.STATE, 200);
@@ -259,7 +257,7 @@ public class circling extends Model {
   public void create() {
 
     if (method.isPost()) {
-      JSONObject jo = this.getJSON();
+      JSON jo = this.getJSON();
       V v = V.create().copy(jo, "name");
       String memo = this.getHtml("memo");
       v.set("memo", memo);
@@ -321,7 +319,7 @@ public class circling extends Model {
     long cid = this.getLong("cid");
     Circling c = Circling.load(cid);
 
-    JSONObject jo = new JSONObject();
+    JSON jo = new JSON();
     if (!X.isEmpty(this.getString("follow"))) {
       Follower.create(login.getId(), cid, V.create("state", c.getUser_state()).set("name", login.getNickname()));
     } else if (!X.isEmpty(this.getString("delete"))) {
@@ -356,7 +354,7 @@ public class circling extends Model {
       return;
     }
     if (method.isPost()) {
-      JSONObject jo = this.getJSON();
+      JSON jo = this.getJSON();
       V v = V.create().copy(jo, "name");
 
       String memo = this.getHtml("memo");
