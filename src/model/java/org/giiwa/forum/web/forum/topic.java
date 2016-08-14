@@ -3,6 +3,8 @@ package org.giiwa.forum.web.forum;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -250,12 +252,21 @@ public class topic extends Model {
 
   @Path(path = "create", login = true)
   public void create() {
+    String type = this.getString("type");
+
     final long cid = this.getLong("cid");
     this.set("cid", cid);
     Circling c = Circling.load(cid);
     Follower f1 = c.getFollower(login);
     if (!"public".equals(c.getAccess()) && (f1 == null || !f1.getPost())) {
-      this.deny("/forum", null);
+      if (X.isSame(type, "json")) {
+        JSON jo = JSON.create();
+        jo.put(X.STATE, HttpServletResponse.SC_UNAUTHORIZED);
+        jo.put(X.MESSAGE, "deny");
+        this.response(jo);
+      } else {
+        this.deny("/forum", null);
+      }
       return;
     }
 
@@ -266,36 +277,46 @@ public class topic extends Model {
       /**
        * remove the "FFF" background, that may blink eyes
        */
-      String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
-      v.set("content", content);
-      List<Element> list = Html.create(content).getTags("img");
-      int p = 0;
-      if (list != null && list.size() > 0) {
-        for (Element e : list) {
-          String src = e.attr("src");
-          if (src != null && src.startsWith("/repo")) {
-            p = 1;
-            break;
+      String content = this.getHtml("content");
+      if (!X.isEmpty(content)) {
+        content = content.replaceAll("background-color:#FFFFFF;", "");
+        v.set("content", content);
+        List<Element> list = Html.create(content).getTags("img");
+        int p = 0;
+        if (list != null && list.size() > 0) {
+          for (Element e : list) {
+            String src = e.attr("src");
+            if (src != null && src.startsWith("/repo")) {
+              p = 1;
+              break;
+            }
           }
         }
+        v.set("photo", p);
+
+        v.set("owner", login.getId());
+        v.set("parent", 0).set("top", 0);
+        Topic.create(v);
+        new Task() {
+
+          @Override
+          public void onExecute() {
+            UserHelper.count(login.getId());
+
+            Circling.repair(cid);
+          }
+
+        }.schedule(10);
       }
-      v.set("photo", p);
 
-      v.set("owner", login.getId());
-      v.set("parent", 0).set("top", 0);
-      Topic.create(v);
-      new Task() {
-
-        @Override
-        public void onExecute() {
-          UserHelper.count(login.getId());
-
-          Circling.repair(cid);
-        }
-
-      }.schedule(10);
-
-      this.redirect("/forum/topic?cid=" + cid);
+      if (X.isSame("json", type)) {
+        JSON jo = JSON.create();
+        jo.put(X.STATE, HttpServletResponse.SC_OK);
+        jo.put(X.MESSAGE, "ok");
+        this.response(jo);
+      } else {
+        this.redirect("/forum/topic?cid=" + cid);
+      }
       return;
     }
     this.show("/forum/topic.create.html");
@@ -361,17 +382,19 @@ public class topic extends Model {
       String content = this.getHtml("content");
       log.debug("content=" + content);
 
-      Topic t = Topic.load(tid);
-      Topic last = t.getLast();
+      if (!X.isEmpty(content)) {
+        Topic t = Topic.load(tid);
+        Topic last = t.getLast();
 
-      V v = V.create("parent", tid);
-      v.set("cid", t.getCid());
-      v.set("content", content);
-      v.set("floor", last == null ? 1 : last.getFloor() + 1);
-      v.set("owner", login.getId());
+        V v = V.create("parent", tid);
+        v.set("cid", t.getCid());
+        v.set("content", content);
+        v.set("floor", last == null ? 1 : last.getFloor() + 1);
+        v.set("owner", login.getId());
 
-      Topic.create(v);
-      Topic.update(tid, V.create("replies", t.getReplies() + 1));
+        Topic.create(v);
+        Topic.update(tid, V.create("replies", t.getReplies() + 1));
+      }
 
       jo.put(X.STATE, 200);
       jo.put(X.MESSAGE, "ok");
@@ -395,31 +418,33 @@ public class topic extends Model {
     /**
      * remove the "FFF" background, that may blink eyes
      */
-    String content = this.getHtml("content").replaceAll("background-color:#FFFFFF;", "");
-    if (last == null || last.getOwner() != login.getId() || !X.isSame(content, last.getContent())) {
-      V v = V.create("parent", id);
-      v.set("cid", t.getCid());
-      v.set("content", content);
-      v.set("floor", last == null ? 1 : last.getFloor() + 1);
-      v.set("owner", login.getId());
-      if (!X.isEmpty(refer)) {
-        v.set("refer", refer);
-      }
-      Topic.create(v);
-      Topic.update(id, V.create("replies", t.getReplies() + 1));
-
-      // TODO, remove later
-      Topic.load(id).repair();
-
-      new Task() {
-
-        @Override
-        public void onExecute() {
-          UserHelper.count(login.getId());
+    String content = this.getHtml("content");
+    if (!X.isEmpty(content)) {
+      content = content.replaceAll("background-color:#FFFFFF;", "");
+      if (last == null || last.getOwner() != login.getId() || !X.isSame(content, last.getContent())) {
+        V v = V.create("parent", id);
+        v.set("cid", t.getCid());
+        v.set("content", content);
+        v.set("floor", last == null ? 1 : last.getFloor() + 1);
+        v.set("owner", login.getId());
+        if (!X.isEmpty(refer)) {
+          v.set("refer", refer);
         }
+        Topic.create(v);
+        Topic.update(id, V.create("replies", t.getReplies() + 1));
 
-      }.schedule(10);
+        // TODO, remove later
+        Topic.load(id).repair();
 
+        new Task() {
+
+          @Override
+          public void onExecute() {
+            UserHelper.count(login.getId());
+          }
+
+        }.schedule(10);
+      }
     }
 
     this.redirect("/forum/topic/detail?id=" + id);
