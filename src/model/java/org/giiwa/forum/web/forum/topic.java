@@ -262,7 +262,7 @@ public class topic extends Model {
       if (X.isSame(type, "json")) {
         JSON jo = JSON.create();
         jo.put(X.STATE, HttpServletResponse.SC_UNAUTHORIZED);
-        jo.put(X.MESSAGE, "deny");
+        jo.put(X.MESSAGE, lang.get("access.deny"));
         this.response(jo);
       } else {
         this.deny("/forum", null);
@@ -271,14 +271,17 @@ public class topic extends Model {
     }
 
     if (method.isPost()) {
-      V v = V.create("cid", cid);
-      v.set("title", this.getString("title"));
 
       /**
        * remove the "FFF" background, that may blink eyes
        */
+      String title = this.getString("title");
       String content = this.getHtml("content");
-      if (!X.isEmpty(content)) {
+      JSON jo = JSON.create();
+
+      if (!X.isEmpty(content) && !X.isEmpty(title)) {
+        V v = V.create("cid", cid);
+        v.set("title", title);
         content = content.replaceAll("background-color:#FFFFFF;", "");
         v.set("content", content);
         List<Element> list = Html.create(content).getTags("img");
@@ -307,17 +310,27 @@ public class topic extends Model {
           }
 
         }.schedule(10);
-      }
-
-      if (X.isSame("json", type)) {
-        JSON jo = JSON.create();
         jo.put(X.STATE, HttpServletResponse.SC_OK);
         jo.put(X.MESSAGE, "ok");
-        this.response(jo);
+
+        if (X.isSame("json", type)) {
+          this.response(jo);
+        } else {
+          this.redirect("/forum/topic?cid=" + cid);
+        }
+        return;
       } else {
-        this.redirect("/forum/topic?cid=" + cid);
+        jo.put(X.STATE, HttpServletResponse.SC_BAD_REQUEST);
+        jo.put(X.MESSAGE, lang.get("title_or_content_can_not_be_empty"));
+
+        if (X.isSame("json", type)) {
+          this.response(jo);
+          return;
+        } else {
+          this.set(this.getJSON());
+          this.set(jo);
+        }
       }
-      return;
     }
     this.show("/forum/topic.create.html");
   }

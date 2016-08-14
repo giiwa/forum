@@ -118,3 +118,4 @@ a.more=更多...
 a.circling.setting=圈子设置
 circling.setting.title=圈子设置
 forum.image.server.hint=社区图片服务器
+title_or_content_can_not_be_empty=标题和内容不能为空
