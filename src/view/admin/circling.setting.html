@@ -9,7 +9,7 @@
 
 <form action='/admin/circling/setting' method='post' class='form' enctype="multipart/form-data">
 	<div><label><h3>Image Server:</h3>
-		<input type='text' name='forum_image_server' value="$system.getString('forum.image.server','')"/>
+		<input type='text' name='forum_image_server' value="$!global.getString('forum.image.server','')"/>
 		<g>$lang.get('forum.image.server.hint')</g>
 	</label></div>
 	
