@@ -67,7 +67,7 @@
 			<a class="btn btn-xs btn-info" href="javascript:;" onclick="_reply('$f.id', '$f.owner_obj.nickname')">$lang.get('a.reply')</a>
 			#end
 		#end
-		#if($me.id == $c.owner)
+		#if($me.id == $c.owner || $me.hasAccess('access.forum.admin'))
 			#if($f.deleted==1)
 			<a class="btn btn-xs btn-danger" href="javascript:;" onclick="_update({id:'$f.id', deleted:0}, this)">$lang.get('a.recover')</a>
 			#else

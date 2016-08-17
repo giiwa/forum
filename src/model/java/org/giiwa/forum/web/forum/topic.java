@@ -101,7 +101,8 @@ public class topic extends Model {
 
       this.set("name", name);
     } else {
-      bs = Topic.load(W.create("cid", cid).and("parent", 0).sort("top", -1).sort("updated", -1), s, n);
+      bs = Topic.load(
+          W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("top", -1).sort("updated", -1), s, n);
     }
 
     this.set(bs, s, n);
@@ -189,7 +190,8 @@ public class topic extends Model {
       jo.put("name", name);
 
     } else {
-      bs = Topic.load(W.create("cid", cid).and("parent", 0).sort("top", -1).sort("updated", -1), s, n);
+      bs = Topic.load(
+          W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("top", -1).sort("updated", -1), s, n);
       if (bs != null && bs.getList() != null) {
         for (Topic e : bs.getList()) {
           _refine(e);
@@ -219,7 +221,7 @@ public class topic extends Model {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(W.create("parent", t.getId()).sort("created", 1), s, n);
+    Beans<Topic> bs = Topic.load(W.create("parent", t.getId()).and("deleted", 1, W.OP_NEQ).sort("created", 1), s, n);
     if (bs != null && bs.getList() != null) {
       if (bs != null && bs.getList() != null) {
         for (Topic e : bs.getList()) {
@@ -341,7 +343,7 @@ public class topic extends Model {
     Circling c = Circling.load(cid);
     long id = this.getLong("id");
     Topic t = Topic.load(id);
-    if (c.getOwner() == login.getId()) {
+    if (c.getOwner() == login.getId() || login.hasAccess("access.forum.admin")) {
       V v = V.create();
       if (this.getString("deleted") != null) {
         v.set("deleted", this.getInt("deleted"));
@@ -538,11 +540,13 @@ public class topic extends Model {
 
     login = getUser();
     this.set("me", login);
-    Follower f = c.getFollower(login);
-    if (c.isPrivate() && (f == null || !f.getPost())) {
-      log.warn("deny to access the circling, user=" + login + ", circling=" + c.getId());
-      this.deny("/forum", null);
-      return;
+    if (!login.hasAccess("access.forum.admin")) {
+      Follower f = c.getFollower(login);
+      if (c.isPrivate() && (f == null || !f.getPost())) {
+        log.warn("deny to access the circling, user=" + login + ", circling=" + c.getId());
+        this.deny("/forum", null);
+        return;
+      }
     }
 
     if (Log.create(V.create("topic_id", id).set("sid", sid()))) {
@@ -559,8 +563,8 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Topic> bs1 = Topic
-        .load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
+    Beans<Topic> bs1 = Topic.load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP_NEQ)
+        .and("deleted", 1, W.OP_NEQ).sort("updated", -1), 0, 9);
     this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");
   }
