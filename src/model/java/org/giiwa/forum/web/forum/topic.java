@@ -245,7 +245,7 @@ public class topic extends Model {
     e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
     e.set("nickname", u1.getNickname() == null ? u1.getName() : u1.getNickname());
     if (!X.isEmpty(e.getContent())) {
-      e.set("content", e.getContent().replaceAll("/ke/", "ke/"));
+      e.set("content", e.getContent().replaceAll("/ke/", Global.getString("forum.image.server", "") + "/ke/"));
       e.set("text", lang.truncate(Html.create(e.getContent()).text(), 50));
     }
     e.set("updated", lang.past(e.getLong("updated")));
