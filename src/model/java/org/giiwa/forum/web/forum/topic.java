@@ -221,16 +221,23 @@ public class topic extends Model {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    Beans<Topic> bs = Topic.load(W.create("parent", t.getId()).and("deleted", 1, W.OP_NEQ).sort("created", 1), s, n);
-    if (bs != null && bs.getList() != null) {
+    W q = W.create("parent", t.getId()).and("deleted", 1, W.OP_NEQ).sort("created", 1);
+    Beans<Topic> bs = Topic.load(q, s, n);
+    long total = Topic.count(q);
+    jo.put("total", total);
+    if (total > 0) {
       if (bs != null && bs.getList() != null) {
-        for (Topic e : bs.getList()) {
-          _refine(e);
+        if (bs != null && bs.getList() != null) {
+          for (Topic e : bs.getList()) {
+            _refine(e);
+          }
+          jo.put("hasmore", bs.getList().size() >= n);
+        } else {
+          jo.put("hasmore", false);
         }
-        jo.put("hasmore", bs.getList().size() >= n);
-      } else {
-        jo.put("hasmore", false);
       }
+    } else {
+      jo.put("hasmore", false);
     }
 
     jo.put("list", bs.getList());
