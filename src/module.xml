@@ -17,7 +17,7 @@
 		<module name="default" version="1.0.2"/>
 	</depends>
 	<filter>
-		<pattern>/user/register</pattern>
+		<pattern>/user/login</pattern>
 		<class>org.giiwa.forum.web.UserFilter</class>
 	</filter>
 </module>

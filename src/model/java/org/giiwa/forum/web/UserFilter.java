@@ -10,8 +10,7 @@ public class UserFilter implements IFilter {
 
   @Override
   public boolean after(Model m) {
-    String name = m.getString("name");
-    User u = User.load(name);
+    User u = m.getUser();
     if (u != null && u.getString("ipfrom") == null) {
       IP.Address a = IP.get(m.getRemoteHost());
       if (a != null) {

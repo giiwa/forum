@@ -6,7 +6,7 @@
 	<package>org.giiwa.forum.web</package>
 	<screenshot>/images/forum_screenshot.png</screenshot>
 	<version>1.0.1</version>
-	<build>1608181938</build>
+	<build>1608190617</build>
 	<enabled>true</enabled>
 	<readme>Forum, group and topic module</readme>
 	<listener>
@@ -17,7 +17,7 @@
 		<module name="default" version="1.0.2"/>
 	</depends>
 	<filter>
-		<pattern>/user/register</pattern>
+		<pattern>/user/login</pattern>
 		<class>org.giiwa.forum.web.UserFilter</class>
 	</filter>
 </module>

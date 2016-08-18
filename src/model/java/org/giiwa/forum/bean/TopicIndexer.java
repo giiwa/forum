@@ -50,7 +50,7 @@ public class TopicIndexer implements Indexer {
   public Object next(long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Topic c = Topic.load(W.create().and("index_flag", flag, W.OP_LT).sort(X.ID, 1));
+    Topic c = Topic.load(W.create().and("index_flag", flag, W.OP_NEQ).sort(X.ID, 1));
     return c == null ? null : c.getId();
   }
 
