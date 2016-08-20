@@ -112,13 +112,6 @@ form g:before {
 	content: '// ';
 }
 
-header {
-	height: 70px;
-	background-color: rgba(75,122,147,.95);
-	background-image: none;
-	border: none;
-}
-
 #overview {
 	margin-top: 70px;
 	background-color: #5299C0;
