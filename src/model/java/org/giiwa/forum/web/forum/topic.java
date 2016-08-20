@@ -547,7 +547,7 @@ public class topic extends Model {
 
     login = getUser();
     this.set("me", login);
-    if (!login.hasAccess("access.forum.admin")) {
+    if (login == null || !login.hasAccess("access.forum.admin")) {
       Follower f = c.getFollower(login);
       if (c.isPrivate() && (f == null || !f.getPost())) {
         log.warn("deny to access the circling, user=" + login + ", circling=" + c.getId());
