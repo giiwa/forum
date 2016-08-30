@@ -210,16 +210,17 @@ public class Topic extends Bean {
     W q = W.create("uid", uid).and(W.create("state", "owner").or("state", "accepted")).sort("cid", 1);
     int s1 = 0;
     W w1 = W.create();
-    Beans<Follower> bs = Follower.load(q, s1, 10);
+    Beans<Follower> bs = Follower.load(q, s1, 100);
     while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
       for (Follower f : bs.getList()) {
         w1.or("cid", f.getCid());
       }
       s1 += bs.getList().size();
+      bs = Follower.load(q, s1, 100);
     }
 
     q = W.create();
-    q.and(w1).and("parent", 0).sort("created", -1);
+    q.and(w1).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("updated", -1);
     return Topic.load(q, s, n);
   }
 }
