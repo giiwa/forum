@@ -202,8 +202,24 @@ public class Topic extends Bean {
   }
 
   public static Topic load(W q) {
-    // TODO Auto-generated method stub
     return Helper.load(q, Topic.class);
   }
 
+  public static Beans<Topic> load(long uid, int s, int n) {
+    // load circling first
+    W q = W.create("uid", uid).and(W.create("state", "owner").or("state", "accepted")).sort("cid", 1);
+    int s1 = 0;
+    W w1 = W.create();
+    Beans<Follower> bs = Follower.load(q, s1, 10);
+    while (bs != null && bs.getList() != null && bs.getList().size() > 0) {
+      for (Follower f : bs.getList()) {
+        w1.or("cid", f.getCid());
+      }
+      s1 += bs.getList().size();
+    }
+
+    q = W.create();
+    q.and(w1).and("parent", 0).sort("created", -1);
+    return Topic.load(q, s, n);
+  }
 }
