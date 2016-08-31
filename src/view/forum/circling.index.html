@@ -1,81 +1,87 @@
 #parse('/forum/head.html')
-
-<div class="tabs">
-</div>
-
+<!--
 <div class='col-sm-12 text-right'>
 	<form class="search-inline">
       <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
       <button type='submit' class="icon-search"></button>
 	</form>
-	<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
 </div>
+-->
+<div class='col-sm-12' style='padding:0'>
+	<div class='topics col-sm-8'>
+		<div class='title'>$lang.get('title.topics')</div>
+		<ul>
+			#foreach($f in $list)
+			<li>
+				<img src="$f.owner_obj.photo"/>
+				<div>
+					<h4><a href='/forum/topic/$f.id'>$f.title</a></h4>
+					<p class='status'>
+						<span class='flags'>
+							#if($f.cream == 1)
+							<img src='/images/flags/cream.png'/>
+							#end
+							#if($f.top == 1)
+							<img src='/images/flags/top.png'/>
+							#end
+							#if($f.photo == 1)
+							<img src='/images/flags/photo.png'/>
+							#end
+							#if($f.replysInDays(1) == 1)
+							<img src='/images/flags/hot.png'/>
+							#end
+						</span>
+					</p>
+					<p>$lang.truncate($f.content, 100)</p>
+					<p class='pull-right'>阅读:$f.reads ｜ 回复:$f.replies ｜ 👍($!f.up) ｜ 👎($!f.down)</p>
+				</div>
+			</li>
+			#end
+		</ul>
 
-<div class='col-sm-2 owner'>
-	<p class='text-center'>
-		#if($me.id == $u.id)
-		<a href='/forum/user/edit'>
-			#if($u.photo)
-			<img src='$u.photo' class="user-bg"/>
+		#parse('/forum/goto.page.html')
+
+	</div>
+	<div class='nav-right col-sm-4'>
+		<div class='panel login text-center'>
+			#if($me)
+			<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
 			#else
-			<img src='/images/user_default.gif'/>
+			<a href='/user/login' class='btn btn-success'>$lang.get('a.login')</a>
 			#end
-		</a>
-		#else
-		<a href='/forum/circling?uid=$u.id'>
-			#if($u.photo)
-			<img src='$u.photo' class='user-bg'/>
-			#else
-			<img src='/images/user_default.gif'/>
-			#end
-		</a>
+		</div>
+		#if($me)
+		<div class='panel'>
+			<div class='title'>$lang.get('title.mycircling')</div>
+			<ul>
+				#foreach($f in $mycirclings)
+				<li>
+					<img src="$f.photo"/>
+					<div>
+						<h4><a href='/forum/topic?cid=$f.id'>$f.name</a></h4>
+						<p>$lang.get('circling.followers'):$!f.followers, $lang.get('circling.topics'):$!f.topics</p>
+					</div>
+				</li>
+				#end
+			</ul>
+		</div>
 		#end
-	</p>
-	<p class='text-center'>
-		<a href='/forum/circling?uid=$!u.id'>$!u.nickname</a>
-	</p>
-	<p class='text-center'>
-		$lang.get('user.tops'):$!u.tops
-	</p>
-	<p class='text-center'>
-		$lang.get('user.topics'):$!u.topics 
-	</p>
-	<p class='text-center'>
-		$lang.get('user.replies'):$!u.replies
-	</p>
-	<p class='text-center'>
-		$lang.get('user.created'):$!lang.format($u.created, 'yyyy-MM-dd')
-	</p>
-	<p class='text-center'>
-		$lang.get('user.from'):$!u.from
-	</p>
+		<div class='panel'>
+			<div class='title'>$lang.get('title.hotcircling')</div>
+			<ul>
+				#foreach($f in $hotcirclings)
+				<li>
+					<img src="$f.photo"/>
+					<div>
+						<h4><a href='/forum/topic?cid=$f.id'>$f.name</a></h4>
+						<p>$lang.get('circling.followers'):$!f.followers, $lang.get('circling.topics'):$!f.topics</p>
+					</div>
+				</li>
+				#end
+			</ul>
+		</div>
+	</div>
 </div>
-
-<ul class='col-sm-10 circlings'>
-	#foreach($f in $list)
-		#set($f1 = $f.getFollower($me))
-		#parse('/forum/circling.item.html')
-	#end
-</ul>
-	
-#parse('/forum/goto.page.html')
-
-<ul class="col-sm-12 circlings cl-recommends">
-	#foreach($p in $pub)
-	<li class="col-sm-2 text-center" style='margin: 2px;overflow:hidden'>
-		<a href="/forum/topic?cid=$p.id">
-			<img src='$p.photo' style='float: initial;margin:0'/>
-			<span class='col-sm-12'>
-				$!p.name
-			</span>
-		</a>
-	</li>
-	#end
-</ul>
-
-<div class='col-sm-12'>
-	<a href='/forum/circling/pub'>$lang.get('a.more')</a>
-</div>	
 	
 <script>
 function _follow(p, o) {

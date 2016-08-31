@@ -19,26 +19,26 @@
 	  <header>
 		<div class="center">
 			<div class="left">
-				<div class="logo"><a href="/" class='icon icon-bubbles'></a></div>
-				<div class="title">$lang.get('forum.title')</div>
+				<div class="logo"><a href="/" class='icon-bubbles'>$lang.get('forum.title')</a></div>
 			</div>
-			<div class="right">
-				<div class="top">
-					#if($me)
-					<div class="item"><a class="icon icon-user" href="/forum//user/edit">$!me.nickname</a></div>
-					<div class="item"><a class="icon icon-bubbles" href="/forum">$lang.get('a.forum')</a></div>
-					<div class="item"><a class="icon icon-exit" href="/user/logout">$lang.get('a.logout')</a></div>
-					#else
-					<div class="item"><a class="icon icon-key" href="/user/login">$lang.get('a.login')</a></div>
-					<div class="item"><a class="icon icon-quill" href="/user/register">$lang.get('a.register')</a></div>
-					#end
-				</div>
-			</div>
+			
+			<ul class="nav navbar-nav navbar-right">
+				#if($me)
+				<li><a class="icon-user" href="/forum//user/edit">$!me.nickname</a></li>
+				<li><a class="icon-exit" href="/user/logout">$lang.get('a.logout')</a></li>
+				#if($me.hasAccess('access.config.admin'))
+				<li><a class="icon-cog" href="/admin">$lang.get('a.admin')</a></li>
+				#end
+				#else
+				<li><a class="icon-key" href="/user/login">$lang.get('a.login')</a></li>
+				<li><a class="icon-quill" href="/user/register">$lang.get('a.register')</a></li>
+				#end
+			</ul>			
 		</div>
 	  </header>
 	  <div class='banner'>
 	  	<div class='center'>
-	  		<ul class='bar bar-nav'>
+	  		<ul class='nav navbar-nav'>
 	  			#parse('/forum/banner.nav.html')
 	  		</ul>
 	  	</div>

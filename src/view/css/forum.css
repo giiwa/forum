@@ -3,7 +3,7 @@ html, body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
 	line-height: 23px;
-	background: #fff;
+	background: #f1f1f1;
 	text-align: center;
 	position: relative;
 	overflow-x: hidden;
@@ -172,8 +172,8 @@ footer {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: left;
-	margin-top: 80px;
 	width: 1000px;
+	padding: 0;
 }
 
 .pages {
@@ -581,15 +581,9 @@ header {
 	width: 100%;
 	overflow: hidden;
 	z-index: 10;
-	position: fixed;
+	position: relative;
 	top: 0;
 	left: 0;
-	background: #112A44;
-}
-header .center {
-	height: 100%;
-	width: 1100px;
-	display: inline-block;
 }
 
 header .left {
@@ -597,59 +591,20 @@ header .left {
 	position: relative;
 	margin-left: 20px;
 }
-header .right {
-	float: right;
-	margin-right: 20px;
-	margin-top: 10px;
-	position: relative;
-}
 
 header .logo {
 	position: relative;
 	float: left;
-	margin: 14px 10px;
 }
 
-header .title {
-	position: relative;
-	font-size: 20pt;
-	width: 420px;
-	text-align: left;
-	color: #EEE;
-	font-weight: bold;
-	letter-spacing: 3px;
-	line-height: 80px;
-	float: left;
-}
-
-header .right .top {
-	background: #01ace4;
-	color: #fff;
-	display: inline-block;
-	padding: 5px 10px;
-}
-
-header .right .top .item {
-	display: inline-block;
-	margin: 0 10px;
-}
-
-header .right a {
-	color: #f1f1f1;
-	text-decoration: none;
-}
-.logo img {
-	height: 50px;
-}
 .owner {
 	border: 1px solid #ccd3e4;
 	padding-top: 10px;
 }
 
 footer .footer-credits {
-	background-color: #112A44;
 	min-height: 40px;
-	color: #999999;
+	color: #666;
 	font-size: 14px;
 	text-align: center;
 	line-height: 2.5;
@@ -674,14 +629,12 @@ footer .footer-credits a {
 	color: #CCCCCC;
 	text-decoration: none;
 }
-header .right a:hover {
-	color: #f33;
-}
 
 header .logo a {
-	font-size: 48px;
-	color: #fff;
+	font-size: 36px;
+	color: #7dc855;
 	text-decoration: none;
+	line-height: 80px;
 }
 
 blockquote {
@@ -696,3 +649,123 @@ blockquote .user {
 	padding: 5px 0;
 }
 
+.banner {
+	position: relative;
+	transition: 0.2s ease;
+	background: #7dc855;
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	height: 50px;
+}
+
+header .center, .banner .center {
+	height: 100%;
+	width: 1000px;
+	display: inline-block;
+}
+.banner .navbar-nav > li > a {
+	color: #fff;
+	padding: 15px 20px;
+}
+.banner .navbar-nav > li > a:hover {
+	color: #fff;
+	background-color: #337ab7;
+}
+header .navbar-nav > li > a {
+	padding: 0 20px;
+	line-height: 80px;
+	color: #333;
+}
+
+header .navbar-nav > li > a:hover {
+	color: #fff;
+	background-color: #7dc855;
+}
+
+.topics {
+	background: #fff;
+	margin-top: 10px;
+	padding: 0;
+}
+
+.nav-right .panel {
+	margin-top: 10px;
+	background: #fff;
+	margin-left: 10px;
+	display: inline-block;
+	width: 100%;
+}
+
+.panel.login {
+	padding: 20px;
+}
+
+.bg-white {
+	background-color: #fff;
+	padding: 20px;
+}
+
+.panel .title {
+	height: 40px;
+	line-height: 40px;
+	background: #7dc855;
+	color: #fff;
+	text-align: center;
+}
+.panel ul {
+	min-height: 40px;
+	list-style: none;
+	padding: 10px;
+	display: inline-block;
+	width: 100%;
+}
+.panel ul > li {
+	border-bottom: 1px solid #999;
+}
+.panel ul > li:last-child {
+	border-bottom: none;
+}
+.panel ul > li > img {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	float: left;
+}
+
+.panel ul > li div {
+	margin-left: 60px;
+	line-height: 26px;
+}
+.panel ul > li div p {
+	color: #999;
+	font-size: 11px;
+}
+.topics >div.title{
+    background: #5cb85c;
+    line-height: 40px;
+    color: #fff;
+	padding-left: 20px;    	
+}
+.topics ul {
+	list-style: none;
+	padding: 0 10px;
+}
+.topics ul > li {
+	margin: 20px 0;
+	border-bottom: 1px solid #ddd;
+	display: inline-block;	
+}
+.topics ul > li > img {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	float: left;
+}
+.topics ul > li  div {
+	margin-left: 60px;
+}
+.topics ul > li div p {
+	font-size: 13px;
+	color: #666;
+}

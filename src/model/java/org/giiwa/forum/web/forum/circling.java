@@ -15,6 +15,7 @@ import org.apache.lucene.search.TopDocs;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Follower;
 import org.giiwa.forum.bean.Log;
+import org.giiwa.forum.bean.Topic;
 import org.giiwa.framework.bean.User;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
@@ -25,85 +26,80 @@ public class circling extends Model {
   public void onGet() {
 
     int s = this.getInt("s");
-    int n = this.getInt("n", 20, "number.per.page");
+    int n = this.getInt("n", 10, "number.per.page");
 
     this.set("me", getUser());
     long uid = this.getLong("uid", login == null ? -1 : login.getId());
-    Beans<Circling> bs = new Beans<Circling>();
 
     User u = User.loadById(uid);
     this.set("u", u);
 
-    String name = this.getString("q");
-    if (!X.isEmpty(name)) {
-      /**
-       * searching, whatever login or not
-       */
-      Query q1 = SE.parse(name, new String[] { "name", "nickname", "memo" });
-      TopDocs docs = SE.search("circling", q1);
-      ScoreDoc[] dd = docs.scoreDocs;
-      bs.setTotal(docs.totalHits);
-      List<Circling> list = new ArrayList<Circling>();
-      bs.setList(list);
-
-      int min = s + n;
-      int i = s;
-      while (i < min && i < dd.length) {
-
-        ScoreDoc d = dd[i];
-        long id = X.toLong(SE.get(d.doc), -1);
-        if (id > -1) {
-          Circling e = Circling.load(id);
-          // SE.highlight();
-          String s1 = SE.highlight(d.doc, "name", q1, null);
-          if (s1 != null) {
-            e.set("name", s1);
-          }
-
-          s1 = SE.highlight(d.doc, "memo", q1, null);
-          if (s1 != null) {
-            e.set("memo", s1);
-          }
-
-          s1 = SE.highlight(d.doc, "nickname", q1, null);
-          if (s1 != null) {
-            e.set("owner_nickname", s1);
-          }
-
-          list.add(e);
-        }
-        i++;
-        if (list.size() >= n) {
-          break;
-        }
-      }
-
-      this.set("q", name);
-
-    } else if (u != null) {
+    /**
+     * load my circlings
+     */
+    if (u != null) {
       W q = W.create("uid", uid);
-      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), s, n);
+      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), 0, 20);
       if (b1 != null) {
-        bs.setTotal(b1.getTotal());
         if (b1.getList() != null) {
           List<Circling> l1 = new ArrayList<Circling>();
-          bs.setList(l1);
           for (Follower f1 : b1.getList()) {
             l1.add(f1.getCircling_obj());
           }
+          this.set("mycirclings", l1);
         }
       }
-    } else {
-      this.redirect("/forum/circling/pub");
-      return;
     }
 
-    this.set(bs, s, n);
-    this.query.path("/forum/circling");
+    /**
+     * load hot circlings
+     */
+    {
+      W q = W.create().and("access", "private", W.OP_NEQ);
 
-    // load public circling
-    Beans<Circling> b1 = Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("score", -1), 0, 30);
-    this.set("pub", b1 != null ? b1.getList() : null);
+      Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
+      if (b1 != null) {
+        this.set("hotcirclings", b1.getList());
+      }
+    }
+
+    if (u != null) {
+
+      W w1 = W.create();
+      W q = W.create("uid", uid).and(W.create("state", "owner").or("state", "accepted"));
+      int s1 = 0;
+      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), s1, 100);
+      while (b1 != null && b1.getList() != null && b1.getList().size() > 0) {
+        for (Follower f1 : b1.getList()) {
+          w1.or("cid", f1.getCid());
+        }
+        s1 += b1.getList().size();
+        if (b1.getList().size() < 100) {
+          break;
+        } else {
+          b1 = Follower.load(q.sort("updated", -1), s1, 100);
+        }
+      }
+
+      // load all topics
+      Beans<Topic> b2 = Topic.load(W.create().and(w1).and("parent", 0).sort("updated", -1), s, n);
+      this.set(b2, s, n);
+
+    } else {
+      // load public topic
+      Beans<Circling> b1 = Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("updated", -1), 0, 100);
+      W w1 = W.create();
+      if (b1 != null && b1.getList() != null) {
+        for (Circling c1 : b1.getList()) {
+          w1.or("cid", c1.getId());
+        }
+      }
+      Beans<Topic> b2 = Topic.load(W.create().or(w1).and("parent", 0).sort("updated", -1), s, n);
+      this.set(b2, s, n);
+
+    }
+
+    this.query.path("/forum/circling");
 
     this.show("/forum/circling.index.html");
 

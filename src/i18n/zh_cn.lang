@@ -119,3 +119,6 @@ a.circling.setting=圈子设置
 circling.setting.title=圈子设置
 forum.image.server.hint=社区图片服务器
 title_or_content_can_not_be_empty=标题和内容不能为空
+title.hotcircling=热门圈子
+title.mycircling=我的圈子
+title.topics=热门话题
