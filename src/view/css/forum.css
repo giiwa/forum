@@ -240,6 +240,7 @@ div.topic {
 	border-top: 4px solid #3b5998;
 	margin-top: 12px;
 	padding: 0;
+	background: #fff;
 }
 
 div.topic-summary {

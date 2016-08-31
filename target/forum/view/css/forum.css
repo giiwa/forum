@@ -240,6 +240,7 @@ div.topic {
 	border-top: 4px solid #3b5998;
 	margin-top: 12px;
 	padding: 0;
+	background: #fff;
 }
 
 div.topic-summary {
@@ -792,8 +793,8 @@ header .navbar-nav > li > a:hover {
 }
 
 .cir-info .info p {
-	color: #999;
-	font-size: 11px;
+	color: #666;
+	font-size: 13px;
 	border-bottom: 1px solid #aaa;
 }
 .cir-info .info p:last-child {

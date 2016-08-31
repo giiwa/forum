@@ -7,18 +7,17 @@
 	<div class='ops pull-right text-center'>
 		#set($f = $c.getFollower($me))
 		#if($f.state == 'owner')
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>edit</a>
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>go</a>
+		<a class='btn btn-info' href='/forum/circling/edit?cid=$c.id'>$lang.get('a.edit')</a>
 		#elseif($f.state == 'accepted')
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>go</a>
+		<a class='btn btn-info' href='javascript:;'>$lang.get('a.accepted')</a>
 		#elseif($f)
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>pending</a>
+		<a class='btn btn-info' href='javascript:;'>$lang.get('a.pending')</a>
 		#else
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>join</a>
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>$lang.get('a.join')</a>
 		#end
 	</div>
 	<div class='info'>
-		<h4>$c.name</h4>
+		<h4>$!c.name</h4>
 		<p>
 			#if($c.owner_obj.photo)
 			<img src="$c.owner_obj.photo" class='user-sm'/>
