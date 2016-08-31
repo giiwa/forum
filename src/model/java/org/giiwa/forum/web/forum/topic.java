@@ -50,7 +50,7 @@ public class topic extends Model {
     this.set("cid", cid);
     this.set("c", c);
 
-    login = getUser();
+    User u = getUser();
     this.set("me", login);
     Follower f = c.getFollower(login);
     if (c.isPrivate() && (f == null || !f.getPost())) {
@@ -58,6 +58,37 @@ public class topic extends Model {
       this.deny("/forum", null);
       return;
     }
+    
+    
+    /**
+     * load my circlings
+     */
+    if (u != null) {
+      W q = W.create("uid", u.getId());
+      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), 0, 20);
+      if (b1 != null) {
+        if (b1.getList() != null) {
+          List<Circling> l1 = new ArrayList<Circling>();
+          for (Follower f1 : b1.getList()) {
+            l1.add(f1.getCircling_obj());
+          }
+          this.set("mycirclings", l1);
+        }
+      }
+    }
+
+    /**
+     * load hot circlings
+     */
+    {
+      W q = W.create().and("access", "private", W.OP_NEQ);
+
+      Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
+      if (b1 != null) {
+        this.set("hotcirclings", b1.getList());
+      }
+    }
+
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");

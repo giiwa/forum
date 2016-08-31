@@ -134,7 +134,7 @@ public class Topic extends Bean {
   }
 
   public Topic getLast() {
-    return Helper.load(W.create("parent", this.getId()).sort("created", -1), Topic.class);
+    return Helper.load(W.create("parent", this.getId()).and("deleted", 1, W.OP_NEQ).sort("created", -1), Topic.class);
   }
 
   public void repair() {

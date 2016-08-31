@@ -1,135 +1,142 @@
 #parse('/forum/head.html')
 
-<div class='tabs'>
-	<a href='/forum'>$lang.get('circling.index.title')</a>
-	<span>&gt;</span>
-	<a href='/forum/topic?cid=$!cid'>$lang.get('topic.index.title')</a>
-</div>
-
 #set($f1 = $c.getFollower($me))
 
-<div class="circlinginfo">
-    <img id="_club_logo" title="$!c.name" alt="$!c.name" class="circling-photo" src=#if($c.photo)"$c.photo" #else '' #end>
-    <div class="clinfo">
-        <h1 title="$!c.name">$!c.name</h1>
-        <div class="clba_s">
-            <div class="moder">
-				<span>$lang.get('circling.owner'):</span>
-            	<a href="/forum/circling?uid=$c.owner" target="_blank">
-					#if($c.owner_obj.photo)
-					<img src="$c.owner_obj.photo" class='user-sm'/>
-					#else
-					<span class='icon-user'></span>
-					#end
-            		
-            		$!c.owner_obj.nickname
-            	</a>
-                <br>
-                <span>
-                    $lang.get('circling.followers'):<em class='icon-users'>$!c.followers</em>
-                </span>
-                <br>
-                <span>
-                    $lang.get('circling.topics'):<em class='icon-bubbles'>$!c.topics</em>
-                </span>
-            </div>
-        </div>
-    </div>
+<div class='cir-info panel'>
+	<img src="$!c.photo"/>
+	<div class='ops pull-right text-center'>
+		#set($f = $c.getFollower($me))
+		#if($f.state == 'owner')
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>edit</a>
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>go</a>
+		#elseif($f.state == 'accepted')
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>go</a>
+		#elseif($f)
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>pending</a>
+		#else
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>join</a>
+		#end
+	</div>
+	<div class='info'>
+		<h4>$c.name</h4>
+		<p>
+			#if($c.owner_obj.photo)
+			<img src="$c.owner_obj.photo" class='user-sm'/>
+			#else
+			<span class='icon-user'></span>
+			#end
+            $c.owner_obj.nickname
+			, $c.followers, $c.topics
+		</p>
+		<p>简介:$!c.memo</p>
+	</div>
 </div>
 
-<div class='text-right col-sm-12'>
+<div class='topics col-sm-8'>
+		<div class='title'>圈子话题</div>
+		<ul>
+			#foreach($f in $list)
+			<li>
+				<img src="$f.owner_obj.photo"/>
+				<div>
+					<h4><a href='/forum/topic/$f.id'>$f.title</a></h4>
+					<p class='status'>
+						<span class='flags'>
+							#if($f.cream == 1)
+							<img src='/images/flags/cream.png'/>
+							#end
+							#if($f.top == 1)
+							<img src='/images/flags/top.png'/>
+							#end
+							#if($f.photo == 1)
+							<img src='/images/flags/photo.png'/>
+							#end
+							#if($f.replysInDays(1) == 1)
+							<img src='/images/flags/hot.png'/>
+							#end
+						</span>
+						<span style='margin-left:10px'>
+							$lang.format($f.created, 'yyyy-MM-dd') 发表在:<a href='/forum/topic?cid=$f.cid'>$!f.circling.name</a>
+						</span>
+					</p>
+					<p>$lang.truncate($f.content, 100)</p>
+					<p>
+						#if($f.last)
+							#if($f.last.owner_obj.photo)
+							<img src="$f.last.owner_obj.photo" class='user-sm'/>
+							#else
+							<span class='icon-user'></span>
+							#end
+							$!f.last.owner_obj.nickname,&nbsp;&nbsp;
+							$!lang.truncate($f.last.content, 50)
+						#end
+					</p>
+					<p class='pull-right'>阅读:$f.reads ｜ 回复:$f.replies ｜ 👍($!f.up) ｜ 👎($!f.down)</p>
+				</div>
+			</li>
+			#end
+		</ul>
+
+		#parse('/forum/goto.page.html')
+	
+</div>
+
+<div class='nav-right col-sm-4'>
 	<form class="search-inline" action="/forum/topic">
 		<input type='hidden' name='cid' value="$cid"/>
       <input type="text" name="name" value="$!name" placeholder="$lang.get('topic.search.text')">
       <button type='submit' class="icon-search"></button>
 	</form>
-	#if($f1.state == 'owner' || $f1.state == 'accepted' || $c.access == 'public')
-	<a href='/forum/topic/create?cid=$!cid' class='btn btn-success'>$lang.get('a.topic.create')</a>
-	#end
-
-	#if(!$f1)
-		<a class='btn btn-info' onclick="_follow({cid:'$c.id',follow:1}, this)">$lang.get('a.follow')</a>
-	#elseif($f1.state == 'pending')
-		<a class='btn btn-info disabled'>$lang.get('a.follow.pending')</a>
-	#elseif($f1.state == 'rejected')
-		<a class='btn btn-info disabled'>$lang.get('a.follow.rejected')</a>
-	#end
 	
-</div>
-
-<div class='col-sm-12 topic'>
-	
-	<table class="table">
-		<thead>
-			<tr>
-				<th>$lang.get('topic.title')</th>
-				<th>$lang.get('topic.owner_created')</th>
-				<th>$lang.get('topic.replies_reads')</th>
-				<th>$lang.get('topic.lastreply_created')</th>
-			</tr>
-		</thead>
-		<tbody>
-			#foreach($f in $list)
-			<tr>
-				<td style='padding:0'> 
-					$this.flags($f)
-					<a class='topic-title' href="/forum/topic/$f.id">$!f.title</a> 
-				</td>
-				<td>
-					<a href="/forum/circling?uid=$f.owner">
-						#if($c.owner_obj.photo)
-						<img src="$c.owner_obj.photo" class='user-sm'/>
-						#else
-						<span class='icon-user'></span>
-						#end
-						$!f.owner_obj.nickname
-					</a>
-					<br/>
-					<span class='text-muted'>$!lang.format($f.created, 'yyyy-MM-dd')</span>
-				</td>
-				<td>
-					$!f.replies
-					<br/>
-					<span class='text-muted'>$!f.reads</span>
-				</td>
-				<td>
-					#if($f.last.owner_obj.nickname)
-					<a href="/forum/circling?uid=$f.last.owner">
-						#if($f.last.owner_obj.photo)
-						<img src="$f.last.owner_obj.photo" class='user-sm'/>
-						#else
-						<span class='icon-user'></span>
-						#end
-						$f.last.owner_obj.nickname
-					</a>
-					#end
-					<br/>
-					<span class='text-muted'>
-						#if($f.last.created>0)
-						$!lang.format($f.last.created, 'yyyy-MM-dd HH:mm')
-						#end
-					</span>
-				</td>
-			</tr>
+	<div class='panel login text-center'>
+		#if($me)
+			#set($f1 = $c.getFollower($me))
+			#if($f1.state == 'owner' || $f1.state == 'accepted' || $c.access == 'public')
+			<a href='/forum/topic/create?cid=$!cid' class='btn btn-success'>$lang.get('a.topic.create')</a>
 			#end
-		</tbody>
-	</table>
-	
-	#parse('/forum/goto.page.html')
-</div>
-
-<ul class="col-sm-12 circlings cl-recommends">
-	#foreach($p in $recommends)
-	<li class="col-sm-2 text-center" style='margin: 2px;overflow:hidden'>
-		<a href="/forum/topic?cid=$p.id">
-			<img src='$p.photo' style='float: initial;margin:0'/>
-			<span class='col-sm-12'>
-				$!p.name
-			</span>
-		</a>
-	</li>
+		
+			#if(!$f1)
+				<a class='btn btn-info' onclick="_follow({cid:'$c.id',follow:1}, this)">$lang.get('a.follow')</a>
+			#elseif($f1.state == 'pending')
+				<a class='btn btn-info disabled'>$lang.get('a.follow.pending')</a>
+			#elseif($f1.state == 'rejected')
+				<a class='btn btn-info disabled'>$lang.get('a.follow.rejected')</a>
+			#end
+		#else
+		<a href='/user/login' class='btn btn-success'>$lang.get('a.login')</a>
+		#end
+	</div>
+	#if($me)
+	<div class='panel'>
+		<div class='title'>$lang.get('title.mycircling')</div>
+		<ul>
+			#foreach($f in $mycirclings)
+			<li>
+				<img src="$f.photo"/>
+				<div>
+					<h4><a href='/forum/topic?cid=$f.id'>$f.name</a></h4>
+					<p>$lang.get('circling.followers'):$!f.followers, $lang.get('circling.topics'):$!f.topics</p>
+				</div>
+			</li>
+			#end
+		</ul>
+	</div>
 	#end
-</ul>
+	<div class='panel'>
+		<div class='title'>$lang.get('title.hotcircling')</div>
+		<ul>
+			#foreach($f in $hotcirclings)
+			<li>
+				<img src="$f.photo"/>
+				<div>
+					<h4><a href='/forum/topic?cid=$f.id'>$f.name</a></h4>
+					<p>$lang.get('circling.followers'):$!f.followers, $lang.get('circling.topics'):$!f.topics</p>
+				</div>
+			</li>
+			#end
+		</ul>
+	</div>
+</div>
 
 <script>
 function _follow(p, o) {
@@ -140,4 +147,5 @@ function _follow(p, o) {
 	});
 }	
 </script>
+
 #parse('/forum/foot.html')

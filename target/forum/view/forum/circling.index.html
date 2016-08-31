@@ -1,12 +1,5 @@
 #parse('/forum/head.html')
-<!--
-<div class='col-sm-12 text-right'>
-	<form class="search-inline">
-      <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
-      <button type='submit' class="icon-search"></button>
-	</form>
-</div>
--->
+
 <div class='col-sm-12' style='padding:0'>
 	<div class='topics col-sm-8'>
 		<div class='title'>$lang.get('title.topics')</div>
@@ -31,6 +24,9 @@
 							<img src='/images/flags/hot.png'/>
 							#end
 						</span>
+						<span style='margin-left:10px'>
+							$lang.format($f.created, 'yyyy-MM-dd') 发表在:<a href='/forum/topic?cid=$f.cid'>$!f.circling.name</a>
+						</span>
 					</p>
 					<p>$lang.truncate($f.content, 100)</p>
 					<p class='pull-right'>阅读:$f.reads ｜ 回复:$f.replies ｜ 👍($!f.up) ｜ 👎($!f.down)</p>
@@ -43,6 +39,11 @@
 
 	</div>
 	<div class='nav-right col-sm-4'>
+		<form class="search-inline">
+	      <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
+	      <button type='submit' class="icon-search"></button>
+		</form>
+
 		<div class='panel login text-center'>
 			#if($me)
 			<a href='/forum/circling/create' class='btn btn-success'>$lang.get('circling.create.title')</a>
@@ -83,13 +84,4 @@
 	</div>
 </div>
 	
-<script>
-function _follow(p, o) {
-	processing && processing.show();
-	$.post('/forum/circling/follow', p, function(d){
-		processing && processing.hide();
-		
-	});
-}	
-</script>
 #parse('/forum/foot.html')
