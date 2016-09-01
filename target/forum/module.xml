@@ -6,7 +6,7 @@
 	<package>org.giiwa.forum.web</package>
 	<screenshot>/images/forum_screenshot.png</screenshot>
 	<version>1.0.1</version>
-	<build>1609011050</build>
+	<build>1609011055</build>
 	<enabled>true</enabled>
 	<readme>Forum, group and topic module</readme>
 	<listener>

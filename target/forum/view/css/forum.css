@@ -497,6 +497,11 @@ form.search-inline {
 	border: 0;
 	box-shadow: none;
 }
+form.noborder {
+	border: 0;
+	box-shadow: none;
+}
+
 form.search-inline input, form.search-inline select {
 	background-image: none;
 	border: 1px solid #ccc;
