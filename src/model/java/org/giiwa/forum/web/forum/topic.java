@@ -45,6 +45,9 @@ public class topic extends Model {
       if (id > 0) {
         _detail(id);
         return;
+      } else {
+        this.redirect("/forum/circling");
+        return;
       }
     }
     this.set("cid", cid);
@@ -58,8 +61,7 @@ public class topic extends Model {
       this.deny("/forum", null);
       return;
     }
-    
-    
+
     /**
      * load my circlings
      */
@@ -88,7 +90,6 @@ public class topic extends Model {
         this.set("hotcirclings", b1.getList());
       }
     }
-
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
