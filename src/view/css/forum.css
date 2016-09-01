@@ -124,8 +124,10 @@ form g:before {
 
 form {
 	position: relative;
-	border-top: 1ps solid #e5e5e5;
+	border: 1px solid #aaa;
+	box-shadow: 1px 1px 6px #aaa;
 }
+
 .table {
 	border-top: 1px solid #538098;
 }
@@ -138,8 +140,6 @@ footer {
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	position: fixed;
-	display: none;
 }
 
 #processing {
@@ -494,6 +494,8 @@ form.search-inline {
 	display: inline-block;
 	position: relative;
 	margin-right: 10px;
+	border: 0;
+	box-shadow: none;
 }
 form.search-inline input, form.search-inline select {
 	background-image: none;
@@ -596,11 +598,6 @@ header .left {
 header .logo {
 	position: relative;
 	float: left;
-}
-
-.owner {
-	border: 1px solid #ccd3e4;
-	padding-top: 10px;
 }
 
 footer .footer-credits {
