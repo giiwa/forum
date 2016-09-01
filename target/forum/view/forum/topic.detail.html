@@ -55,6 +55,7 @@
 	
 	#if($f1.post || $c.access == 'public')
 	<form id='reply' class="form-horizontal col-sm-12 noborder" method="post" action="/forum/topic/reply">
+	  #if($me)
 	  <input type='hidden' name='id' value='$!t.id' />
 	  <input type='hidden' name='refer' value='' />
 	  <div class="form-group">
@@ -69,6 +70,12 @@
 	      <button class="btn btn-primary" type="submit">$lang.get('btn.ok')</button>
 	    </div>
 	  </div>
+	  #else
+	  <div class='text-center' style='padding: 50px;'>
+		  <a class='btn btn-xs btn-info' href='/user/login'>$lang.get('a.login')</a> &nbsp;|&nbsp;
+		  <a class='btn btn-xs btn-success' href='/user/register'>$lang.get('a.register')</a>
+	  </div>
+	  #end
 	</form>
 	#end
 </div>

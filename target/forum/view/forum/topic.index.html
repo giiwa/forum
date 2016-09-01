@@ -11,9 +11,9 @@
 		#elseif($f.state == 'accepted')
 		<a class='btn btn-info' href='javascript:;'>$lang.get('a.accepted')</a>
 		#elseif($f)
-		<a class='btn btn-info' href='javascript:;'>$lang.get('a.pending')</a>
+		<a class='btn btn-info' href='javascript:;'>$lang.get('a.follow.pending')</a>
 		#else
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>$lang.get('a.join')</a>
+		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>$lang.get('a.circling.follow')</a>
 		#end
 	</div>
 	<div class='info'>

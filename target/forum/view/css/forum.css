@@ -670,6 +670,7 @@ header .center, .banner .center {
 .banner .navbar-nav > li > a {
 	color: #fff;
 	padding: 15px 20px;
+	transition: 1s ease;
 }
 .banner .navbar-nav > li > a:hover {
 	color: #fff;
@@ -678,7 +679,8 @@ header .center, .banner .center {
 header .navbar-nav > li > a {
 	padding: 0 20px;
 	line-height: 80px;
-	color: #333;
+	color: #666;
+	transition: 0.2s ease;
 }
 
 header .navbar-nav > li > a:hover {
