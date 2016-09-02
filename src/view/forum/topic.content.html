@@ -75,8 +75,9 @@
 			#end
 			
 			#if($f == $t)
-			#if($f.top != 1)
+			#if($f.top == 0)
 			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:1}, this)">$lang.get('a.top1')</a>
+			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:-1}, this)">$lang.get('a.top2')</a>
 			#else
 			<a class="btn btn-xs btn-primary" href="javascript:;" onclick="_update({id:'$f.id', top:0}, this)">$lang.get('a.top0')</a>
 			#end

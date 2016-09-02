@@ -50,6 +50,7 @@ public class Circling extends Bean {
   }
 
   private User owner_obj;
+
   public User getOwner_obj() {
     if (owner_obj == null) {
       owner_obj = User.loadById(this.getOwner());
@@ -146,6 +147,10 @@ public class Circling extends Bean {
       return null;
     }
     return Follower.load(W.create("cid", this.getId()).and("uid", u.getId()));
+  }
+
+  public long getPending_follower() {
+    return Helper.count(W.create("cid", this.getId()).and("state", "pending"), Follower.class);
   }
 
   public boolean isForbidden(User u) {

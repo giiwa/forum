@@ -629,7 +629,7 @@ footer ul.nav-footer li.terms {
 	padding-left: 0;
 }
 footer .footer-credits a {
-	color: #CCCCCC;
+	color: #999;
 	text-decoration: none;
 }
 
@@ -803,4 +803,8 @@ header .navbar-nav > li > a:hover {
 }
 .cir-info .info p:last-child {
 	border-bottom: none;
+}
+
+.cir-info .info h4 a{
+	font-size: 11px;
 }

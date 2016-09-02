@@ -4,20 +4,14 @@
 
 <div class='cir-info panel'>
 	<img src="$!c.photo"/>
-	<div class='ops pull-right text-center'>
-		#set($f = $c.getFollower($me))
-		#if($f.state == 'owner')
-		<a class='btn btn-info' href='/forum/circling/edit?cid=$c.id'>$lang.get('a.edit')</a>
-		#elseif($f.state == 'accepted')
-		<a class='btn btn-info' href='javascript:;'>$lang.get('a.accepted')</a>
-		#elseif($f)
-		<a class='btn btn-info' href='javascript:;'>$lang.get('a.follow.pending')</a>
-		#else
-		<a class='btn btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>$lang.get('a.circling.follow')</a>
-		#end
-	</div>
 	<div class='info'>
-		<h4>$!c.name</h4>
+		#set($f = $c.getFollower($me))
+		<h4>
+			$!c.name
+			#if($f.state == 'owner')
+			<a class='icon-pencil hint-bottom' href='/forum/circling/edit?cid=$c.id' data-hint="$lang.get('a.edit')"></a>
+			#end
+		</h4>
 		<p>
 			#if($c.owner_obj.photo)
 			<img src="$c.owner_obj.photo" class='user-sm'/>
@@ -25,7 +19,21 @@
 			<span class='icon-user'></span>
 			#end
             $c.owner_obj.nickname,&nbsp;&nbsp;
-			关注:$c.followers, 话题:$c.topics
+			
+			#if($f.state == 'owner')
+			关注人数:<a href='/forum/circling/user?cid=$c.id'>$c.followers</a> &nbsp;|&nbsp; 话题数:$c.topics
+			&nbsp;|&nbsp;申请加入人数:<a href='/forum/circling/user?cid=$c.id&state=pending'>$c.pending_follower</a>
+			#else
+			关注人数:$c.followers &nbsp;|&nbsp; 话题数:$c.topics
+			#end
+			
+			#if($f.state == 'accepted')
+			&nbsp;|&nbsp;<span>您已经加入</span>
+			#elseif($f.state == 'pending')
+			&nbsp;|&nbsp;<span>等待审核确认</span>
+			#elseif(!$f && $me)
+			&nbsp;|&nbsp;<a class='btn btn-xs btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>申请加入</a>
+			#end
 		</p>
 		<p>简介:$!c.memo</p>
 	</div>
@@ -142,7 +150,7 @@ function _follow(p, o) {
 	processing && processing.show();
 	$.post('/forum/circling/follow', p, function(d){
 		processing && processing.hide();
-		
+		$.hint("$lang.get('save.success')");
 	});
 }	
 </script>

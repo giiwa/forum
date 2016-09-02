@@ -41,6 +41,10 @@ public class Topic extends Bean {
     return this.getInt("down");
   }
 
+  public int getTop() {
+    return this.getInt("top");
+  }
+
   public int getFloor() {
     return this.getInt("floor");
   }
