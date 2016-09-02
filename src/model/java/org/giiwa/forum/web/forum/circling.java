@@ -105,20 +105,91 @@ public class circling extends Model {
 
   }
 
-  @Path(path = "pub")
-  public void pub() {
+  @Path(path = "search")
+  public void search() {
 
     this.set("me", this.getUser());
     this.set("u", this.getUser());
 
+    /**
+     * load my circlings
+     */
+    if (login != null) {
+      W q = W.create("uid", login.getId());
+      Beans<Follower> b1 = Follower.load(q.sort("updated", -1), 0, 20);
+      if (b1 != null) {
+        if (b1.getList() != null) {
+          List<Circling> l1 = new ArrayList<Circling>();
+          for (Follower f1 : b1.getList()) {
+            l1.add(f1.getCircling_obj());
+          }
+          this.set("mycirclings", l1);
+        }
+      }
+    }
+
+    /**
+     * load hot circlings
+     */
+    {
+      W q = W.create().and("access", "private", W.OP_NEQ);
+
+      Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
+      if (b1 != null) {
+        this.set("hotcirclings", b1.getList());
+      }
+    }
+
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    Beans<Circling> b1 = Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("score", -1), 0, 30);
-    this.set(b1, s, n);
+    String q = this.getString("q");
+    this.set("q", q);
 
-    this.query.path("/forum/circling/pub");
-    this.show("/forum/circling.pub.html");
+    Beans<Circling> bs = new Beans<Circling>();
+    Query q1 = SE.parse(q, new String[] { "name", "nickname", "memo" });
+    TopDocs docs = SE.search("circling", q1);
+    ScoreDoc[] dd = docs.scoreDocs;
+    bs.setTotal(docs.totalHits);
+    List<Circling> list = new ArrayList<Circling>();
+    bs.setList(list);
+
+    int min = s + n;
+    int i = s;
+    while (i < min && i < dd.length) {
+
+      ScoreDoc d = dd[i];
+      long id = X.toLong(SE.get(d.doc), -1);
+      if (id > -1) {
+        Circling e = Circling.load(id);
+        // SE.highlight();
+        String s1 = SE.highlight(d.doc, "name", q1, null);
+        if (s1 != null) {
+          e.set("name", s1);
+        }
+
+        s1 = SE.highlight(d.doc, "memo", q1, null);
+        if (s1 != null) {
+          e.set("memo", s1);
+        }
+
+        s1 = SE.highlight(d.doc, "nickname", q1, null);
+        if (s1 != null) {
+          e.set("owner_nickname", s1);
+        }
+
+        list.add(e);
+      }
+      i++;
+      if (list.size() >= n) {
+        break;
+      }
+    }
+
+    this.set(bs, s, n);
+
+    this.query.path("/forum/circling/search");
+    this.show("/forum/circling.search.html");
 
   }
 

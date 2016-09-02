@@ -28,9 +28,9 @@
 			#end
 			
 			#if($f.state == 'accepted')
-			&nbsp;|&nbsp;<span>您已经加入</span>
+			&nbsp;|&nbsp;<span class='text-primary'>您已经加入该圈子了</span>
 			#elseif($f.state == 'pending')
-			&nbsp;|&nbsp;<span>等待审核确认</span>
+			&nbsp;|&nbsp;<span class='text-danger'>等待审核确认</span>
 			#elseif(!$f && $me)
 			&nbsp;|&nbsp;<a class='btn btn-xs btn-info' href='javascript:;' onclick='_follow({cid:"$c.id", follow:1},this)'>申请加入</a>
 			#end

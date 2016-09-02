@@ -6,7 +6,7 @@
 		<ul>
 			#foreach($f in $list)
 			<li>
-				<img src="$f.owner_obj.photo"/>
+				<img src=#if($!f.owner_obj.photo)"$f.owner_obj.photo" #else "/images/user_default.gif" #end/>
 				<div>
 					<h4><a href='/forum/topic/$f.id'>$f.title</a></h4>
 					<p class='status'>
@@ -39,7 +39,7 @@
 
 	</div>
 	<div class='nav-right col-sm-4'>
-		<form class="search-inline">
+		<form class="search-inline" action="/forum/circling/search">
 	      <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
 	      <button type='submit' class="icon-search"></button>
 		</form>
