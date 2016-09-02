@@ -4,26 +4,30 @@
 	<div class='topics col-sm-8'>
 		<div class='title'>$lang.get('title.circlings')</div>
 		<ul>
-			#foreach($f in $list)
-			<li>
-				<img src="$!f.photo"/>
-				<div>
-					<h4><a href='/forum/topic?cid=$f.id'>$f.name</a></h4>
-					<p class='status'>
-						<span style='margin-left:10px'>
-							#if($f.owner_obj.photo)
-							<img src="$f.owner_obj.photo" class='user-sm'/>
-							#else
-							<span class='icon-user'></span>
-							#end
-							$f.owner_obj.nickname,&nbsp;
-							$lang.format($f.created, 'yyyy-MM-dd') 创建
-						</span>
-					</p>
-					<p>$f.memo</p>
-					<p class='pull-right'>圈子人数:$f.followers ｜ 主题数:$f.topics </p>
-				</div>
-			</li>
+			#if($list.size() > 0)
+				#foreach($f in $list)
+				<li>
+					<img src="$!f.photo"/>
+					<div>
+						<h4><a href='/forum/topic?cid=$f.id'>$f.name</a></h4>
+						<p class='status'>
+							<span style='margin-left:10px'>
+								#if($f.owner_obj.photo)
+								<img src="$f.owner_obj.photo" class='user-sm'/>
+								#else
+								<span class='icon-user'></span>
+								#end
+								$f.owner_obj.nickname,&nbsp;
+								$lang.format($f.created, 'yyyy-MM-dd') 创建
+							</span>
+						</p>
+						<p>$f.memo</p>
+						<p class='pull-right'>圈子人数:$f.followers ｜ 主题数:$f.topics </p>
+					</div>
+				</li>
+				#end
+			#else
+				<li class='text-center text-danger'>没有找到结果！</li>
 			#end
 		</ul>
 
@@ -31,10 +35,6 @@
 
 	</div>
 	<div class='nav-right col-sm-4'>
-		<form class="search-inline" action="/forum/circling/search">
-	      <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
-	      <button type='submit' class="icon-search"></button>
-		</form>
 
 		<div class='panel login text-center'>
 			#if($me)

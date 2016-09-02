@@ -42,45 +42,49 @@
 <div class='topics col-sm-8'>
 		<div class='title'>圈子话题</div>
 		<ul>
-			#foreach($f in $list)
-			<li>
-				<img src="$f.owner_obj.photo"/>
-				<div>
-					<h4><a href='/forum/topic/$f.id'>$f.title</a></h4>
-					<p class='status'>
-						<span class='flags'>
-							#if($f.cream == 1)
-							<img src='/images/flags/cream.png'/>
+			#if($list.size() >0)
+				#foreach($f in $list)
+				<li>
+					<img src="$f.owner_obj.photo"/>
+					<div>
+						<h4><a href='/forum/topic/$f.id'>$f.title</a></h4>
+						<p class='status'>
+							<span class='flags'>
+								#if($f.cream == 1)
+								<img src='/images/flags/cream.png'/>
+								#end
+								#if($f.top == 1)
+								<img src='/images/flags/top.png'/>
+								#end
+								#if($f.photo == 1)
+								<img src='/images/flags/photo.png'/>
+								#end
+								#if($f.replysInDays(1) == 1)
+								<img src='/images/flags/hot.png'/>
+								#end
+							</span>
+							<span style='margin-left:10px'>
+								$lang.format($f.created, 'yyyy-MM-dd') 发表在:<a href='/forum/topic?cid=$f.cid'>$!f.circling.name</a>
+							</span>
+						</p>
+						<p>$lang.truncate($f.content, 100)</p>
+						<p>
+							#if($f.last)
+								#if($f.last.owner_obj.photo)
+								<img src="$f.last.owner_obj.photo" class='user-sm'/>
+								#else
+								<span class='icon-user'></span>
+								#end
+								$!f.last.owner_obj.nickname,&nbsp;&nbsp;
+								$!lang.truncate($f.last.content, 50)
 							#end
-							#if($f.top == 1)
-							<img src='/images/flags/top.png'/>
-							#end
-							#if($f.photo == 1)
-							<img src='/images/flags/photo.png'/>
-							#end
-							#if($f.replysInDays(1) == 1)
-							<img src='/images/flags/hot.png'/>
-							#end
-						</span>
-						<span style='margin-left:10px'>
-							$lang.format($f.created, 'yyyy-MM-dd') 发表在:<a href='/forum/topic?cid=$f.cid'>$!f.circling.name</a>
-						</span>
-					</p>
-					<p>$lang.truncate($f.content, 100)</p>
-					<p>
-						#if($f.last)
-							#if($f.last.owner_obj.photo)
-							<img src="$f.last.owner_obj.photo" class='user-sm'/>
-							#else
-							<span class='icon-user'></span>
-							#end
-							$!f.last.owner_obj.nickname,&nbsp;&nbsp;
-							$!lang.truncate($f.last.content, 50)
-						#end
-					</p>
-					<p class='pull-right'>阅读:$f.reads ｜ 回复:$f.replies ｜ 👍($!f.up) ｜ 👎($!f.down)</p>
-				</div>
-			</li>
+						</p>
+						<p class='pull-right'>阅读:$f.reads ｜ 回复:$f.replies ｜ 👍($!f.up) ｜ 👎($!f.down)</p>
+					</div>
+				</li>
+				#end
+			#else
+				<li class='text-center text-danger'>没有找到结果！</li>
 			#end
 		</ul>
 

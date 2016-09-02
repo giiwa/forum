@@ -108,6 +108,12 @@ public class circling extends Model {
   @Path(path = "search")
   public void search() {
 
+    String q1 = this.getString("q");
+    if (X.isEmpty(q1)) {
+      this.redirect("/forum/circling");
+      return;
+    }
+
     this.set("me", this.getUser());
     this.set("u", this.getUser());
 
@@ -143,12 +149,11 @@ public class circling extends Model {
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    String q = this.getString("q");
-    this.set("q", q);
+    this.set("q", q1);
 
     Beans<Circling> bs = new Beans<Circling>();
-    Query q1 = SE.parse(q, new String[] { "name", "nickname", "memo" });
-    TopDocs docs = SE.search("circling", q1);
+    Query q2 = SE.parse(q1, new String[] { "name", "nickname", "memo" });
+    TopDocs docs = SE.search("circling", q2);
     ScoreDoc[] dd = docs.scoreDocs;
     bs.setTotal(docs.totalHits);
     List<Circling> list = new ArrayList<Circling>();
@@ -163,17 +168,17 @@ public class circling extends Model {
       if (id > -1) {
         Circling e = Circling.load(id);
         // SE.highlight();
-        String s1 = SE.highlight(d.doc, "name", q1, null);
+        String s1 = SE.highlight(d.doc, "name", q2, null);
         if (s1 != null) {
           e.set("name", s1);
         }
 
-        s1 = SE.highlight(d.doc, "memo", q1, null);
+        s1 = SE.highlight(d.doc, "memo", q2, null);
         if (s1 != null) {
           e.set("memo", s1);
         }
 
-        s1 = SE.highlight(d.doc, "nickname", q1, null);
+        s1 = SE.highlight(d.doc, "nickname", q2, null);
         if (s1 != null) {
           e.set("owner_nickname", s1);
         }

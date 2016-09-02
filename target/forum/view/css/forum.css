@@ -799,12 +799,14 @@ header .navbar-nav > li > a:hover {
 .cir-info .info p {
 	color: #666;
 	font-size: 13px;
-	border-bottom: 1px solid #aaa;
 }
 .cir-info .info p:last-child {
 	border-bottom: none;
 }
 
-.cir-info .info h4 a{
+.cir-info .info h4 a {
 	font-size: 11px;
+}
+.banner form.search-inline input, .banner form.search-inline button {
+	border-color: #aaa;
 }

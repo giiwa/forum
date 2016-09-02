@@ -33,7 +33,7 @@
 				<li><a class="icon-key" href="/user/login">$lang.get('a.login')</a></li>
 				<li><a class="icon-quill" href="/user/register">$lang.get('a.register')</a></li>
 				#end
-			</ul>			
+			</ul>
 		</div>
 	  </header>
 	  <div class='banner'>
@@ -41,6 +41,10 @@
 	  		<ul class='nav navbar-nav'>
 	  			#parse('/forum/banner.nav.html')
 	  		</ul>
+			<form class="search-inline pull-right" action="/forum/circling/search" style='margin-top:4px;'>
+		      <input type="text" name="q" value="$!q" placeholder="$lang.get('circling.search.text')">
+		      <button type='submit' class="icon-search"></button>
+			</form>
 	  	</div>
 	  </div>
       <div id="main" class='container'>			
