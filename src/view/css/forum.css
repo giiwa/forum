@@ -783,7 +783,6 @@ header .navbar-nav > li > a:hover {
 .cir-info img {
 	width: 100px;
 	height: 100px;
-	border-radius: 50%;
 	float: left;
 }
 .cir-info .info {
