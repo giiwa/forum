@@ -44,7 +44,9 @@ public class circling extends Model {
         if (b1.getList() != null) {
           List<Circling> l1 = new ArrayList<Circling>();
           for (Follower f1 : b1.getList()) {
-            l1.add(f1.getCircling_obj());
+            Circling c = f1.getCircling_obj();
+            if (c.getInt("deleted") != 1)
+              l1.add(c);
           }
           this.set("mycirclings", l1);
         }
@@ -55,7 +57,7 @@ public class circling extends Model {
      * load hot circlings
      */
     {
-      W q = W.create().and("access", "private", W.OP_NEQ);
+      W q = W.create().and("access", "private", W.OP_NEQ).and("deleted", 1, W.OP_NEQ);
 
       Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
       if (b1 != null) {
@@ -87,7 +89,8 @@ public class circling extends Model {
 
     } else {
       // load public topic
-      Beans<Circling> b1 = Circling.load(W.create().and("access", "private", W.OP_NEQ).sort("updated", -1), 0, 100);
+      Beans<Circling> b1 = Circling
+          .load(W.create().and("access", "private", W.OP_NEQ).and("deleted", 1, W.OP_NEQ).sort("updated", -1), 0, 100);
       W w1 = W.create();
       if (b1 != null && b1.getList() != null) {
         for (Circling c1 : b1.getList()) {
@@ -127,7 +130,9 @@ public class circling extends Model {
         if (b1.getList() != null) {
           List<Circling> l1 = new ArrayList<Circling>();
           for (Follower f1 : b1.getList()) {
-            l1.add(f1.getCircling_obj());
+            Circling c = f1.getCircling_obj();
+            if (c.getInt("deleted") != 1)
+              l1.add(c);
           }
           this.set("mycirclings", l1);
         }
@@ -140,7 +145,7 @@ public class circling extends Model {
     {
       W q = W.create().and("access", "private", W.OP_NEQ);
 
-      Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
+      Beans<Circling> b1 = Circling.load(q.sort("updated", -1).and("deleted", 1, W.OP_NEQ), 0, 20);
       if (b1 != null) {
         this.set("hotcirclings", b1.getList());
       }
@@ -167,23 +172,25 @@ public class circling extends Model {
       long id = X.toLong(SE.get(d.doc), -1);
       if (id > -1) {
         Circling e = Circling.load(id);
-        // SE.highlight();
-        String s1 = SE.highlight(d.doc, "name", q2, null);
-        if (s1 != null) {
-          e.set("name", s1);
-        }
+        if (e.getInt("deleted") != 1) {
+          // SE.highlight();
+          String s1 = SE.highlight(d.doc, "name", q2, null);
+          if (s1 != null) {
+            e.set("name", s1);
+          }
 
-        s1 = SE.highlight(d.doc, "memo", q2, null);
-        if (s1 != null) {
-          e.set("memo", s1);
-        }
+          s1 = SE.highlight(d.doc, "memo", q2, null);
+          if (s1 != null) {
+            e.set("memo", s1);
+          }
 
-        s1 = SE.highlight(d.doc, "nickname", q2, null);
-        if (s1 != null) {
-          e.set("owner_nickname", s1);
-        }
+          s1 = SE.highlight(d.doc, "nickname", q2, null);
+          if (s1 != null) {
+            e.set("owner_nickname", s1);
+          }
 
-        list.add(e);
+          list.add(e);
+        }
       }
       i++;
       if (list.size() >= n) {
@@ -230,19 +237,21 @@ public class circling extends Model {
         long id = X.toLong(SE.get(d.doc), -1);
         if (id > -1) {
           Circling e = Circling.load(id);
-          // SE.highlight();
-          String s1 = SE.highlight(d.doc, "name", q1, null);
-          if (s1 != null) {
-            e.set("name", s1);
-          }
+          if (e.getInt("deleted") != 1) {
+            // SE.highlight();
+            String s1 = SE.highlight(d.doc, "name", q1, null);
+            if (s1 != null) {
+              e.set("name", s1);
+            }
 
-          s1 = SE.highlight(d.doc, "memo", q1, null);
-          if (s1 != null) {
-            e.set("memo", s1);
-          }
+            s1 = SE.highlight(d.doc, "memo", q1, null);
+            if (s1 != null) {
+              e.set("memo", s1);
+            }
 
-          _refine(e);
-          arr.add(e.getJSON());
+            _refine(e);
+            arr.add(e.getJSON());
+          }
         }
         i++;
         if (arr.size() >= n) {
@@ -266,9 +275,10 @@ public class circling extends Model {
           List<JSON> arr = new ArrayList<JSON>();
           for (Follower f1 : b1.getList()) {
             Circling c1 = f1.getCircling_obj();
-            _refine(c1);
-            arr.add(c1.getJSON());
-
+            if (c1.getInt("deleted") != 1) {
+              _refine(c1);
+              arr.add(c1.getJSON());
+            }
           }
           jo.put("list", arr);
           jo.put("hasmore", arr.size() >= n);

@@ -72,7 +72,9 @@ public class topic extends Model {
         if (b1.getList() != null) {
           List<Circling> l1 = new ArrayList<Circling>();
           for (Follower f1 : b1.getList()) {
-            l1.add(f1.getCircling_obj());
+            Circling c1 = f1.getCircling_obj();
+            if (c1.getInt("deleted") != 1)
+              l1.add(c1);
           }
           this.set("mycirclings", l1);
         }
@@ -83,7 +85,7 @@ public class topic extends Model {
      * load hot circlings
      */
     {
-      W q = W.create().and("access", "private", W.OP_NEQ);
+      W q = W.create().and("access", "private", W.OP_NEQ).and("deleted", 1, W.OP_NEQ);
 
       Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
       if (b1 != null) {
@@ -143,7 +145,8 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Circling> bs1 = Circling.load(login == null ? -1 : login.getId(), W.create().sort("updated", -1), 0, 20);
+    Beans<Circling> bs1 = Circling.load(login == null ? -1 : login.getId(),
+        W.create().and("deleted", 1, W.OP_NEQ).sort("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
 
     this.show("/forum/topic.index.html");
