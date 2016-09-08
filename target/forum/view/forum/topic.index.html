@@ -21,7 +21,7 @@
             $c.owner_obj.nickname,&nbsp;&nbsp;
 			
 			#if($f.state == 'owner')
-			关注人数:<a href='/forum/circling/user?cid=$c.id'>$c.followers</a> &nbsp;|&nbsp; 话题数:$!c.topics
+			关注人数:<a href='/forum/circling/user?cid=$c.id'>$!c.followers</a> &nbsp;|&nbsp; 话题数:$!c.topics
 			&nbsp;|&nbsp;申请加入人数:<a href='/forum/circling/user?cid=$c.id&state=pending'>$!c.pending_follower</a>
 			#else
 			关注人数:$!c.followers &nbsp;|&nbsp; 话题数:$!c.topics
