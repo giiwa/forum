@@ -16,13 +16,13 @@
 <td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
 <td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
 <td>
-	<a href='javascript:;' onclick='_repair("$f.id", this)'>$lang.get('a.repair')</a>
+	<a class='btn btn-warning btn-xs' href='javascript:;' onclick='_repair("$f.id", this)'>$lang.get('a.repair')</a>
 	#if($f.state == 1)
-	<a href='javascript:;' onclick='_state("$f.id", this, 0)'>$lang.get('a.enable')</a>
+	<a class='btn btn-info btn-xs' href='javascript:;' onclick='_state("$f.id", this, 0)'>$lang.get('a.enable')</a>
 	#else
-	<a href='javascript:;' onclick='_state("$f.id", this, 1)'>$lang.get('a.disable')</a>
+	<a class='btn btn-info btn-xs' href='javascript:;' onclick='_state("$f.id", this, 1)'>$lang.get('a.disable')</a>
 	#end
 	#if($f.deleted != 1)
-	<a href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
+	<a class='btn btn-danger btn-xs' href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>
 	#end
 </td>
