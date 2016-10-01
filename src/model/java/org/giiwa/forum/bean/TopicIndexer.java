@@ -16,14 +16,14 @@ public class TopicIndexer implements Indexer {
   public void bad(Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Topic.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "bad").set("updated", V.ignore));
+    Topic.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "bad").ignore("updated"));
   }
 
   @Override
   public void done(Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Topic.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "done").set("updated", V.ignore));
+    Topic.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "done").ignore("updated"));
   }
 
   @Override

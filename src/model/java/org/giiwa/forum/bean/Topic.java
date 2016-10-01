@@ -143,7 +143,7 @@ public class Topic extends Bean {
 
   public void repair() {
     long c = Helper.count(W.create("parent", this.getId()), Topic.class);
-    update(this.getId(), V.create("replies", (int) c).set("updated", V.ignore));
+    update(this.getId(), V.create("replies", (int) c).ignore("updated"));
 
     new Task() {
 
@@ -158,7 +158,7 @@ public class Topic extends Bean {
 
           for (Topic t : bs.getList()) {
             if (t.getFloor() != f) {
-              t.update(V.create("floor", f).set("updated", V.ignore));
+              t.update(V.create("floor", f).ignore("updated"));
             }
             f++;
           }
