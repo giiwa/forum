@@ -182,6 +182,7 @@ public class topic extends Model {
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
+    int row = 0;
     Beans<Topic> bs = null;
     String name = this.getString("name");
     if (!X.isEmpty(name) && X.isEmpty(path)) {
@@ -211,7 +212,7 @@ public class topic extends Model {
             e.set("title", s1);
           }
 
-          _refine(e);
+          row = _refine(e, row);
 
           list.add(e);
         }
@@ -229,7 +230,7 @@ public class topic extends Model {
           W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("top", -1).sort("updated", -1), s, n);
       if (bs != null && bs.getList() != null) {
         for (Topic e : bs.getList()) {
-          _refine(e);
+          row = _refine(e, row);
         }
         jo.put("hasmore", bs.getList().size() >= n);
       } else {
@@ -249,9 +250,10 @@ public class topic extends Model {
 
     JSON jo = new JSON();
 
+    int row = 0;
     long tid = this.getLong("tid");
     Topic t = Topic.load(tid);
-    _refine(t);
+    row = _refine(t, row);
     jo.put("topic", t);
 
     int s = this.getInt("s");
@@ -264,7 +266,7 @@ public class topic extends Model {
       if (bs != null && bs.getList() != null) {
         if (bs != null && bs.getList() != null) {
           for (Topic e : bs.getList()) {
-            _refine(e);
+            row = _refine(e, row);
           }
           jo.put("hasmore", bs.getList().size() >= n);
         } else {
@@ -282,9 +284,13 @@ public class topic extends Model {
     this.response(jo);
   }
 
-  private void _refine(Topic e) {
+  private int _refine(Topic e, int row) {
     User u1 = e.getOwner_obj();
-    e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
+    if (X.isEmpty(u1.getString("photo"))) {
+      e.set("photo", Global.getString("forum.image.server", "") + "/images/user_default.gif");
+    } else {
+      e.set("photo", Global.getString("forum.image.server", "") + u1.getString("photo"));
+    }
     e.set("nickname", u1.getNickname() == null ? u1.getName() : u1.getNickname());
     if (!X.isEmpty(e.getContent())) {
       e.set("content", e.getContent().replaceAll("/ke/", Global.getString("forum.image.server", "") + "/ke/"));
@@ -292,6 +298,8 @@ public class topic extends Model {
     }
     e.set("updated", lang.past(e.getLong("updated")));
     e.set("created", lang.format(e.getLong("created"), "yy-MM-dd HH:mm"));
+    e.set("row", row);
+    return row + 1;
   }
 
   @Path(path = "create", login = true)
