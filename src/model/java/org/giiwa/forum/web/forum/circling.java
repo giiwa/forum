@@ -216,7 +216,7 @@ public class circling extends Model {
     this.set("u", u);
 
     JSON jo = new JSON();
-
+    int row = 0;
     String name = this.getString("q");
     if (!X.isEmpty(name)) {
       /**
@@ -249,7 +249,7 @@ public class circling extends Model {
               e.set("memo", s1);
             }
 
-            _refine(e);
+            row = _refine(e, row);
             arr.add(e.getJSON());
           }
         }
@@ -276,7 +276,7 @@ public class circling extends Model {
           for (Follower f1 : b1.getList()) {
             Circling c1 = f1.getCircling_obj();
             if (c1.getInt("deleted") != 1) {
-              _refine(c1);
+              row = _refine(c1, row);
               arr.add(c1.getJSON());
             }
           }
@@ -299,13 +299,14 @@ public class circling extends Model {
     this.response(jo);
   }
 
-  private void _refine(Circling e) {
+  private int _refine(Circling e, int row) {
     e.put("photo", Global.getString("forum.image.server", "") + e.get("photo"));
     User u = e.getOwner_obj();
     e.put("nickname", u.getNickname() == null ? u.getName() : u.getNickname());
     e.set("updated", lang.past(e.getLong("updated")));
     e.set("created", lang.format(e.getLong("created"), "yy-MM-dd HH:mm"));
-
+    e.set("row", row);
+    return row + 1;
   }
 
   @Path(path = "delete", login = true)
