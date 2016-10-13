@@ -4,7 +4,6 @@
 
 <div class='tabs'>
 	<a href='/admin/circling'>$lang.get('a.circling')</a>
-	<a href='/admin/circling/import'>$lang.get('a.import')</a>
 	<a href='/admin/topic?cid=$!cid' class='selected'>$lang.get('a.topic')</a>
 </div>
 
@@ -12,7 +11,7 @@
 <div class='search'>
 	<form action='/admin/topic' method='get' #if($currentpage>0) style='display:none' #end >
 		<span><label><h3>$lang.get('circling.cid'):</h3><input type='text' name='cid' value='$!cid'/></label></span>
-		<span><label><h3>$lang.get('topic.title'):</h3><input type='text' name='title' value='$!title'/></label></span>
+		<span><label><h3>$lang.get('topic.title'):</h3><input type='text' name='name' value='$!name'/></label></span>
 		<button type='submit' class='btns1 icon icon-search'></button>
 	</form>
 	<div class='s1tab #if($currentpage>0) down #else up #end'>
@@ -24,10 +23,11 @@
 	<thead>
 		<tr>
 			<th>$lang.get('topic.id')</th>
+			<th>$lang.get('topic.thread')</th>
 			<th>$lang.get('topic.title')</th>
+			<th>$lang.get('topic.content')</th>
 			<th>$lang.get('topic.replies')</th>
 			<th>$lang.get('topic.owner')</th>
-			<th>$lang.get('topic.updated')</th>
 			<th>$lang.get('topic.created')</th>
 			<th></th>
 		</tr>
@@ -35,11 +35,12 @@
 	<tbody>
 #foreach($f in $list)
 	<tr #if($f.deleted==1) class="deleted"#end>
-		<td>$f.id</td>
-		<td>$!f.title</td>
+		<td>#if($f.parent==0) <a href="/forum/topic/$!f.id" target="_blank">$f.id</a>  #else $f.id #end</td>
+		<td>#if($f.parent>0) <a href="/forum/topic/$!f.parent" target="_blank">$f.parent</a> #end</td>
+		<td>$!lang.truncate($f.title, 30)</td>
+		<td>$!lang.truncate($f.content, 30)</td>
 		<td>$!f.replies</td>
-		<td>$!f.owner.name</td>
-		<td>$!lang.format($f.updated, 'yyyy-MM-dd HH:mm:ss')</td>
+		<td>$!f.owner_obj.nickname</td>
 		<td>$!lang.format($f.created, 'yyyy-MM-dd HH:mm:ss')</td>
 		<td>
 			<a class='btn btn-danger btn-xs' href='javascript:;' onclick='_delete("$f.id", this)'>$lang.get('a.delete')</a>

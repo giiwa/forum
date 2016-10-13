@@ -4,6 +4,7 @@ import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.W;
 import org.giiwa.core.bean.X;
 import org.giiwa.forum.bean.Circling;
+import org.giiwa.forum.bean.Topic;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 
@@ -20,15 +21,16 @@ public class topic extends Model {
     if (cid > 0) {
       Circling c = Circling.load(cid);
       this.set("c", c);
+      this.set("cid", cid);
       q.and("cid", cid);
     }
     String name = this.getString("name");
 
-    if (!X.isEmpty(name) && path == null) {
-      q.and("name", name, W.OP_LIKE);
+    if (!X.isEmpty(name) && X.isEmpty(path)) {
+      q.and("content", name, W.OP_LIKE);
       this.set("name", name);
     }
-    Beans<Circling> bs = Circling.load(q.sort("created", -1), s, n);
+    Beans<Topic> bs = Topic.load(q.sort("created", -1), s, n);
     this.set(bs, s, n);
 
     this.show("/admin/topic.index.html");
