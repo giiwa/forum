@@ -2,6 +2,7 @@ package org.giiwa.forum.web.admin;
 
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.W;
+import org.giiwa.core.json.JSON;
 import org.giiwa.core.bean.X;
 import org.giiwa.forum.bean.Circling;
 import org.giiwa.forum.bean.Topic;
@@ -35,6 +36,16 @@ public class topic extends Model {
 
     this.show("/admin/topic.index.html");
 
+  }
+
+  @Path(path = "delete", login = true, access = "access.forum.admin")
+  public void delete() {
+    long id = this.getLong("id");
+    Topic.delete(id);
+    JSON jo = JSON.create();
+    jo.put(X.STATE, 200);
+    jo.put(X.MESSAGE, "ok");
+    this.response(jo);
   }
 
 }
