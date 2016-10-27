@@ -1,7 +1,5 @@
 package org.giiwa.forum.web.admin;
 
-import java.util.regex.Pattern;
-
 import org.giiwa.core.bean.Beans;
 import org.giiwa.core.bean.Helper.V;
 import org.giiwa.core.bean.Helper.W;

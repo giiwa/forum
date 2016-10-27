@@ -336,6 +336,7 @@ public class topic extends Model {
         v.set("title", title);
         content = content.replaceAll("background-color:#FFFFFF;", "");
 
+        int p = 0;
         String images = this.getString("images");
         if (!X.isEmpty(images)) {
           String[] ss = images.split("[, ]");
@@ -347,6 +348,7 @@ public class topic extends Model {
                 s = s.substring(0, i);
               }
               sb.append("<img src='" + s + "' style='width:200px'/>");
+              p = 1;
             }
           }
           sb.append("</div>");
@@ -355,7 +357,6 @@ public class topic extends Model {
         v.set("content", content);
 
         List<Element> list = Html.create(content).getTags("img");
-        int p = 0;
         if (list != null && list.size() > 0) {
           for (Element e : list) {
             String src = e.attr("src");
