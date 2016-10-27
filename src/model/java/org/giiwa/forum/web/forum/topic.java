@@ -342,6 +342,10 @@ public class topic extends Model {
           StringBuilder sb = new StringBuilder("<div class='images'>");
           for (String s : ss) {
             if (!X.isEmpty(s)) {
+              int i = s.lastIndexOf("?");
+              if (i > 0) {
+                s = s.substring(0, i);
+              }
               sb.append("<img src='" + s + "' style='width:200px'/>");
             }
           }
