@@ -335,7 +335,21 @@ public class topic extends Model {
         V v = V.create("cid", cid);
         v.set("title", title);
         content = content.replaceAll("background-color:#FFFFFF;", "");
+
+        String images = this.getString("images");
+        if (!X.isEmpty(images)) {
+          String[] ss = images.split("[, ]");
+          StringBuilder sb = new StringBuilder("<div class='images'>");
+          for (String s : ss) {
+            if (!X.isEmpty(s)) {
+              sb.append("<img src='" + s + "' style='width:200px'/>");
+            }
+          }
+          sb.append("</div>");
+          content += sb.toString();
+        }
         v.set("content", content);
+
         List<Element> list = Html.create(content).getTags("img");
         int p = 0;
         if (list != null && list.size() > 0) {
