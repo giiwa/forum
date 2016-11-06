@@ -296,6 +296,11 @@ public class topic extends Model {
       e.set("content", e.getContent().replaceAll("/ke/", Global.getString("forum.image.server", "") + "/ke/"));
       e.set("text", lang.truncate(Html.create(e.getContent()).text(), 50));
     }
+
+    Topic t = e.getLast();
+    if (t != null) {
+      e.set("lastText", lang.truncate(Html.create(t.getContent()).text(), 50));
+    }
     e.set("updated", lang.past(e.getLong("updated")));
     e.set("created", lang.format(e.getLong("created"), "yy-MM-dd HH:mm"));
     e.set("row", row);
