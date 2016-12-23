@@ -85,7 +85,7 @@ public class topic extends Model {
      * load hot circlings
      */
     {
-      W q = W.create().and("access", "private", W.OP_NEQ).and("deleted", 1, W.OP_NEQ);
+      W q = W.create().and("access", "private", W.OP.neq).and("deleted", 1, W.OP.neq);
 
       Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
       if (b1 != null) {
@@ -136,7 +136,7 @@ public class topic extends Model {
       this.set("name", name);
     } else {
       bs = Topic.load(
-          W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("top", -1).sort("updated", -1), s, n);
+          W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP.neq).sort("top", -1).sort("updated", -1), s, n);
     }
 
     this.set(bs, s, n);
@@ -146,7 +146,7 @@ public class topic extends Model {
      * get recommends
      */
     Beans<Circling> bs1 = Circling.load(login == null ? -1 : login.getId(),
-        W.create().and("deleted", 1, W.OP_NEQ).sort("updated", -1), 0, 20);
+        W.create().and("deleted", 1, W.OP.neq).sort("updated", -1), 0, 20);
     this.set("recommends", bs1 == null ? null : bs1.getList());
 
     this.show("/forum/topic.index.html");
@@ -227,7 +227,7 @@ public class topic extends Model {
 
     } else {
       bs = Topic.load(
-          W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("top", -1).sort("updated", -1), s, n);
+          W.create("cid", cid).and("parent", 0).and("deleted", 1, W.OP.neq).sort("top", -1).sort("updated", -1), s, n);
       if (bs != null && bs.getList() != null) {
         for (Topic e : bs.getList()) {
           row = _refine(e, row);
@@ -258,7 +258,7 @@ public class topic extends Model {
 
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
-    W q = W.create("parent", t.getId()).and("deleted", 1, W.OP_NEQ).sort("created", 1);
+    W q = W.create("parent", t.getId()).and("deleted", 1, W.OP.neq).sort("created", 1);
     Beans<Topic> bs = Topic.load(q, s, n);
     long total = Topic.count(q);
     jo.put("total", total);
@@ -449,7 +449,7 @@ public class topic extends Model {
        * get recommends
        */
       Beans<Topic> bs1 = Topic
-          .load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP_NEQ).sort("updated", -1), 0, 20);
+          .load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP.neq).sort("updated", -1), 0, 20);
       this.set("recommends", bs1 == null ? null : bs1.getList());
       this.set("t", t);
     } else {
@@ -637,8 +637,8 @@ public class topic extends Model {
     /**
      * get recommends
      */
-    Beans<Topic> bs1 = Topic.load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP_NEQ)
-        .and("deleted", 1, W.OP_NEQ).sort("updated", -1), 0, 9);
+    Beans<Topic> bs1 = Topic.load(W.create("cid", t.getCid()).and("parent", 0).and(X.ID, id, W.OP.neq)
+        .and("deleted", 1, W.OP.neq).sort("updated", -1), 0, 9);
     this.set("recommends", bs1 == null ? null : bs1.getList());
     this.show("/forum/topic.detail.html");
   }

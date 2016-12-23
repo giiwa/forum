@@ -2,8 +2,8 @@ package org.giiwa.forum.bean;
 
 import java.net.URLEncoder;
 
-import org.giiwa.core.base.GString;
 import org.giiwa.core.base.Http;
+import org.giiwa.core.base.StringFinder;
 import org.giiwa.core.bean.X;
 
 public class IP {
@@ -13,7 +13,7 @@ public class IP {
 	public static Address get(String ip) {
 		String req = ip126.replaceAll("\\$ip", URLEncoder.encode(ip));
 		Http.Response r = Http.get(req);
-		GString st = GString.create(r.body);
+		StringFinder st = StringFinder.create(r.body);
 		String lo = st.substring("lo=\"", "\"");
 		String lc = st.substring("lc=\"", "\"");
 		return X.isEmpty(lo) ? null : new Address(ip, lo, lc);

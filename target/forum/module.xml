@@ -4,9 +4,8 @@
 	<id>20</id>
 	<name>forum</name>
 	<package>org.giiwa.forum.web</package>
-	<screenshot>/images/forum_screenshot.png</screenshot>
-	<version>1.0.1</version>
-	<build>1611160915</build>
+	<version>1.1</version>
+	<build>1612231651</build>
 	<enabled>true</enabled>
 	<readme>Forum, group and topic module</readme>
 	<listener>
@@ -16,8 +15,4 @@
 	<depends>
 		<module name="default" version="1.0.2"/>
 	</depends>
-	<filter>
-		<pattern>/user/login</pattern>
-		<class>org.giiwa.forum.web.UserFilter</class>
-	</filter>
 </module>

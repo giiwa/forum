@@ -72,7 +72,7 @@ public class Topic extends Bean {
 
   public long replysInDays(int days) {
     return Helper.count(W.create("cid", this.getCid()).and("parent", this.getId()).and("created",
-        System.currentTimeMillis() - days * X.ADAY, W.OP_GT), Topic.class);
+        System.currentTimeMillis() - days * X.ADAY, W.OP.gt), Topic.class);
   }
 
   public long getOwner() {
@@ -138,7 +138,7 @@ public class Topic extends Bean {
   }
 
   public Topic getLast() {
-    return Helper.load(W.create("parent", this.getId()).and("deleted", 1, W.OP_NEQ).sort("created", -1), Topic.class);
+    return Helper.load(W.create("parent", this.getId()).and("deleted", 1, W.OP.neq).sort("created", -1), Topic.class);
   }
 
   public void repair() {
@@ -224,7 +224,7 @@ public class Topic extends Bean {
     }
 
     q = W.create();
-    q.and(w1).and("parent", 0).and("deleted", 1, W.OP_NEQ).sort("updated", -1);
+    q.and(w1).and("parent", 0).and("deleted", 1, W.OP.neq).sort("updated", -1);
     return Topic.load(q, s, n);
   }
 }

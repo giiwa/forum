@@ -20,7 +20,7 @@ public class circling extends Model {
     String name = this.getString("name");
 
     if (!X.isEmpty(name) && path == null) {
-      q.and("name", name, W.OP_LIKE);
+      q.and("name", name, W.OP.like);
       this.set("name", name);
     }
     Beans<Circling> bs = Circling.load(q.sort("created", -1), s, n);

@@ -13,21 +13,21 @@ import org.giiwa.tinyse.se.SE.Indexer;
 public class TopicIndexer implements Indexer {
 
   @Override
-  public void bad(Object id, long flag) {
+  public void bad(String engine, Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
     Topic.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "bad").ignore("updated"));
   }
 
   @Override
-  public void done(Object id, long flag) {
+  public void done(String engine, Object id, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
     Topic.update(X.toLong(id, -1), V.create("index_flag", flag).set("index_state", "done").ignore("updated"));
   }
 
   @Override
-  public Document load(Object id) {
+  public Document load(String engine, Object id) {
     // TODO Auto-generated method stub
     Topic c = Topic.load(X.toLong(id, -1));
     if (c != null) {
@@ -47,10 +47,10 @@ public class TopicIndexer implements Indexer {
   }
 
   @Override
-  public Object next(long flag) {
+  public Object next(String engine, long flag) {
     // TODO Auto-generated method stub
     String node = Model.node();
-    Topic c = Topic.load(W.create().and("index_flag", flag, W.OP_NEQ).sort(X.ID, 1));
+    Topic c = Topic.load(W.create().and("index_flag", flag, W.OP.neq).sort(X.ID, 1));
     return c == null ? null : c.getId();
   }
 

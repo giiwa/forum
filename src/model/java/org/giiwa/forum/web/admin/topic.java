@@ -28,7 +28,7 @@ public class topic extends Model {
     String name = this.getString("name");
 
     if (!X.isEmpty(name) && X.isEmpty(path)) {
-      q.and("content", name, W.OP_LIKE);
+      q.and("content", name, W.OP.like);
       this.set("name", name);
     }
     Beans<Topic> bs = Topic.load(q.sort("created", -1), s, n);

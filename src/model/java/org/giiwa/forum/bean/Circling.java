@@ -158,7 +158,7 @@ public class Circling extends Bean {
       return this.isPrivate();
     }
     return Log.exists(W.create("data", "forbidden").and("cid", this.getId()).and("uid", u.getId()).and("expired",
-        System.currentTimeMillis(), W.OP_GT));
+        System.currentTimeMillis(), W.OP.gt));
   }
 
   public static Beans<Circling> load(long uid, W q, int s, int n) {
@@ -179,7 +179,7 @@ public class Circling extends Bean {
     if (w.size() > 0) {
       q.and(w);
     } else {
-      q.and("access", "private", W.OP_NEQ);
+      q.and("access", "private", W.OP.neq);
     }
 
     return Helper.load(q, s, n, Circling.class);

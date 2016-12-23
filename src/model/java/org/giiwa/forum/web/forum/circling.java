@@ -57,7 +57,7 @@ public class circling extends Model {
      * load hot circlings
      */
     {
-      W q = W.create().and("access", "private", W.OP_NEQ).and("deleted", 1, W.OP_NEQ);
+      W q = W.create().and("access", "private", W.OP.neq).and("deleted", 1, W.OP.neq);
 
       Beans<Circling> b1 = Circling.load(q.sort("updated", -1), 0, 20);
       if (b1 != null) {
@@ -90,7 +90,7 @@ public class circling extends Model {
     } else {
       // load public topic
       Beans<Circling> b1 = Circling
-          .load(W.create().and("access", "private", W.OP_NEQ).and("deleted", 1, W.OP_NEQ).sort("updated", -1), 0, 100);
+          .load(W.create().and("access", "private", W.OP.neq).and("deleted", 1, W.OP.neq).sort("updated", -1), 0, 100);
       W w1 = W.create();
       if (b1 != null && b1.getList() != null) {
         for (Circling c1 : b1.getList()) {
@@ -143,9 +143,9 @@ public class circling extends Model {
      * load hot circlings
      */
     {
-      W q = W.create().and("access", "private", W.OP_NEQ);
+      W q = W.create().and("access", "private", W.OP.neq);
 
-      Beans<Circling> b1 = Circling.load(q.sort("updated", -1).and("deleted", 1, W.OP_NEQ), 0, 20);
+      Beans<Circling> b1 = Circling.load(q.sort("updated", -1).and("deleted", 1, W.OP.neq), 0, 20);
       if (b1 != null) {
         this.set("hotcirclings", b1.getList());
       }
@@ -385,7 +385,7 @@ public class circling extends Model {
       }
       String name = this.getString("name");
       if (!X.isEmpty(name)) {
-        q.and("name", name, W.OP_LIKE);
+        q.and("name", name, W.OP.like);
         this.set("name", name);
       }
       Beans<Follower> bs = Follower.load(q, s, n);
